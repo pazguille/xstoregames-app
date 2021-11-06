@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+    <!-- <link rel="preconnect" href="https://unpkg.com" /> -->
+    <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://xbox-api.pazguille.me" />
+
+    <link rel="modulepreload" href="./src/js/app.js" />
+    <link rel="modulepreload" href="./src/js/templates.js" />
+    <!-- <link rel="modulepreload" href="./src/js/Loading.js" /> -->
+
+    <link rel="shortcut icon" href="./src/assets/favicon.svg" />
+    <link rel="apple-touch-icon" href="./src/assets/favicon.png" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title>La tiendita de XCaja</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>La tiendita de XCaja</h1>
+    </header>
+
+    <main>
+      <div class="x-loader" aria-label="Cargando"></div>
+      <div class="lists"></div>
+      <div class="detail">
+        <button class="detail-back-btn">
+          <svg width="19" height="19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 9.5H1M9.5 18 1 9.5 9.5 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="detail-content"></div>
+      </div>
+    </main>
+
+    <script>
+      window.requestIdleCallback = window.requestIdleCallback || function (cb) {
+        var start = Date.now();
+        return setTimeout(function () {
+          cb({
+            didTimeout: false,
+            timeRemaining: function () {
+              return Math.max(0, 50 - (Date.now() - start));
+            }
+          });
+        }, 1);
+      };
+    </script>
+    <script type="module">
+      import bootApp from './src/js/app.js';
+      bootApp();
+    </script>
+  </body>
+</html>
