@@ -85,6 +85,7 @@ section h2 {
 
 .game-preview-new {
   width: 315px;
+  height: 295px;
   background: linear-gradient(106.33deg, #BF5AF2 0.73%, #8B27BD 99.99%);
   box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
@@ -299,7 +300,7 @@ section h2 {
   position: fixed;
   z-index: 3;
   color: var(--txt-color);
-  background: rgba(191, 90, 242, 0.8);
+  background: rgba(191, 90, 242, 0.9);
   border: none;
   width: 45px;
   height: 45px;
@@ -307,10 +308,6 @@ section h2 {
   left: 10px;
   line-height: 0;
   transform: translate3d(0,0,0);
-}
-
-.list {
-  padding-top: 60px;
 }
 
 .list .game-preview {
