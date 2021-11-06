@@ -208,7 +208,7 @@ section h2 {
   50% { border-width:0; opacity:0; transform: scale(1.3); }
 }
 
-.detail {
+.page {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -222,14 +222,14 @@ section h2 {
   transform: translateX(0);
   transition: transform 300ms ease;
   z-index: 2;
+  background-color: var(--bg-color);
 }
 
-.detail-on {
+.page-on {
   transform: translateX(-100%);
 }
 
 .detail .game-preview {
-  background-color: var(--bg-color);
   box-shadow: none;
   width: 100%;
   border-radius: 0;
@@ -247,7 +247,7 @@ section h2 {
   background-color: var(--bg-color);
   border-radius: 25px 25px 0 0;
   position: relative;
-  top: 490px;
+  top: 185px;
 }
 
 .detail .game-title {
@@ -257,17 +257,44 @@ section h2 {
   margin: 5px 0;
 }
 
+.detail .game-price {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.detail .game-price-amount {
+  font-size: 26px;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  font-size: .9em;
+  line-height: 1.5em;
+  text-align: center;
+  background-color: var(--bg-highlight-color);
+  border: 1px solid var(--bg-highlight-color);
+  padding: .5em .7em;
+  cursor: pointer;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  color: var(--txt-color);
+  text-decoration: none;
+  vertical-align: super;
+}
+
 .detail .game-description {
   font-size: 16px !important;
   line-height: 1.2em;
 }
 
-.detail-content {
+.page-content {
   overflow: auto;
   height: 100%;
 }
 
-.detail-back-btn {
+.page-back-btn {
   border-radius: 100%;
   position: fixed;
   z-index: 3;
@@ -279,4 +306,54 @@ section h2 {
   top: 10px;
   left: 10px;
   line-height: 0;
+  transform: translate3d(0,0,0);
+}
+
+.list {
+  padding-top: 60px;
+}
+
+.list .game-preview {
+  width: auto;
+  flex-direction: row;
+  margin: 10px;
+}
+
+@media (min-width: 54em) {
+  .list-content {
+    display: flex;
+    flex-flow: wrap;
+  }
+
+  .list .game-preview {
+    width: 315px;
+  }
+
+  .detail .game-preview > img {
+    position: relative;
+  }
+
+  .detail .game-preview > div {
+    position: static;
+    top: 0;
+  }
+
+  .detail .game-preview .game-preview-info {
+    position: absolute;
+    top: 220px;
+    width: 50%;
+    background: rgba(0,0,0, .9);
+    padding: 15px 25px;
+    right: 0;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .detail .game-preview-images {
+    text-align: center;
+  }
+
+  .detail .game-preview-images img {
+    max-width: 48%;
+    padding: 5px;
+  }
 }

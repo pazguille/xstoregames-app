@@ -21,7 +21,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all" href="/">Ver todos →</a>
+  <a class="see-all link" id="list-${section.type}" href="./?list=${section.type}">Ver todos →</a>
 </section>
 `);
 }
@@ -42,7 +42,7 @@ export function gameCardNewTemplate(game) {
   return (`
 <article class="game-preview-new">
   <div>
-    <h3 class="game-title"><a id="${game.id}" href="./?id=${game.id}">${game.title}</a></h3>
+    <h3 class="game-title"><a id="game-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
@@ -64,7 +64,7 @@ export function gameCardTemplate(game) {
   return (`
 <article class="game-preview">
   <div>
-    <h3 class="game-title"><a id="${game.id}" href="./?id=${game.id}">${game.title}</a></h3>
+    <h3 class="game-title"><a id="game-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
@@ -85,21 +85,26 @@ export function gameDeailTemplate(game) {
   const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
   return (`
 <article class="game-preview">
-  <img class="game-img" width="100%" decoding="async" alt="" src="${game.images.poster.url}">
+  <img class="game-img" width="100%" loading="lazy" decoding="async" alt="" src="${game.images.titledheroart.url || game.images.titledheroart[0].url}">
   <div>
-    <h3 class="game-title">${game.title}</h3>
-    <p class="game-by">by ${game.developer || game.publisher}</p>
-    <div class="game-price">
-      ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
-      <span class="game-price-amount">
-        ${game.price.deal > 0 ?
-          ` 💳 ${formatter.format(convert(game.price.deal, dollar))}`
-          : 'Gratis'
-        }
-      </span>
+    <div class="game-preview-info">
+      <h3 class="game-title">${game.title}</h3>
+      <p class="game-by">by ${game.developer || game.publisher}</p>
+      <div class="game-price">
+        ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
+        <span class="game-price-amount">
+          ${game.price.deal > 0 ?
+            ` 💳 ${formatter.format(convert(game.price.deal, dollar))}`
+            : 'Gratis'
+          }
+        </span>
+      </div>
+      <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar Ahora</a>
+      <p class="game-description">${game.description}</p>
     </div>
-    <p class="game-description">${game.description}</p>
-    ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}" />`).join('')}
+    <div class="game-preview-images">
+      ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}" />`).join('')}
+    </div>
   </div>
 </article>
 `);
