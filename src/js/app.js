@@ -33,13 +33,12 @@ const LIMIT = 10;
 let skipitems = 0;
 
 export default async function bootApp() {
+  const $pageBack = document.querySelector('.page-back-btn');
   const $loading = document.querySelector('.x-loader');
   const $home = document.querySelector('.home');
   const $detail = document.querySelector('.detail');
-  const $detailBack = document.querySelector('.detail-back-btn');
   const $detailContent = document.querySelector('.detail-content');
   const $list = document.querySelector('.list');
-  const $listBack = document.querySelector('.list-back-btn');
   const $listContent = document.querySelector('.list-content');
 
   await Promise.all(sections.map(async ({type}) => {
@@ -69,9 +68,6 @@ export default async function bootApp() {
   document.body.addEventListener('click', (eve) => {
     if (!eve.target.classList.contains('link')) { return; }
     eve.preventDefault();
-    requestIdleCallback(() => {
-      document.body.style.overflow = 'hidden';
-    });
 
     const data = eve.target.id.split('-');
     const type = data[0];
@@ -122,21 +118,17 @@ export default async function bootApp() {
         o.current = $listContent.lastElementChild;
         o.observe(o.current);
       });
-
     }
+
+    $pageBack.removeAttribute('hidden');
+
   });
 
-  $detailBack.addEventListener('click', () => {
-    history.back();
-  });
-
-  $listBack.addEventListener('click', () => {
+  $pageBack.addEventListener('click', () => {
     history.back();
   });
 
   window.addEventListener('popstate', (eve) => {
-    document.body.style.overflow = '';
-
     if (eve.state && eve.state.page === 'list') {
       $detail.classList.remove('page-on');
       setTimeout(() => {
@@ -147,6 +139,7 @@ export default async function bootApp() {
 
     } else {
       skipitems = LIMIT;
+      $pageBack.setAttribute('hidden', true);
       $list.classList.remove('page-on');
       $detail.classList.remove('page-on');
       setTimeout(() => {
@@ -168,6 +161,7 @@ export default async function bootApp() {
       }
     });
     requestIdleCallback(() => {
+      $pageBack.removeAttribute('hidden');
       const html = gameDeailTemplate(game);
       $detailContent.innerHTML = html;
       $detail.classList.add('page-on');

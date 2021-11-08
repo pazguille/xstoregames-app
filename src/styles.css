@@ -22,12 +22,27 @@ body {
   color: var(--txt-color);
   font-size: 16px;
   line-height: 1.1em;
+
+  overflow: hidden;
+  height: 100%;
+}
+
+main {
+  overflow: auto;
+  height: 100vh;
+  scroll-behavior: smooth;
+
+  padding-top: 45px;
 }
 
 header {
   text-align: center;
   background-color: #107C10;
   padding: 10px;
+
+  position: fixed;
+  z-index: 1;
+  width: 100%;
 }
 
 h1 {
@@ -215,7 +230,7 @@ section h2 {
 
 .page {
   position: fixed;
-  top: 0;
+  top: 45px;
   bottom: 0;
   left: 100%;
   width: 100%;
@@ -301,15 +316,14 @@ section h2 {
 
 .page-back-btn {
   border-radius: 100%;
-  position: fixed;
-  z-index: 3;
+  position: absolute;
   color: var(--txt-color);
-  background: rgba(191, 90, 242, 0.9);
+  background: none;
   border: none;
-  width: 45px;
+  width: 55px;
   height: 45px;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
   line-height: 0;
   transform: translate3d(0,0,0);
 }
