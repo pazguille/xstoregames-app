@@ -29,9 +29,7 @@ body {
 
 main {
   overflow: auto;
-  height: 100vh;
-  scroll-behavior: smooth;
-
+  height: calc(100vh - 45px);
   padding-top: 45px;
 }
 
@@ -41,7 +39,7 @@ header {
   padding: 10px;
 
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
 }
 
