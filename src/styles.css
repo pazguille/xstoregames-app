@@ -54,6 +54,10 @@ h3 {
   display: none;
 }
 
+h1 img {
+  vertical-align: text-top;
+}
+
 section {
   margin: 40px 0;
   position: relative;

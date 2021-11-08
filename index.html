@@ -6,24 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 
     <!-- <link rel="preconnect" href="https://unpkg.com" /> -->
-    <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://www.dolarsi.com" />
     <link rel="preconnect" href="https://xbox-api.pazguille.me" />
+    <link rel="preconnect" href="https://store-images.s-microsoft.com/" />
+
+    <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=new&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=deals&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=coming&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=best&skipitems=0" crossorigin="anonymous" />
 
     <link rel="modulepreload" href="./src/js/app.js" />
     <link rel="modulepreload" href="./src/js/templates.js" />
     <!-- <link rel="modulepreload" href="./src/js/Loading.js" /> -->
 
-    <link rel="shortcut icon" href="./src/assets/favicon.svg" />
+    <link rel="stylesheet" href="./src/styles.css" />
+
+    <title>XStore: La tiendita argenta de Xbox</title>
+
+    <link rel="shortcut icon" href="./src/assets/favicon.png" />
     <link rel="apple-touch-icon" href="./src/assets/favicon.png" />
     <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
-    <title>La tiendita de XCaja</title>
-    <link rel="stylesheet" href="./src/styles.css" />
+    <meta name="description" content="Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos." />
+    <meta name="keywords" content="Xbox Series X, Xbox One, xbox live, ofertas con gold, juegos con gold, próximos juegos de xbox, nuevos juegos en xbox, nuevos juegos, videojuegos, catálogo de juegos de xbox, próximos juegos de xbox, nuevos juegos en xbox, nuevos juegos, videojuegos" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://xstore.pazguille.me" />
+    <meta property="og:title" content="XStore: La tiendita argenta de Xbox" />
+    <meta property="og:description" content="Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos." />
+    <meta property="og:image" content="https://xstore.pazguille.me/src/assets/favicon.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="xstore.pazguille.me" />
+    <meta property="twitter:url" content="https://xstore.pazguille.me" />
+    <meta name="twitter:title" content="XStore: La tiendita argenta de Xbox" />
+    <meta name="twitter:description" content="Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos." />
+    <meta name="twitter:image" content="https://xstore.pazguille.me/src/assets/favicon.png" />
   </head>
   <body>
     <header>
-      <h1>La tiendita de XCaja</h1>
+      <h1>
+        <img src="./src/assets/favicon.png" width="25px" />
+        XStore
+      </h1>
     </header>
 
     <main>
@@ -58,6 +85,22 @@
           });
         }, 1);
       };
+      window.addEventListener('load', function() {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-GTM4ELWW90', {
+          storage: 'none',
+          anonymize_ip: true,
+          allow_google_signals: false,
+          allow_ad_personalization_signals: false,
+        });
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-BFNTZ7EKH9';
+        s.async = 1;
+        var m = document.getElementsByTagName('script')[0];
+        m.parentNode.insertBefore(s,m);
+      });
     </script>
     <script type="module">
       import bootApp from './src/js/app.js';
