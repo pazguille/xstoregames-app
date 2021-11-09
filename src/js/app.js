@@ -89,7 +89,7 @@ export default async function bootApp() {
     }
 
     if (type === 'list') {
-      const section = sections.find(section => section.type === id)
+      const section = sections.find(section => section.type === id);
       section.list.map((game) => requestIdleCallback(() => {
         $listContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
       }));
@@ -167,4 +167,74 @@ export default async function bootApp() {
       $detail.classList.add('page-on');
     });
   }
+
+  // if (params.has('list')) {
+  //   const id = params.get('list');
+  //   const section = sections.find(section => section.type === id);
+  //   $pageBack.removeAttribute('hidden');
+  //   section.list.map((game) => requestIdleCallback(() => {
+  //     $listContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+  //   }));
+  //   $list.classList.add('page-on');
+
+  //   const o = new IntersectionObserver(async(entries) => {
+  //     const first = entries[0];
+  //     if (first.isIntersecting) {
+  //       o.unobserve(o.current);
+  //       const resp = await fetch(getXboxURL(id, skipitems += LIMIT));
+  //       const moreGames = await resp.json();
+  //       moreGames.map((game) => requestIdleCallback(() => {
+  //         $listContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+  //       }));
+  //       requestIdleCallback(() => {
+  //         o.current = $listContent.lastElementChild;
+  //         o.observe(o.current);
+  //       });
+  //       section.list.push(...moreGames);
+  //       games.push(...moreGames);
+  //     }
+  //   });
+
+  //   requestIdleCallback(() => {
+  //     o.current = $listContent.lastElementChild;
+  //     o.observe(o.current);
+  //   });
+  // }
+
+  const touchPassiveListener = { passive: true, capture: false, };
+  const $main = document.querySelector('main');
+  const threshold = 95;
+  let startOffsetY = 0;
+  let currentOffsetY = 0;
+  let refresh = false;
+
+  function resetTouchFn(eve) {
+    refresh = false;
+    currentOffsetY = 0;
+    startOffsetY = eve.touches[0].pageY;
+  }
+
+  function onTouchEndFn() {
+    if (refresh && this.scrollTop <= 0) {
+      window.location.reload();
+    } else {
+      refresh = false;
+      this.style = undefined;
+    }
+  };
+
+  function onTouchMoveFn(eve) {
+    const dif_y = eve.touches[0].pageY - startOffsetY;
+    currentOffsetY = dif_y;
+    if (this.scrollTop <= 0 && dif_y > 0 && dif_y < threshold) {
+      this.style.transform = `translateY(${currentOffsetY}px)`;
+    }
+    if (dif_y > threshold) {
+      refresh = true;
+    }
+  };
+
+  $main.addEventListener('touchstart', resetTouchFn, touchPassiveListener);
+  $main.addEventListener('touchmove', onTouchMoveFn, touchPassiveListener);
+  $main.addEventListener('touchend', onTouchEndFn, touchPassiveListener);
 }

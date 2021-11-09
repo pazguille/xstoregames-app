@@ -33,6 +33,17 @@ main {
   padding-top: 45px;
 }
 
+main:before {
+  content: 'Cargando...';
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 45px;
+  text-align: center;
+}
+
 header {
   text-align: center;
   background-color: #107C10;
