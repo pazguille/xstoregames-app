@@ -92,8 +92,7 @@ export function gameCardTemplate(game) {
 export function gameDeailTemplate(game) {
   const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
   return (`
-<article class="game-preview">
-  <img class="game-img" width="100%" loading="lazy" decoding="async" alt="" src="${game.images.titledheroart.url || game.images.titledheroart[0].url}">
+<article class="game-preview" style="background-image: url(${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url})">
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
