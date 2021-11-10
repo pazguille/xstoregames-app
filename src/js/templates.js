@@ -48,10 +48,14 @@ export function gameCardNewTemplate(game) {
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
       <span class="game-price-amount">
         ${game.price.deal > 0 ?
-          ` 💳 ${formatter.format(convert(game.price.deal, dollar))}`
+          `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
           : 'Gratis'
         }
       </span>
+      ${game.price.deal > 0 ?
+        `<small class="game-price-taxes">impuestos incluídos</small>`
+        : ''
+      }
     </div>
   </div>
   <img class="game-img" width="315px" height="177px" decoding="async" alt="" src="${game.images.titledheroart.url || game.images.titledheroart[0].url}">
@@ -70,10 +74,14 @@ export function gameCardTemplate(game) {
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
       <span class="game-price-amount">
         ${game.price.deal > 0 ?
-          ` 💳 ${formatter.format(convert(game.price.deal, dollar))}`
+          `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
           : 'Gratis'
         }
       </span>
+      ${game.price.deal > 0 ?
+        `<small class="game-price-taxes">impuestos incluídos</small>`
+        : ''
+      }
     </div>
   </div>
   <img class="game-img" width="155px" decoding="async" loading="lazy" height="155px" alt="" src="${game.images.boxart.url}">
@@ -94,10 +102,14 @@ export function gameDeailTemplate(game) {
         ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
         <span class="game-price-amount">
           ${game.price.deal > 0 ?
-            ` 💳 ${formatter.format(convert(game.price.deal, dollar))}`
+            `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
             : 'Gratis'
           }
         </span>
+        ${game.price.deal > 0 ?
+          `<small class="game-price-taxes">impuestos incluídos</small>`
+          : ''
+        }
       </div>
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar Ahora</a>
       <p class="game-description">${game.description}</p>

@@ -86,6 +86,8 @@ export default async function bootApp() {
         $detail.classList.add('page-on');
       });
       history.pushState({ page: 'game' }, game.title, eve.target.href);
+
+      $pullToRefresh = $detailContent;
     }
 
     if (type === 'list') {
@@ -118,6 +120,8 @@ export default async function bootApp() {
         o.current = $listContent.lastElementChild;
         o.observe(o.current);
       });
+
+      $pullToRefresh = $listContent;
     }
 
     $pageBack.removeAttribute('hidden');
@@ -136,6 +140,7 @@ export default async function bootApp() {
           $detailContent.innerHTML = '';
         });
       }, 300);
+      $pullToRefresh = $listContent;
 
     } else {
       skipitems = LIMIT;
@@ -149,6 +154,7 @@ export default async function bootApp() {
         });
       }, 300);
     }
+    $pullToRefresh = $main;
   });
 
   const url = new URL(window.location.href);
@@ -165,7 +171,9 @@ export default async function bootApp() {
       const html = gameDeailTemplate(game);
       $detailContent.innerHTML = html;
       $detail.classList.add('page-on');
+      $pullToRefresh = $detailContent;
     });
+
   }
 
   // if (params.has('list')) {
@@ -206,29 +214,47 @@ export default async function bootApp() {
   const threshold = 95;
   let startOffsetY = 0;
   let currentOffsetY = 0;
+  let startOffsetX = 0;
   let refresh = false;
+  let scrolling = false;
+  let $pullToRefresh = $main;
 
   function resetTouchFn(eve) {
     refresh = false;
+    scrolling = false;
     currentOffsetY = 0;
     startOffsetY = eve.touches[0].pageY;
+    startOffsetX = eve.touches[0].pageX;
   }
 
   function onTouchEndFn() {
-    if (refresh && this.scrollTop <= 0) {
+    if (refresh && $pullToRefresh.scrollTop <= 0) {
       window.location.reload();
     } else {
       refresh = false;
+      scrolling = false;
       this.style = undefined;
     }
   };
 
   function onTouchMoveFn(eve) {
     const dif_y = eve.touches[0].pageY - startOffsetY;
+    const dif_x = eve.touches[0].pageX - startOffsetX;
+
+    const touchAngle = (Math.atan2(Math.abs(dif_x), Math.abs(dif_y)) * 180) / Math.PI;
+    const isScrolling = touchAngle > 45;
+
+    if (isScrolling) {
+      scrolling = true;
+      return;
+    }
+
     currentOffsetY = dif_y;
-    if (this.scrollTop <= 0 && dif_y > 0 && dif_y < threshold) {
+
+    if ($pullToRefresh.scrollTop <= 0 && dif_y > 0 && dif_y < threshold) {
       this.style.transform = `translateY(${currentOffsetY}px)`;
     }
+
     if (dif_y > threshold) {
       refresh = true;
     }
