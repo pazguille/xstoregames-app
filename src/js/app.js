@@ -145,17 +145,26 @@ export default async function bootApp() {
     } else {
       skipitems = LIMIT;
       $pageBack.setAttribute('hidden', true);
+
+      if (swipeToBack) {
+        $detail.setAttribute('hidden', true);
+      }
+
       $list.classList.remove('page-on');
       $detail.classList.remove('page-on');
       setTimeout(() => {
         requestIdleCallback(() => {
+          $detail.removeAttribute('hidden');
           $listContent.innerHTML = '';
           $detailContent.innerHTML = '';
         });
       }, 300);
     }
+
     $pullToRefresh = $main;
+    swipeToBack = false;
   });
+
 
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -173,7 +182,6 @@ export default async function bootApp() {
       $detail.classList.add('page-on');
       $pullToRefresh = $detailContent;
     });
-
   }
 
   // if (params.has('list')) {
@@ -215,22 +223,29 @@ export default async function bootApp() {
   let startOffsetY = 0;
   let currentOffsetY = 0;
   let startOffsetX = 0;
+  let currentOffsetX = 0;
   let refresh = false;
   let scrolling = false;
   let $pullToRefresh = $main;
+  let swipeToBack = false;
 
   function resetTouchFn(eve) {
     refresh = false;
     scrolling = false;
     currentOffsetY = 0;
+    currentOffsetX = 0;
     startOffsetY = eve.touches[0].pageY;
     startOffsetX = eve.touches[0].pageX;
+
   }
 
   function onTouchEndFn() {
     if (refresh && $pullToRefresh.scrollTop <= 0) {
       window.location.reload();
     } else {
+      if (!(scrolling && swipeToBack && currentOffsetX < 0)) {
+        swipeToBack = false;
+      }
       refresh = false;
       scrolling = false;
       this.style = undefined;
@@ -241,9 +256,13 @@ export default async function bootApp() {
     const dif_y = eve.touches[0].pageY - startOffsetY;
     const dif_x = eve.touches[0].pageX - startOffsetX;
 
+    if (dif_x >= currentOffsetX) {
+      swipeToBack = true;
+    }
+    currentOffsetX = dif_x;
+
     const touchAngle = (Math.atan2(Math.abs(dif_x), Math.abs(dif_y)) * 180) / Math.PI;
     const isScrolling = touchAngle > 45;
-
     if (isScrolling) {
       scrolling = true;
       return;
