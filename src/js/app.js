@@ -134,9 +134,16 @@ export default async function bootApp() {
 
   window.addEventListener('popstate', (eve) => {
     if (eve.state && eve.state.page === 'list') {
+
+      if (swipeToBack) {
+        $detail.setAttribute('hidden', true);
+      }
+
       $detail.classList.remove('page-on');
+
       setTimeout(() => {
         requestIdleCallback(() => {
+          $detail.removeAttribute('hidden');
           $detailContent.innerHTML = '';
         });
       }, 300);
@@ -147,6 +154,7 @@ export default async function bootApp() {
       $pageBack.setAttribute('hidden', true);
 
       if (swipeToBack) {
+        $list.setAttribute('hidden', true);
         $detail.setAttribute('hidden', true);
       }
 
@@ -154,6 +162,7 @@ export default async function bootApp() {
       $detail.classList.remove('page-on');
       setTimeout(() => {
         requestIdleCallback(() => {
+          $list.removeAttribute('hidden');
           $detail.removeAttribute('hidden');
           $listContent.innerHTML = '';
           $detailContent.innerHTML = '';
