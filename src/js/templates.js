@@ -58,7 +58,7 @@ export function gameCardNewTemplate(game) {
       }
     </div>
   </div>
-  <img class="game-img" width="315px" height="177px" decoding="async" alt="" src="${game.images.titledheroart.url || game.images.titledheroart[0].url}">
+  <img class="game-img" width="315px" height="177px" decoding="async" alt="" src="${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}">
 </article>
 `);
 }
