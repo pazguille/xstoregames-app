@@ -21,7 +21,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all link" id="list-${section.type}" href="./?list=${section.type}">Ver todos →</a>
+  <a class="see-all link" id="collection-${section.type}" href="./?list=${section.type}">Ver todos →</a>
 </section>
 `);
 }
@@ -42,7 +42,7 @@ export function gameCardNewTemplate(game) {
   return (`
 <article class="game-preview-new">
   <div>
-    <h3 class="game-title"><a id="game-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
+    <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
@@ -58,7 +58,7 @@ export function gameCardNewTemplate(game) {
       }
     </div>
   </div>
-  <img class="game-img" width="315px" height="177px" decoding="async" alt="" src="${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}">
+  <img class="game-img" width="315px" height="177px" decoding="async" alt="" src="${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}?w=630">
 </article>
 `);
 }
@@ -68,7 +68,7 @@ export function gameCardTemplate(game) {
   return (`
 <article class="game-preview">
   <div>
-    <h3 class="game-title"><a id="game-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
+    <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
@@ -84,7 +84,7 @@ export function gameCardTemplate(game) {
       }
     </div>
   </div>
-  <img class="game-img" width="155px" decoding="async" loading="lazy" height="155px" alt="" src="${game.images.boxart.url}">
+  <img class="game-img" width="155px" decoding="async" loading="lazy" height="155px" alt="" src="${game.images.boxart.url}?w=310">
 </article>
 `);
 }
@@ -92,7 +92,7 @@ export function gameCardTemplate(game) {
 export function gameDeailTemplate(game) {
   const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
   return (`
-<article class="game-preview" style="background-image: url(${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url})">
+<article class="game-preview" style="background-image: url(${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}?w=1000)">
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
@@ -114,7 +114,7 @@ export function gameDeailTemplate(game) {
       <p class="game-description">${game.description}</p>
     </div>
     <div class="game-preview-images">
-      ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}" />`).join('')}
+      ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
     </div>
   </div>
 </article>

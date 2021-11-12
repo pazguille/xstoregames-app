@@ -10,11 +10,11 @@
     <link rel="preconnect" href="https://xbox-api.pazguille.me" />
     <link rel="preconnect" href="https://store-images.s-microsoft.com/" />
 
-    <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
-    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=new&skipitems=0" crossorigin="anonymous" />
-    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=deals&skipitems=0" crossorigin="anonymous" />
-    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=coming&skipitems=0" crossorigin="anonymous" />
-    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/xbox-games?list=best&skipitems=0" crossorigin="anonymous" />
+    <!-- <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=new&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=deals&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=coming&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=best&skipitems=0" crossorigin="anonymous" /> -->
 
     <link rel="modulepreload" href="./src/js/app.js" />
     <link rel="modulepreload" href="./src/js/templates.js" />
@@ -66,9 +66,22 @@
         <img src="./src/assets/favicon.png" width="25px" />
         XStore
       </h1>
-      <button class="page-back-btn" hidden>
-        <svg width="19" height="19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 9.5H1M9.5 18 1 9.5 9.5 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <button class="page-back-btn header-btn" hidden>
+        <svg width="19" height="19" fill="none" aria-hidden="true"><path d="M18 9.5H1M9.5 18 1 9.5 9.5 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
+
+      <button class="search-btn header-btn">
+        <svg width="25" height="25" viewBox="0 0 32 32" fill="#fff"><path d="M13 3a10 10 0 1 0 6.3 17.7l6 6a1 1 0 1 0 1.4-1.4l-6-6A10 10 0 0 0 13 3zm0 2a8 8 0 1 1 0 16 8 8 0 1 1 0-16z"/></svg>
+      </button>
+
+      <form id="search" class="search" action="/" hidden>
+        <label for="query">Buscar</label>
+        <input type="text" id="query" name="search" placeholder="Buscar juegos...">
+        <button type="submit" aria-label="Buscar">
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M13 3a10 10 0 1 0 6.3 17.7l6 6a1 1 0 1 0 1.4-1.4l-6-6A10 10 0 0 0 13 3zm0 2a8 8 0 1 1 0 16 8 8 0 1 1 0-16z"/></svg>
+        </button>
+        <button class="search-cancel-btn" aria-label="Cancelar">Cancelar</button>
+      </form>
     </header>
 
     <main>
@@ -76,8 +89,12 @@
 
       <div class="home"></div>
 
-      <div class="list page">
-        <div class="list-content page-content"></div>
+      <div class="collection list page">
+        <div class="collection-content page-content"></div>
+      </div>
+
+      <div class="results list page">
+        <div class="results-content page-content"></div>
       </div>
 
       <div class="detail page">

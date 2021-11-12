@@ -6,6 +6,10 @@
   --bg-box-color: #3A3A3A;
   --bg-highlight-color: #BF5AF2;
   --bg-box-highlight-color: rgba(3, 218, 197, 0.12);
+  --bg-xbox-color: #107C10;
+}
+[hidden] {
+  display: none !important;
 }
 
 html {
@@ -27,6 +31,16 @@ body {
   height: 100%;
 }
 
+input {
+  font-size: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 main {
   overflow: auto;
   height: calc(100vh - 45px);
@@ -46,12 +60,13 @@ main:before {
 
 header {
   text-align: center;
-  background-color: #107C10;
+  background-color: var(--bg-xbox-color);
   padding: 10px;
 
   position: fixed;
   z-index: 3;
   width: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -201,6 +216,10 @@ section h2 {
   border: 5px solid var(--bg-highlight-color);
 }
 
+.game-title a:focus:not(:focus-visible):before {
+  border: none;
+}
+
 .game-by {
   font-size: 13px;
   color: var(--txt-color-secondary);
@@ -250,6 +269,7 @@ section h2 {
   top: 50%;
   left: 50%;
   transform: translate(50%, -50%);
+  z-index: 10;
 }
 
 @keyframes xboxloader {
@@ -308,6 +328,9 @@ section h2 {
 .detail .game-preview-images {
   background-color: var(--bg-color);
   padding: 10px;
+  /* display: flex;
+  flex-direction: row;
+  overflow: auto; */
 }
 
 .detail .game-title {
@@ -340,7 +363,6 @@ section h2 {
 
 .btn {
   display: inline-block;
-  border: none;
   font-size: .9em;
   line-height: 1.5em;
   text-align: center;
@@ -360,7 +382,7 @@ section h2 {
   height: 100%;
 }
 
-.page-back-btn {
+.header-btn {
   border-radius: 100%;
   position: absolute;
   color: var(--txt-color);
@@ -369,9 +391,59 @@ section h2 {
   width: 55px;
   height: 45px;
   top: 0px;
-  left: 0px;
   line-height: 0;
   transform: translate3d(0,0,0);
+}
+
+.page-back-btn {
+  left: 0px;
+}
+
+.search-btn {
+  right: 0px;
+}
+
+.search {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  height: 45px;
+  background-color: var(--bg-xbox-color);
+  text-align: left;
+  display: flex;
+  align-items: center;
+
+  margin: 0;
+}
+
+.search label {
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.search input[type="text"] {
+  background-color: var(--txt-color);
+  border: 1px solid var(--txt-color);
+  border-radius: 20px;
+  padding: 3px 10px;
+  color: var(--bg-color);
+}
+
+.search input[type="text"]:focus {
+  outline: none;
+}
+
+.search button {
+  height: 45px;
+  color: var(--txt-color);
+  font-size: 16px;
+  padding: 0 5px;
+}
+
+.search button svg {
+  vertical-align: bottom;
 }
 
 .list .game-preview {
