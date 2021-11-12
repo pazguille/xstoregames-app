@@ -461,6 +461,7 @@ section h2 {
   .list .page-content {
     display: flex;
     flex-flow: wrap;
+    align-content: flex-start;
   }
 
   .list .game-preview {

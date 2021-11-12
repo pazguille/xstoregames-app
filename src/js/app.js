@@ -174,8 +174,6 @@ export default async function bootApp() {
     const $prevPage = $currentPage;
     const $prevPageContent = $currentPageContent;
 
-    console.log(eve.state);
-
     if (swipeToBack) {
       $currentPage.setAttribute('hidden', true);
     }
