@@ -48,10 +48,10 @@ main {
 }
 
 main:before {
-  content: 'Cargando...';
+  content: '↑';
   display: block;
   position: absolute;
-  top: 0px;
+  top: 10px;
   left: 0;
   width: 100%;
   height: 45px;
@@ -378,7 +378,6 @@ section h2 {
 }
 
 .page-content {
-  overflow: auto;
   height: 100%;
 }
 
@@ -461,7 +460,6 @@ section h2 {
   .list .page-content {
     display: flex;
     flex-flow: wrap;
-    align-content: flex-start;
   }
 
   .list .game-preview {

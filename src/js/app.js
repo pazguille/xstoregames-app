@@ -18,7 +18,7 @@ const sections = [
   },
   {
     type: 'deals',
-    title: 'Descuentitos',
+    title: 'Ahorrate unos mangos',
     list: [],
     skipitems: LIMIT,
   },
@@ -289,7 +289,7 @@ export default async function bootApp() {
   }
 
   function onTouchEndFn() {
-    if (refresh && $pullToRefresh.scrollTop <= 0) {
+    if (refresh && startOffsetY < threshold && $pullToRefresh.scrollTop <= 0) {
       window.location.reload();
     } else {
       if (!(scrolling && swipeToBack && currentOffsetX < 0)) {
@@ -319,7 +319,7 @@ export default async function bootApp() {
 
     currentOffsetY = dif_y;
 
-    if ($pullToRefresh.scrollTop <= 0 && dif_y > 0 && dif_y < threshold) {
+    if ($pullToRefresh.scrollTop <= 0 && startOffsetY < threshold && currentOffsetY < threshold) {
       this.style.transform = `translateY(${currentOffsetY}px)`;
     }
 
