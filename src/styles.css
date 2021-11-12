@@ -458,7 +458,7 @@ section h2 {
 }
 
 @media (min-width: 54em) {
-  .list-content {
+  .list .page-content {
     display: flex;
     flex-flow: wrap;
   }
