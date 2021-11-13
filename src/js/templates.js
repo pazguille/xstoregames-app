@@ -113,26 +113,12 @@ export function gameDeailTemplate(game) {
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar Ahora</a>
       <p class="game-description">${game.description}</p>
     </div>
-    <div class="game-preview-images">
-      ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
-    </div>
+    ${game.images.screenshot ? `
+      <div class="game-preview-images">
+        ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
+      </div>
+    ` : ''}
   </div>
 </article>
-`);
-}
-
-export function skeletonTemplate() {
-  return (`
-<article class="game-preview"></article>
-`);
-}
-
-export function noDataTemplate(url, message) {
-  return (`
-<tr>
-<td class="ranking">-</td>
-<td>${getSiteInfo(url)}</td>
-<td class="data-not-found" colspan="4">${message}</td>
-</tr>
 `);
 }
