@@ -43,6 +43,7 @@ export function gameCardNewTemplate(game) {
   <div>
     <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
+    ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
       <span class="game-price-amount">
@@ -69,6 +70,7 @@ export function gameCardTemplate(game) {
   <div>
     <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
     <p class="game-by">by ${game.developer || game.publisher}</p>
+    ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
     <div class="game-price">
       ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
       <span class="game-price-amount">
@@ -96,6 +98,7 @@ export function gameDeailTemplate(game) {
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
       <p class="game-by">by ${game.developer || game.publisher}</p>
+      ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="70px" height="13px" alt="Disponible en Game Pass">` : ''}
       <div class="game-price">
         ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
         <span class="game-price-amount">

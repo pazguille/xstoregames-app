@@ -148,6 +148,10 @@ section h2 {
   color: var(--txt-color);
 }
 
+.game-preview-new .game-pass {
+  top: 154px;
+}
+
 .game-preview-new > div {
   padding: 10px 15px;
   box-sizing: border-box;
@@ -230,6 +234,15 @@ section h2 {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.game-pass {
+  position: absolute;
+  top: 131px;
+  left: 5px;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: var(--txt-color);
 }
 
 .game-price {
@@ -349,6 +362,12 @@ section h2 {
 .detail .game-price-taxes {
   margin-top: 10px;
   margin-left: 35px;
+}
+
+.detail .game-pass {
+  position: initial;
+  display: block;
+  margin: 15px 0 0;
 }
 
 .detail .game-description {
