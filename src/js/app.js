@@ -4,11 +4,12 @@ import {
   gameDeailTemplate,
  } from './templates.js';
 
- const LIMIT = 10;
+const LIMIT = 10;
 const getXboxURL = (list, skipitems = 0) => `https://xbox-api.pazguille.me/api/games?list=${list}&skipitems=${skipitems}`;
 const searchXboxURL = (query) => `https://xbox-api.pazguille.me/api/search?q=${query}`;
 // const getXboxURL = (list, skipitems = 0) => `http://localhost:3031/api/games?list=${list}&skipitems=${skipitems}`;
 // const searchXboxURL = (query) => `http://localhost:3031/api/search?q=${query}`;
+const gamesCache = new Map();
 const sections = [
   {
     type: 'new',
@@ -41,7 +42,6 @@ const sections = [
     skipitems: LIMIT,
   },
 ];
-const gamesCache = new Map();
 
 export default async function bootApp() {
   const $searchBtn = document.querySelector('.search-btn');
@@ -81,8 +81,8 @@ export default async function bootApp() {
 
   document.body.addEventListener('click', (eve) => {
     if (!eve.target.classList.contains('link')) { return; }
-    eve.preventDefault();
 
+    eve.preventDefault();
     const data = eve.target.id.split('-');
     const type = data[0];
     const id = data[1];
@@ -93,36 +93,18 @@ export default async function bootApp() {
     if (type === 'detail') {
       $currentPage = $detail;
       $currentPageContent = $detailContent;
-      $pullToRefresh = $currentPageContent;
-
       const game = gamesCache.get(id);
-
-      history.pushState({ page: 'detail' }, game.title, eve.target.href);
-      $currentPage.classList.add('page-on');
-
       const html = gameDeailTemplate(game);
       requestIdleCallback(() => {
         $currentPageContent.innerHTML = html;
-        $search.setAttribute('hidden', true);
-        $searchBtn.setAttribute('hidden', true);
       });
     }
 
     if (type === 'collection') {
       $currentPage = $list;
       $currentPageContent = $listContent;
-      $pullToRefresh = $currentPageContent;
 
       const section = sections.find(section => section.type === id);
-
-      history.pushState({ page: 'collection' }, section.title, eve.target.href);
-      $currentPage.classList.add('page-on');
-
-      requestIdleCallback(() => {
-        $search.setAttribute('hidden', true);
-        $searchBtn.setAttribute('hidden', true);
-      });
-
       section.list.map((game) => requestIdleCallback(() => {
         $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
         gamesCache.set(game.id, game);
@@ -149,6 +131,15 @@ export default async function bootApp() {
         o.observe(o.current);
       });
     }
+
+    requestIdleCallback(() => {
+      $search.setAttribute('hidden', true);
+      $searchBtn.setAttribute('hidden', true);
+    });
+
+    history.pushState({ page: type }, '', eve.target.href);
+    $currentPage.classList.add('page-on');
+    $pullToRefresh = $currentPageContent;
   });
 
   $pageBack.addEventListener('click', () => {

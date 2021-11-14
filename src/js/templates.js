@@ -1,14 +1,13 @@
 const IVA = 0.21;
 const IIBB = 0.02;
 const AFIP = 0.35;
-const PAISup10 = 0.30;
-const PAISdown10 = 0.08;
-const taxes = 1+IVA+IIBB+AFIP;
+const PAISA = 0.08;
+const PAISB = 0.30;
+const taxes = (1+IVA+IIBB+AFIP+PAISA).toFixed(2);
 
 function convert(price, dollar) {
   const usdPrice = (price / dollar);
-  const pais = usdPrice > 10 ? PAISup10 : PAISdown10;
-  return (usdPrice * dollar * (taxes + pais)).toFixed(2);
+  return (usdPrice * dollar * taxes).toFixed(2);
 }
 
 const formatter = new Intl.NumberFormat('es-AR', {
