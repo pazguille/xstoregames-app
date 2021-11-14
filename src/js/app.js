@@ -42,7 +42,6 @@ const sections = [
   },
 ];
 const gamesCache = new Map();
-window.gamesCache = gamesCache;
 
 export default async function bootApp() {
   const $searchBtn = document.querySelector('.search-btn');
@@ -57,6 +56,7 @@ export default async function bootApp() {
   const $listContent = document.querySelector('.collection-content');
   const $results = document.querySelector('.results');
   const $resultsContent = document.querySelector('.results-content');
+
   let $currentPage = null;
   let $currentPageContent = null;
 
