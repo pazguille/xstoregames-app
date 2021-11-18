@@ -92,17 +92,18 @@ export default async function bootApp() {
   let $currentPageContent = null;
 
   $homeBtn.addEventListener('click', () => {
-    if (!$currentPage) { return; }
+    if (!$currentPageContent) { return; }
 
     $loading.setAttribute('hidden', true);
     $currentPage.classList.remove('page-on');
     $currentPageContent.innerHTML = '';
     $currentPage = null;
     $currentPageContent = null;
+    $pullToRefresh = $main;
   });
 
   $newsBtn.addEventListener('click', async () => {
-    if ($currentPage) { return; }
+    if ($currentPageContent) { return; }
 
     $loading.removeAttribute('hidden');
 
@@ -235,7 +236,7 @@ export default async function bootApp() {
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
       $search.elements[0].value = '';
-      $currentPage = null;
+      $currentPage = $main;
       $currentPageContent = null;
     }
 
