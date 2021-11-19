@@ -47,11 +47,8 @@ button svg {
 
 main {
   overflow: auto;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 50px - env(safe-area-inset-bottom));
   padding-top: 50px;
-
-  /* height: calc(100vh - 100px);
-  padding: 50px 0; */
 }
 
 main:before {
@@ -298,9 +295,9 @@ section h2 {
 .game-buy-now {
   background-image: url('./assets/xbox-logo.png');
   background-repeat: no-repeat;
-  background-position: 10px center;
+  background-position: .5em center;
   background-size: 15px;
-  padding-left: 30px !important;
+  padding-left: 28px !important;
 }
 
 .x-loader {
@@ -504,8 +501,7 @@ section h2 {
 
 .home {
   min-height: auto;
-  bottom: 50px;
-  padding-bottom: 80px;
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
 }
 
 .list .game-preview {
@@ -521,7 +517,7 @@ section h2 {
 
 .news {
   z-index: 1;
-  bottom: 50px;
+  bottom: calc(50px + env(safe-area-inset-bottom));
   min-height: auto;
 }
 
