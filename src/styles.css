@@ -13,9 +13,9 @@
 }
 
 html {
-  font-family: sans-serif; /* 1 */
-  -ms-text-size-adjust: 100%; /* 2 */
-  -webkit-text-size-adjust: 100%; /* 2 */
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -26,9 +26,6 @@ body {
   color: var(--txt-color);
   font-size: 16px;
   line-height: 1.1em;
-
-  overflow: hidden;
-  height: 100%;
 }
 
 input {
@@ -47,7 +44,6 @@ button svg {
 
 main {
   overflow: auto;
-  height: calc(100vh - 50px - env(safe-area-inset-bottom));
   padding-top: 50px;
 }
 
@@ -500,7 +496,6 @@ section h2 {
 }
 
 .home {
-  min-height: auto;
   padding-bottom: calc(60px + env(safe-area-inset-bottom));
 }
 

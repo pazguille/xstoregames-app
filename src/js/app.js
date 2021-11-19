@@ -140,7 +140,7 @@ export default async function bootApp() {
     const id = data[1];
 
     $pageBack.removeAttribute('hidden');
-    $main.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
     if (type === 'detail') {
       $currentPage = $detail;
@@ -232,7 +232,7 @@ export default async function bootApp() {
     }
 
     if (eve.state === null) {
-      $main.style = undefined;
+      document.body.style = undefined;
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
       $search.elements[0].value = '';
@@ -326,7 +326,7 @@ export default async function bootApp() {
     $loading.removeAttribute('hidden');
     $search.setAttribute('hidden', true);
     $pageBack.removeAttribute('hidden');
-    $main.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
     const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
     $loading.setAttribute('hidden', true);
