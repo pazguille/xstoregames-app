@@ -61,15 +61,15 @@ async function updateDollar() {
   });
 }
 
-const dollar = JSON.parse(localStorage.getItem('dollar'));
-if (!dollar || dollar.date !== new Date().toDateString()) {
-  await updateDollar();
-} else {
-  window.dollar = dollar.amount;
-  updateDollar();
-}
-
 export default async function bootApp() {
+  const dollar = JSON.parse(localStorage.getItem('dollar'));
+  if (!dollar || dollar.date !== new Date().toDateString()) {
+    await updateDollar();
+  } else {
+    window.dollar = dollar.amount;
+    updateDollar();
+  }
+
   const $searchBtn = document.querySelector('.search-btn');
   const $cancelSearchBtn = document.querySelector('.search-cancel-btn');
   const $search = document.querySelector('#search');
