@@ -2,13 +2,17 @@ import {
   sectionTemplate,
   gameCardTemplate,
   gameDeailTemplate,
+  newsTemplate,
  } from './templates.js';
 
 const LIMIT = 10;
 const getXboxURL = (list, skipitems = 0) => `https://xbox-api.pazguille.me/api/games?list=${list}&skipitems=${skipitems}`;
 const searchXboxURL = (query) => `https://xbox-api.pazguille.me/api/search?q=${query}`;
+const getXboxNewsURL = () => `https://xbox-api.pazguille.me/api/news`;
 // const getXboxURL = (list, skipitems = 0) => `http://localhost:3031/api/games?list=${list}&skipitems=${skipitems}`;
 // const searchXboxURL = (query) => `http://localhost:3031/api/search?q=${query}`;
+// const getXboxNewsURL = () => `http://localhost:3031/api/news`;
+
 const gamesCache = new Map();
 const sections = [
   {
@@ -43,6 +47,28 @@ const sections = [
   },
 ];
 
+async function updateDollar() {
+  await fetch('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
+  .then(res => res.json())
+  .then(data => {
+    return parseFloat(data[0].casa.compra.replace(',', '.'));
+  })
+  .then(data => {
+    window.dollar = data;
+    localStorage.setItem('dollar', JSON.stringify({
+      amount: data, date: new Date().toDateString(),
+    }));
+  });
+}
+
+const dollar = JSON.parse(localStorage.getItem('dollar'));
+if (!dollar || dollar.date !== new Date().toDateString()) {
+  await updateDollar();
+} else {
+  window.dollar = dollar.amount;
+  updateDollar();
+}
+
 export default async function bootApp() {
   const $searchBtn = document.querySelector('.search-btn');
   const $cancelSearchBtn = document.querySelector('.search-cancel-btn');
@@ -57,8 +83,40 @@ export default async function bootApp() {
   const $results = document.querySelector('.results');
   const $resultsContent = document.querySelector('.results-content');
 
+  const $homeBtn = document.querySelector('.home-btn');
+  const $newsBtn = document.querySelector('.news-btn');
+  const $news = document.querySelector('.news');
+  const $newsContent = document.querySelector('.news-content');
+
   let $currentPage = null;
   let $currentPageContent = null;
+
+  $homeBtn.addEventListener('click', () => {
+    if (!$currentPageContent) { return; }
+
+    $loading.setAttribute('hidden', true);
+    $currentPage.classList.remove('page-on');
+    $currentPageContent.innerHTML = '';
+    $currentPage = null;
+    $currentPageContent = null;
+    $pullToRefresh = $main;
+  });
+
+  $newsBtn.addEventListener('click', async () => {
+    if ($currentPageContent) { return; }
+
+    $loading.removeAttribute('hidden');
+
+    $currentPage = $news;
+    $currentPageContent = $newsContent;
+    $currentPage.classList.add('page-on');
+
+    const news = await fetch(getXboxNewsURL()).then(res => res.json());
+    news.map((n) => requestIdleCallback(() => {
+      $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n));
+    }));
+    $loading.setAttribute('hidden', true);
+  });
 
   $searchBtn.addEventListener('click', () => {
     $search.removeAttribute('hidden');
@@ -73,13 +131,7 @@ export default async function bootApp() {
     $search.setAttribute('hidden', true);
   });
 
-  window.dollar = await fetch('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
-    .then(res => res.json())
-    .then(data => {
-      return parseFloat(data[0].casa.compra.replace(',', '.'));
-    });
-
-  document.body.addEventListener('click', (eve) => {
+  document.body.addEventListener('click', async (eve) => {
     if (!eve.target.classList.contains('link')) { return; }
 
     eve.preventDefault();
@@ -184,65 +236,12 @@ export default async function bootApp() {
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
       $search.elements[0].value = '';
+      $currentPage = $main;
+      $currentPageContent = null;
     }
 
     $pullToRefresh = $currentPage;
   });
-
-
-  // const url = new URL(window.location.href);
-  // const params = new URLSearchParams(url.search);
-
-  // if (params.has('id')) {
-  //   const game = games.find((game) => {
-  //     if (game.id === params.get('id')) {
-  //       return game;
-  //     }
-  //   });
-  //   requestIdleCallback(() => {
-  //     $pageBack.removeAttribute('hidden');
-  //     const html = gameDeailTemplate(game);
-  //     $detailContent.innerHTML = html;
-  //     $detail.classList.add('page-on');
-  //     $pullToRefresh = $detailContent;
-  //   });
-
-  //   $currentPage = $detail;
-  //   $currentPageContent = $detailContent;
-  //   $searchBtn.setAttribute('hidden', true);
-  // }
-
-  // if (params.has('list')) {
-  //   const id = params.get('list');
-  //   const section = sections.find(section => section.type === id);
-  //   $pageBack.removeAttribute('hidden');
-  //   section.list.map((game) => requestIdleCallback(() => {
-  //     $listContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-  //   }));
-  //   $list.classList.add('page-on');
-
-  //   const o = new IntersectionObserver(async(entries) => {
-  //     const first = entries[0];
-  //     if (first.isIntersecting) {
-  //       o.unobserve(o.current);
-  //       const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());;
-  //       moreGames.map((game) => requestIdleCallback(() => {
-  //         $listContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-  //       }));
-  //       requestIdleCallback(() => {
-  //         o.current = $listContent.lastElementChild;
-  //         o.observe(o.current);
-  //       });
-  //       section.list.push(...moreGames);
-  //       gamesCache.push(...moreGames);
-  //     }
-  //   });
-
-  //   requestIdleCallback(() => {
-  //     o.current = $listContent.lastElementChild;
-  //     o.observe(o.current);
-  //   });
-  // }
 
   const touchPassiveListener = { passive: true, capture: false, };
   const $main = document.querySelector('main');
@@ -304,7 +303,6 @@ export default async function bootApp() {
       refresh = true;
     }
   };
-
   $main.addEventListener('touchstart', resetTouchFn, touchPassiveListener);
   $main.addEventListener('touchmove', onTouchMoveFn, touchPassiveListener);
   $main.addEventListener('touchend', onTouchEndFn, touchPassiveListener);

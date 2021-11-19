@@ -41,10 +41,17 @@ button {
   cursor: pointer;
 }
 
+button svg {
+  pointer-events: none;
+}
+
 main {
   overflow: auto;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 100px);
   padding-top: 50px;
+
+  /* height: calc(100vh - 100px);
+  padding: 50px 0; */
 }
 
 main:before {
@@ -58,16 +65,33 @@ main:before {
   text-align: center;
 }
 
-header {
+header,
+footer {
   text-align: center;
-  background-color: var(--bg-xbox-color);
-  padding: 10px;
-
   position: fixed;
   z-index: 3;
   width: 100%;
-  height: 50px;
   box-sizing: border-box;
+}
+
+header {
+  background-color: var(--bg-xbox-color);
+  padding: 10px;
+  height: 50px;
+}
+
+footer {
+  background-color: var(--bg-color);
+  border-top: 1px solid #2f3336;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+footer div {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 h1 {
@@ -99,7 +123,7 @@ h1 img {
 }
 
 section {
-  margin: 40px 0;
+  margin: 25px 0;
   position: relative;
 }
 
@@ -271,9 +295,17 @@ section h2 {
   margin-top: 5px;
 }
 
+.game-buy-now {
+  background-image: url('./assets/xbox-logo.png');
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-size: 15px;
+  padding-left: 30px !important;
+}
+
 .x-loader {
   animation: xboxloader infinite 1.5s linear;
-  border: #FFF 15px solid;
+  border: #FFF 5px solid;
   border-radius:50%;
   box-sizing: border-box;
   height: 20px;
@@ -290,7 +322,7 @@ section h2 {
   0% { transform: scale(0); opacity:0; }
   20% { opacity:1; }
   25% { transform: scale(1); opacity:1; }
-  50% { border-width:0; opacity:0; transform: scale(1.3); }
+  50% { border-width:0; opacity:0; transform: scale(1.3);  }
 }
 
 .page {
@@ -361,7 +393,6 @@ section h2 {
 
 .detail .game-price-taxes {
   margin-top: 10px;
-  margin-left: 35px;
 }
 
 .detail .game-pass {
@@ -417,6 +448,17 @@ section h2 {
   right: 0px;
 }
 
+.footer-btn {
+  border-radius: 100%;
+  color: var(--txt-color);
+  background: none;
+  border: none;
+  width: 55px;
+  height: 55px;
+  line-height: 1.5em;
+  transform: translate3d(0,0,0);
+}
+
 .search {
   position: absolute;
   top: 0;
@@ -460,6 +502,12 @@ section h2 {
   vertical-align: bottom;
 }
 
+.home {
+  min-height: auto;
+  bottom: 50px;
+  padding-bottom: 80px;
+}
+
 .list .game-preview {
   width: auto;
   height: 155px;
@@ -471,8 +519,53 @@ section h2 {
   margin: 10px 0 0;
 }
 
+.news {
+  z-index: 1;
+  bottom: 50px;
+  min-height: auto;
+}
+
+.news-preview {
+  padding: 10px 15px;
+  position: relative;
+  margin: 10px;
+  border-radius: 5px;
+  background-color: var(--bg-box-color);
+  height: auto;
+  width: auto;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.news-preview h2 {
+  font-size: 22px;
+  margin: 5px 0 20px;
+}
+
+.news-preview a {
+  color: var(--txt-color);
+}
+
+.news-preview a:before {
+  content: '';
+  text-decoration: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.news-preview p {
+  color: var(--txt-color-secondary);
+}
+
 @media (min-width: 54em) {
-  .list .page-content {
+  .list .page-content,
+  .news .page-content {
     display: flex;
     flex-flow: wrap;
     align-content: baseline;
@@ -480,6 +573,10 @@ section h2 {
 
   .list .game-preview {
     width: 315px;
+  }
+
+  .news .news-preview {
+    width: 310px;
   }
 
   .detail .game-preview .game-preview-info {
