@@ -77,7 +77,8 @@ export function gameInfoTemplate(game) {
 export function gameDeailTemplate(game) {
   const img = game.images.titledheroart ?
   (game.images.titledheroart.url || game.images.titledheroart[0].url)
-  : game.images.screenshot[0].url;
+  : game.images.screenshot ? game.images.screenshot[0].url
+  : game.images.superheroart.url;
 
   return (`
 <article class="game-preview" style="background-image: url(${img}?w=1000)">
