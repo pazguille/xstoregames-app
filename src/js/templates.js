@@ -46,12 +46,15 @@ export function gamePriceTemplate(game) {
 <div class="game-price">
   ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
   <span class="game-price-amount">
-    ${game.price.deal > 0 ?
+    ${game.price.amount > 0 ?
       `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
       : 'Gratis'
     }
   </span>
-  ${game.price.deal > 0 ?
+  ${game.price.deal !== game.price.amount ? `<div class="game-price-prev"><s>
+${formatter.format(convert(game.price.amount, dollar))}
+</s></div>` : ''}
+  ${game.price.amount > 0 ?
     `<small class="game-price-taxes">impuestos incluídos</small>`
     : ''
   }
@@ -65,19 +68,25 @@ export function gameInfoTemplate(game) {
   <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
   <p class="game-by">by ${game.developer || game.publisher}</p>
   ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
+  ${game.ea_play ? `<img class="game-pass" src="./src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
   ${gamePriceTemplate(game)}
 </div>
   `);
 }
 
 export function gameDeailTemplate(game) {
+  const img = game.images.titledheroart ?
+  (game.images.titledheroart.url || game.images.titledheroart[0].url)
+  : game.images.screenshot[0].url;
+
   return (`
-<article class="game-preview" style="background-image: url(${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}?w=1000)">
+<article class="game-preview" style="background-image: url(${img}?w=1000)">
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
       <p class="game-by">by ${game.developer || game.publisher}</p>
       ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="70px" height="13px" alt="Disponible en Game Pass">` : ''}
+      ${game.ea_play ? `<img class="game-pass" src="./src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play">` : ''}
       ${gamePriceTemplate(game)}
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar ahora</a>
       <p class="game-description">${game.description}</p>
@@ -93,10 +102,13 @@ export function gameDeailTemplate(game) {
 }
 
 export function gameCardNewTemplate(game) {
+  const img = game.images.titledheroart ?
+    (game.images.titledheroart.url || game.images.titledheroart[0].url)
+    : game.images.screenshot[0].url;
   return (`
 <article class="game-preview-new">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="315px" height="177px" alt="" decoding="async" src="${game.images.superheroart.url || game.images.titledheroart.url || game.images.titledheroart[0].url}?w=630">
+  <img class="game-img" width="315px" height="177px" alt="" decoding="async" src="${img}?w=630">
 </article>
 `);
 }

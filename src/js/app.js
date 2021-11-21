@@ -40,6 +40,12 @@ const sections = [
     skipitems: LIMIT,
   },
   {
+    type: 'most',
+    title: 'Los más jugados',
+    list: [],
+    skipitems: LIMIT,
+  },
+  {
     type: 'free',
     title: 'Gratarola',
     list: [],
@@ -94,6 +100,9 @@ export default async function bootApp() {
   $homeBtn.addEventListener('click', () => {
     if (!$currentPageContent) { return; }
 
+    $main.style = undefined;
+    document.body.style = undefined;
+
     $loading.setAttribute('hidden', true);
     $currentPage.classList.remove('page-on');
     $currentPageContent.innerHTML = '';
@@ -110,6 +119,9 @@ export default async function bootApp() {
     $currentPage = $news;
     $currentPageContent = $newsContent;
     $currentPage.classList.add('page-on');
+
+    $main.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
     const news = await fetch(getXboxNewsURL()).then(res => res.json());
     news.map((n) => requestIdleCallback(() => {
@@ -140,6 +152,7 @@ export default async function bootApp() {
     const id = data[1];
 
     $pageBack.removeAttribute('hidden');
+    $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
     if (type === 'detail') {
@@ -232,6 +245,7 @@ export default async function bootApp() {
     }
 
     if (eve.state === null) {
+      $main.style = undefined;
       document.body.style = undefined;
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
@@ -326,6 +340,7 @@ export default async function bootApp() {
     $loading.removeAttribute('hidden');
     $search.setAttribute('hidden', true);
     $pageBack.removeAttribute('hidden');
+    $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
     const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());

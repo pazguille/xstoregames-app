@@ -16,6 +16,7 @@
     <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=coming&skipitems=0" crossorigin="anonymous" />
     <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=best&skipitems=0" crossorigin="anonymous" />
     <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=free&skipitems=0" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://xbox-api.pazguille.me/api/games?list=most&skipitems=0" crossorigin="anonymous" />
 
     <link rel="modulepreload" href="./src/js/app.js" />
     <link rel="modulepreload" href="./src/js/templates.js" />
@@ -79,7 +80,7 @@
 
       <form id="search" class="search" action="/" hidden>
         <label for="query">Buscar</label>
-        <input type="text" id="query" name="search" placeholder="Buscar juegos...">
+        <input type="search" id="query" name="search" placeholder="Buscar juegos...">
         <button type="submit" aria-label="Buscar">
           <svg width="20" height="20" viewBox="0 0 32 32" fill="#fff" aria-hidden="true"><path d="M13 3a10 10 0 1 0 6.3 17.7l6 6a1 1 0 1 0 1.4-1.4l-6-6A10 10 0 0 0 13 3zm0 2a8 8 0 1 1 0 16 8 8 0 1 1 0-16z"/></svg>
         </button>

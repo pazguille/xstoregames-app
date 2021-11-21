@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark light;
+  /* color-scheme: dark light; */
   --txt-color: #fff;
   --txt-color-secondary: #b3b3b3;
   --bg-color: #1C1C1C;
@@ -146,7 +146,7 @@ section h2 {
 
 .game-preview-new {
   width: 315px;
-  height: 295px;
+  height: 320px;
   background: linear-gradient(106.33deg, #BF5AF2 0.73%, #8B27BD 99.99%);
   box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.8);
   border-radius: 10px;
@@ -183,8 +183,7 @@ section h2 {
   margin: 10px 0 0
 }
 
-.game-preview-new .game-price-amount,
-.game-preview-new .game-price-taxes {
+.game-preview-new .game-price-amount {
   display: inline-block;
   margin: 0;
 }
@@ -264,10 +263,10 @@ section h2 {
 
 .game-price {
   margin: 15px 0;
+  font-weight: 300;
 }
 
 .game-price-amount {
-  font-weight: 300;
   margin-top: 10px;
   display: block;
   font-size: 18px;
@@ -282,8 +281,8 @@ section h2 {
   border-radius: 5px;
 }
 
+.game-price-prev,
 .game-price-taxes {
-  font-weight: 300;
   display: inline-block;
   margin-top: 5px;
 }
@@ -382,9 +381,11 @@ section h2 {
 
 .detail .game-price-amount {
   font-size: 26px;
+  margin-top: 15px;
 }
 
-.detail .game-price-taxes {
+.detail .game-price-prev {
+  display: block;
   margin-top: 10px;
 }
 
@@ -472,7 +473,7 @@ section h2 {
   z-index: -1;
 }
 
-.search input[type="text"] {
+.search input[type="search"] {
   background-color: var(--txt-color);
   border: 1px solid var(--txt-color);
   border-radius: 20px;
@@ -480,7 +481,7 @@ section h2 {
   color: var(--bg-color);
 }
 
-.search input[type="text"]:focus {
+.search input[type="search"]:focus {
   outline: none;
 }
 
