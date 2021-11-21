@@ -181,6 +181,7 @@ export default async function bootApp() {
           if (first.isIntersecting) {
             o.unobserve(o.current);
             const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
+            if (moreGames.length === 0) { return; }
             moreGames.map((game) => requestIdleCallback(() => {
               $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
               gamesCache.set(game.id, game);

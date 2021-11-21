@@ -79,7 +79,7 @@ export function gameDeailTemplate(game) {
   (game.images.titledheroart.url || game.images.titledheroart[0].url)
   : game.images.screenshot ? game.images.screenshot[0].url
   : game.images.superheroart.url;
-
+  const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   return (`
 <article class="game-preview" style="background-image: url(${img}?w=1000)">
   <div>
@@ -90,6 +90,7 @@ export function gameDeailTemplate(game) {
       ${game.ea_play ? `<img class="game-pass" src="./src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play">` : ''}
       ${gamePriceTemplate(game)}
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar ahora</a>
+      ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
       <p class="game-description">${game.description}</p>
     </div>
     ${Array.isArray(game.images.screenshot) ? `
