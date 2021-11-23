@@ -19,37 +19,37 @@ const sections = [
     type: 'new',
     title: 'Salidos del horno',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
   {
     type: 'deals',
     title: 'Ahorrate unos mangos',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
   {
     type: 'coming',
     title: '¡Mirá lo que se viene!',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
   {
     type: 'best',
     title: 'Deberías jugarlos',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
   {
     type: 'most',
     title: 'Los más jugados',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
   {
     type: 'free',
     title: 'Gratarola',
     list: [],
-    skipitems: LIMIT,
+    skipitems: 0,
   },
 ];
 
