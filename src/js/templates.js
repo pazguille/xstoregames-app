@@ -48,7 +48,7 @@ export function gamePriceTemplate(game) {
   <span class="game-price-amount">
     ${game.price.amount > 0 ?
       `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
-      : 'Gratis'
+      : game.demo ? 'Demo' : 'Gratis'
     }
   </span>
   ${game.price.deal !== game.price.amount ? `<div class="game-price-prev"><s>
@@ -116,10 +116,12 @@ export function gameCardNewTemplate(game) {
 }
 
 export function gameCardTemplate(game) {
+  const img = game.images.boxart ?
+    game.images.boxart.url : game.images.poster.url;
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="155px" height="155px" alt="" decoding="async" loading="lazy" src="${game.images.boxart.url}?w=310">
+  <img class="game-img" width="155px" height="155px" alt="" decoding="async" loading="lazy" src="${img}?w=310">
 </article>
 `);
 }
