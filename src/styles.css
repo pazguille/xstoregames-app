@@ -361,9 +361,14 @@ section h2 {
 .detail .game-preview-images {
   background-color: var(--bg-color);
   padding: 10px;
+  display: inline-block;
   /* display: flex;
   flex-direction: row;
   overflow: auto; */
+}
+
+.detail .game-preview-video {
+  position: relative;
 }
 
 .detail .game-title {

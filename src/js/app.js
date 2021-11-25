@@ -1,7 +1,7 @@
 import {
   sectionTemplate,
   gameCardTemplate,
-  gameDeailTemplate,
+  gameDetailTemplate,
   newsTemplate,
  } from './templates.js';
 
@@ -159,7 +159,7 @@ export default async function bootApp() {
       $currentPage = $detail;
       $currentPageContent = $detailContent;
       const game = gamesCache.get(id);
-      const html = gameDeailTemplate(game);
+      const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
         $currentPageContent.innerHTML = html;
       });

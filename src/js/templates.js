@@ -74,7 +74,7 @@ export function gameInfoTemplate(game) {
   `);
 }
 
-export function gameDeailTemplate(game) {
+export function gameDetailTemplate(game) {
   const img = game.images.titledheroart ?
   (game.images.titledheroart.url || game.images.titledheroart[0].url)
   : game.images.screenshot ? game.images.screenshot[0].url
@@ -95,6 +95,9 @@ export function gameDeailTemplate(game) {
     </div>
     ${Array.isArray(game.images.screenshot) ? `
       <div class="game-preview-images">
+        <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video">
+          <img width="100%" loading="lazy" decoding="async" src="./src/assets/video.jpg" />
+        </a>
         ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
       </div>
     ` : ''}
