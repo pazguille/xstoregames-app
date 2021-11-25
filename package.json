@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/pazguille/xbox-games-app/issues"
   },
-  "homepage": "https://xstore.pazguill.me",
+  "homepage": "https://xstoregames.com",
   "devDependencies": {
     "html-inline": "^1.2.0",
     "html-minifier-terser": "^5.1.1",

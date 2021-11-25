@@ -6,9 +6,9 @@ import {
  } from './templates.js';
 
 const LIMIT = 10;
-const getXboxURL = (list, skipitems = 0) => `https://xbox-api.pazguille.me/api/games?list=${list}&skipitems=${skipitems}`;
-const searchXboxURL = (query) => `https://xbox-api.pazguille.me/api/search?q=${query}`;
-const getXboxNewsURL = () => `https://xbox-api.pazguille.me/api/news`;
+const getXboxURL = (list, skipitems = 0) => `https://api.xstoregames.com/api/games?list=${list}&skipitems=${skipitems}`;
+const searchXboxURL = (query) => `https://api.xstoregames.com/api/search?q=${query}`;
+const getXboxNewsURL = () => `https://api.xstoregames.com/api/news`;
 // const getXboxURL = (list, skipitems = 0) => `http://localhost:3031/api/games?list=${list}&skipitems=${skipitems}`;
 // const searchXboxURL = (query) => `http://localhost:3031/api/search?q=${query}`;
 // const getXboxNewsURL = () => `http://localhost:3031/api/news`;
