@@ -24,7 +24,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all link" id="collection-${section.type}" href="./?list=${section.type}">Ver todos →</a>
+  <a class="see-all link" id="collection-${section.type}" href="/collection/${section.type}">Ver todos →</a>
 </section>
 `);
 }
@@ -65,10 +65,10 @@ ${formatter.format(convert(game.price.amount, dollar))}
 export function gameInfoTemplate(game) {
   return (`
 <div>
-  <h3 class="game-title"><a id="detail-${game.id}" href="./?id=${game.id}" class="link">${game.title}</a></h3>
+  <h3 class="game-title"><a id="detail-${game.id}" href="/game/${game.id}" class="link">${game.title}</a></h3>
   <p class="game-by">by ${game.developer || game.publisher}</p>
-  ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
-  ${game.ea_play ? `<img class="game-pass" src="./src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
+  ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
+  ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
   ${gamePriceTemplate(game)}
 </div>
   `);
@@ -86,8 +86,8 @@ export function gameDetailTemplate(game) {
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
       <p class="game-by">by ${game.developer || game.publisher}</p>
-      ${game.game_pass ? `<img class="game-pass" src="./src/assets/game-pass.png" width="70px" height="13px" alt="Disponible en Game Pass">` : ''}
-      ${game.ea_play ? `<img class="game-pass" src="./src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play">` : ''}
+      ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.png" width="70px" height="13px" alt="Disponible en Game Pass">` : ''}
+      ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play">` : ''}
       ${gamePriceTemplate(game)}
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar ahora</a>
       ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
@@ -96,7 +96,7 @@ export function gameDetailTemplate(game) {
     ${Array.isArray(game.images.screenshot) ? `
       <div class="game-preview-images">
         <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video">
-          <img width="100%" loading="lazy" decoding="async" src="./src/assets/video.jpg" />
+          <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" />
         </a>
         ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
       </div>

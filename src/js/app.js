@@ -331,9 +331,9 @@ export default async function bootApp() {
 
     const q = eve.target.elements[0].value;
     if (history.state === null) {
-      history.pushState({ page: 'results' }, 'Resultados de busqueda', `${eve.target.action}?search=${q}`);
+      history.pushState({ page: 'results' }, 'Resultados de busqueda', `${eve.target.action}?q=${q}`);
     } else {
-      history.replaceState({ page: 'results' }, 'Resultados de busqueda', `${eve.target.action}?search=${q}`);
+      history.replaceState({ page: 'results' }, 'Resultados de busqueda', `${eve.target.action}?q=${q}`);
     }
     $currentPage.classList.add('page-on');
 
