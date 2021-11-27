@@ -148,11 +148,11 @@ export default async function bootApp() {
     if (!eve.target.classList.contains('link')) { return; }
     eve.preventDefault();
     const data = eve.target.id.split('-');
-    const type = data[0];
+    const page = data[0];
     const id = data[1];
-    showPage(type, id);
+    showPage(page, id);
     $pageBack.removeAttribute('hidden');
-    history.pushState({ page: type }, '', eve.target.href);
+    history.pushState({ page, id }, '', eve.target.href);
   });
 
   $pageBack.addEventListener('click', () => {
@@ -172,25 +172,9 @@ export default async function bootApp() {
     setTimeout(() => {
       requestIdleCallback(() => {
         $prevPage.removeAttribute('hidden');
-        $prevPageContent.innerHTML = '';
+        $prevPageContent ? $prevPageContent.innerHTML = '' : false;
       });
     }, 300);
-
-    if (eve.state && eve.state.page === 'results') {
-      $currentPage = $results;
-      $currentPageContent = $resultsContent;
-      $searchBtn.removeAttribute('hidden');
-    }
-
-    if (eve.state && eve.state.page === 'collection') {
-      $currentPage = $list;
-      $currentPageContent = $listContent;
-    }
-
-    if (eve.state && eve.state.page === 'detail') {
-      $currentPage = $detail;
-      $currentPageContent = $detailContent;
-    }
 
     if (eve.state === null) {
       $main.style = undefined;
@@ -200,6 +184,13 @@ export default async function bootApp() {
       $search.elements[0].value = '';
       $currentPage = $main;
       $currentPageContent = null;
+
+    } else if (eve.state && eve.state.page === 'results') {
+      $pageBack.removeAttribute('hidden');
+      loadSearchPage(eve.state.q);
+    } else {
+      $pageBack.removeAttribute('hidden');
+      showPage(eve.state.page, eve.state.id);
     }
 
     $pullToRefresh = $currentPage;
@@ -272,14 +263,15 @@ export default async function bootApp() {
   $search.addEventListener('submit', async (eve) => {
     eve.preventDefault();
     const q = eve.target.elements[0].value;
+    $pageBack.removeAttribute('hidden');
     loadSearchPage(q);
   });
 
-  async function showPage(type, id) {
+  async function showPage(page, id) {
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    if (type === 'detail') {
+    if (page === 'detail') {
       $currentPage = $detail;
       $currentPageContent = $detailContent;
       let game = gamesCache.get(id);
@@ -295,7 +287,7 @@ export default async function bootApp() {
       });
     }
 
-    if (type === 'collection') {
+    if (page === 'collection') {
       $currentPage = $list;
       $currentPageContent = $listContent;
 
@@ -354,21 +346,21 @@ export default async function bootApp() {
   }
 
   async function loadSearchPage(q) {
+    $searchBtn.removeAttribute('hidden');
     $currentPage = $results
     $currentPageContent = $resultsContent;
     $pullToRefresh = $currentPageContent;
 
     if (history.state === null) {
-      history.pushState({ page: 'results' }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
     } else {
-      history.replaceState({ page: 'results' }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
     }
     $currentPage.classList.add('page-on');
 
     $currentPageContent.innerHTML = '';
     $loading.removeAttribute('hidden');
     $search.setAttribute('hidden', true);
-    $pageBack.removeAttribute('hidden');
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
@@ -389,10 +381,10 @@ export default async function bootApp() {
 
   const { pathname, searchParams } = new URL(window.location.href);
   const pathSplit = pathname.split('/');
-  const type = pathSplit[1];
+  const page = pathSplit[1];
   const id = pathSplit[2];
 
-  switch (type) {
+  switch (page) {
     case '':
       loadHomePage();
       break;
