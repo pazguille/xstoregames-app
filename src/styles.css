@@ -111,6 +111,11 @@ h3 {
   display: none;
 }
 
+h1 a {
+ color: var(--txt-color);
+ text-decoration: none;
+}
+
 h1 img {
   vertical-align: text-top;
 }
@@ -362,9 +367,6 @@ section h2 {
   background-color: var(--bg-color);
   padding: 10px;
   display: inline-block;
-  /* display: flex;
-  flex-direction: row;
-  overflow: auto; */
 }
 
 .detail .game-preview-video {
