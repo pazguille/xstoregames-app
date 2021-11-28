@@ -161,7 +161,13 @@ export default async function bootApp() {
 
   window.addEventListener('popstate', (eve) => {
     if (swipeToBack) {
+      const $prev = $currentPage;
       $currentPage.setAttribute('hidden', true);
+      setTimeout(() => {
+        requestIdleCallback(() => {
+          $prev.removeAttribute('hidden');
+        });
+      }, 300);
     }
 
     $currentPage.classList.remove('page-on');
@@ -189,6 +195,7 @@ export default async function bootApp() {
     }
 
     $pullToRefresh = $currentPage;
+    swipeToBack = false;
   });
 
   const touchPassiveListener = { passive: true, capture: false, };
@@ -269,6 +276,8 @@ export default async function bootApp() {
     if (page === 'detail') {
       $currentPage = $detail;
       $currentPageContent = $detailContent;
+      $currentPageContent.innerHTML = '';
+
       let game = gamesCache.get(id);
 
       if (!game) {
