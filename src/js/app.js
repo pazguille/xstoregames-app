@@ -169,13 +169,6 @@ export default async function bootApp() {
 
     $currentPage.classList.remove('page-on');
 
-    setTimeout(() => {
-      requestIdleCallback(() => {
-        $prevPage.removeAttribute('hidden');
-        $prevPageContent ? $prevPageContent.innerHTML = '' : false;
-      });
-    }, 300);
-
     if (eve.state === null) {
       $main.style = undefined;
       document.body.style = undefined;
@@ -185,10 +178,15 @@ export default async function bootApp() {
       $currentPage = $main;
       $currentPageContent = null;
 
-    } else if (eve.state && eve.state.page === 'results') {
+    } else if (eve.state.page === 'detail') {
+      $pageBack.removeAttribute('hidden');
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'results') {
       $pageBack.removeAttribute('hidden');
       loadSearchPage(eve.state.q);
-    } else {
+
+    } else if (eve.state.page === 'collection') {
       $pageBack.removeAttribute('hidden');
       showPage(eve.state.page, eve.state.id);
     }
@@ -283,41 +281,46 @@ export default async function bootApp() {
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
+        $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
       });
     }
 
     if (page === 'collection') {
+      const $prev = $currentPageContent;
+
       $currentPage = $list;
       $currentPageContent = $listContent;
 
-      const section = sections.find(section => section.type === id);
-      section.list.map((game) => requestIdleCallback(() => {
-        $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-        gamesCache.set(game.id, game);
-      }));
+      if ($prev === null) {
+        const section = sections.find(section => section.type === id);
+        section.list.map((game) => requestIdleCallback(() => {
+          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+          gamesCache.set(game.id, game);
+        }));
 
-      requestIdleCallback(() => {
-        const o = new IntersectionObserver(async (entries) => {
-          const first = entries[0];
-          if (first.isIntersecting) {
-            o.unobserve(o.current);
-            const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
-            if (moreGames.length === 0) { return; }
-            moreGames.map((game) => requestIdleCallback(() => {
-              $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-              gamesCache.set(game.id, game);
-            }));
-            requestIdleCallback(() => {
-              o.current = $currentPageContent.lastElementChild;
-              o.observe(o.current);
-              section.list.push(...moreGames);
-            });
-          }
+        requestIdleCallback(() => {
+          const o = new IntersectionObserver(async (entries) => {
+            const first = entries[0];
+            if (first.isIntersecting) {
+              o.unobserve(o.current);
+              const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
+              if (moreGames.length === 0) { return; }
+              moreGames.map((game) => requestIdleCallback(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+                gamesCache.set(game.id, game);
+              }));
+              requestIdleCallback(() => {
+                o.current = $currentPageContent.lastElementChild;
+                o.observe(o.current);
+                section.list.push(...moreGames);
+              });
+            }
+          });
+          o.current = $currentPageContent.lastElementChild;
+          o.observe(o.current);
         });
-        o.current = $currentPageContent.lastElementChild;
-        o.observe(o.current);
-      });
+      }
     }
 
     requestIdleCallback(() => {
@@ -356,6 +359,7 @@ export default async function bootApp() {
     } else {
       history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
     }
+
     $currentPage.classList.add('page-on');
 
     $currentPageContent.innerHTML = '';
