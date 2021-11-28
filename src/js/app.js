@@ -290,6 +290,7 @@ export default async function bootApp() {
       $currentPageContent = $listContent;
 
       if ($prev === null) {
+        $currentPageContent.innerHTML = '';
         const section = sections.find(section => section.type === id);
         section.list.map((game) => requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
