@@ -160,9 +160,6 @@ export default async function bootApp() {
   });
 
   window.addEventListener('popstate', (eve) => {
-    const $prevPage = $currentPage;
-    const $prevPageContent = $currentPageContent;
-
     if (swipeToBack) {
       $currentPage.setAttribute('hidden', true);
     }
