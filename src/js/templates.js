@@ -138,3 +138,8 @@ export function newsTemplate(news) {
 </article>
 `);
 }
+
+
+export function emptyWishlist() {
+  return '<p class="empty-wishlist">Aún no tienes favoritos.</p>';
+}

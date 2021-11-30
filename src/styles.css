@@ -38,7 +38,7 @@ button {
   cursor: pointer;
 }
 
-button svg {
+svg {
   pointer-events: none;
 }
 
@@ -85,6 +85,13 @@ footer {
 
 footer div {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+footer ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 h1 {
@@ -341,6 +348,11 @@ section h2 {
   transform: translateX(0);
 }
 
+.page-fixed {
+  transition: none;
+  will-change: none;
+}
+
 .detail .game-preview {
   box-shadow: none;
   width: 100%;
@@ -445,19 +457,32 @@ section h2 {
   left: 0px;
 }
 
-.search-btn {
+.search-btn,
+.fav-btn {
   right: 0px;
 }
 
+.fav-on svg {
+  fill: #c51b1b;
+}
+
+.share-btn {
+  right: 45px;
+}
+
 .footer-btn {
-  border-radius: 100%;
   color: var(--txt-color);
   background: none;
   border: none;
   width: 55px;
   height: 55px;
-  line-height: 1.5em;
+  line-height: 50px;
   transform: translate3d(0,0,0);
+  display: inline-block;
+}
+
+.footer-btn svg {
+  vertical-align: middle;
 }
 
 .search {
@@ -507,6 +532,13 @@ section h2 {
   padding-bottom: calc(60px + env(safe-area-inset-bottom));
 }
 
+.empty-wishlist {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+}
+
 .list .game-preview {
   width: auto;
   height: 155px;
@@ -518,6 +550,7 @@ section h2 {
   margin: 10px 0 0;
 }
 
+.wish,
 .news {
   z-index: 1;
   bottom: calc(50px + env(safe-area-inset-bottom));

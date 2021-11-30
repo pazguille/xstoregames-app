@@ -3,6 +3,7 @@ import {
   gameCardTemplate,
   gameDetailTemplate,
   newsTemplate,
+  emptyWishlist,
  } from './templates.js';
 
 const LIMIT = 10;
@@ -77,6 +78,12 @@ export default async function bootApp() {
     updateDollar();
   }
 
+  const wishlist = new Set(
+    JSON.parse(localStorage.getItem('wishlist'))
+  );
+
+  const $favBtn = document.querySelector('.fav-btn');
+  const $shareBtn = document.querySelector('.share-btn');
   const $searchBtn = document.querySelector('.search-btn');
   const $cancelSearchBtn = document.querySelector('.search-cancel-btn');
   const $search = document.querySelector('#search');
@@ -90,46 +97,13 @@ export default async function bootApp() {
   const $results = document.querySelector('.results');
   const $resultsContent = document.querySelector('.results-content');
 
-  const $homeBtn = document.querySelector('.home-btn');
-  const $newsBtn = document.querySelector('.news-btn');
   const $news = document.querySelector('.news');
   const $newsContent = document.querySelector('.news-content');
+  const $wish = document.querySelector('.wish');
+  const $wishContent = document.querySelector('.wish-content');
 
   let $currentPage = null;
   let $currentPageContent = null;
-
-  $homeBtn.addEventListener('click', () => {
-    if (!$currentPageContent) { return; }
-
-    $main.style = undefined;
-    document.body.style = undefined;
-
-    $loading.setAttribute('hidden', true);
-    $currentPage.classList.remove('page-on');
-    $currentPageContent.innerHTML = '';
-    $currentPage = null;
-    $currentPageContent = null;
-    $pullToRefresh = $main;
-  });
-
-  $newsBtn.addEventListener('click', async () => {
-    if ($currentPageContent) { return; }
-
-    $loading.removeAttribute('hidden');
-
-    $currentPage = $news;
-    $currentPageContent = $newsContent;
-    $currentPage.classList.add('page-on');
-
-    $main.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-
-    const news = await fetch(getXboxNewsURL()).then(res => res.json());
-    news.map((n) => requestIdleCallback(() => {
-      $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n));
-    }));
-    $loading.setAttribute('hidden', true);
-  });
 
   $searchBtn.addEventListener('click', () => {
     $search.removeAttribute('hidden');
@@ -137,6 +111,35 @@ export default async function bootApp() {
       $search.elements[0].focus();
     });
   });
+
+  $favBtn.addEventListener('click', () => {
+    const { pathname } = new URL(window.location.href);
+    const pathSplit = pathname.split('/');
+    const id = pathSplit[2];
+
+    if (wishlist.has(id)) {
+      wishlist.delete(id);
+      $favBtn.classList.remove('fav-on');
+    } else {
+      wishlist.add(id);
+      $favBtn.classList.add('fav-on');
+    }
+
+    localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
+  });
+
+  $shareBtn.addEventListener('click', () => {
+    if ('share' in navigator) {
+      navigator.share({
+        title: `XStore`,
+        url: window.location.href,
+      });
+    } else if ('clipboard' in navigator) {
+      navigator.clipboard.writeText(window.location.href);
+    } else {
+      alert(`Copia la url ${window.location.href}.`);
+    }
+  })
 
   $cancelSearchBtn.addEventListener('click', (eve) => {
     eve.preventDefault();
@@ -150,8 +153,8 @@ export default async function bootApp() {
     const data = eve.target.id.split('-');
     const page = data[0];
     const id = data[1];
-    showPage(page, id);
     $pageBack.removeAttribute('hidden');
+    showPage(page, id);
     history.pushState({ page, id }, '', eve.target.href);
   });
 
@@ -171,6 +174,8 @@ export default async function bootApp() {
     }
 
     $currentPage.classList.remove('page-on');
+    $shareBtn.setAttribute('hidden', true);
+    $favBtn.setAttribute('hidden', true);
 
     if (eve.state === null) {
       $main.style = undefined;
@@ -178,7 +183,7 @@ export default async function bootApp() {
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
       $search.elements[0].value = '';
-      $currentPage = $main;
+      $currentPage = null;
       $currentPageContent = null;
 
     } else if (eve.state.page === 'detail') {
@@ -188,6 +193,14 @@ export default async function bootApp() {
     } else if (eve.state.page === 'results') {
       $pageBack.removeAttribute('hidden');
       loadSearchPage(eve.state.q);
+
+    } else if (eve.state.page === 'wishlist') {
+      $pageBack.setAttribute('hidden', true);
+      showPage(eve.state.page);
+
+    } else if (eve.state.page === 'news') {
+      $pageBack.setAttribute('hidden', true);
+      showPage(eve.state.page);
 
     } else if (eve.state.page === 'collection') {
       $pageBack.removeAttribute('hidden');
@@ -273,6 +286,46 @@ export default async function bootApp() {
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
+    if (page === 'wishlist') {
+      $currentPage && $currentPage.classList.remove('page-on');
+      $pageBack.setAttribute('hidden', true);
+
+      $currentPage = $wish;
+      $currentPageContent = $wishContent;
+      $currentPageContent.innerHTML = '';
+      $currentPage.classList.add('page-on');
+
+      const games = Array.from(wishlist).join(',');
+      if (games.length) {
+        $loading.removeAttribute('hidden');
+        const wish = await fetch(gameXboxURL(games)).then(res => res.json());
+        wish.map((w) => requestIdleCallback(() => {
+          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(w));
+        }));
+        $loading.setAttribute('hidden', true);
+      } else {
+        requestIdleCallback(() => {
+          $currentPageContent.insertAdjacentHTML('beforeend', emptyWishlist());
+        });
+      }
+    }
+
+    if (page === 'news') {
+      $currentPage && $currentPage.classList.remove('page-on');
+      $pageBack.setAttribute('hidden', true);
+
+      $currentPage = $news;
+      $currentPageContent = $newsContent;
+      $currentPageContent.innerHTML = '';
+      $currentPage.classList.add('page-on');
+      $loading.removeAttribute('hidden');
+      const news = await fetch(getXboxNewsURL()).then(res => res.json());
+      news.map((n) => requestIdleCallback(() => {
+        $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n));
+      }));
+      $loading.setAttribute('hidden', true);
+    }
+
     if (page === 'detail') {
       $currentPage = $detail;
       $currentPageContent = $detailContent;
@@ -281,12 +334,18 @@ export default async function bootApp() {
       let game = gamesCache.get(id);
 
       if (!game) {
+        $currentPage.classList.add('page-on');
+        $loading.removeAttribute('hidden');
         game = await fetch(gameXboxURL(id)).then(res => res.json()).then(game => game[0]);
         gamesCache.set(game.id, game);
+        $loading.setAttribute('hidden', true);
       }
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
+        $shareBtn.removeAttribute('hidden');
+        $favBtn.removeAttribute('hidden');
+        $favBtn.classList[wishlist.has(id) ? 'add' : 'remove']('fav-on');
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
       });
@@ -297,6 +356,9 @@ export default async function bootApp() {
 
       $currentPage = $list;
       $currentPageContent = $listContent;
+
+      $shareBtn.setAttribute('hidden', true);
+      $favBtn.setAttribute('hidden', true);
 
       if ($prev === null) {
         $currentPageContent.innerHTML = '';
@@ -347,14 +409,6 @@ export default async function bootApp() {
     });
   }
 
-  async function loadCollectionPage(list) {
-    showPage('collection', list);
-  }
-
-  async function loadDetailPage(id) {
-    showPage('detail', id);
-  }
-
   async function loadSearchPage(q) {
     $searchBtn.removeAttribute('hidden');
     $currentPage = $results
@@ -399,11 +453,17 @@ export default async function bootApp() {
     case '':
       loadHomePage();
       break;
+    case 'wishlist':
+      showPage('wishlist');
+      break;
+    case 'news':
+      showPage('news');
+      break;
     case 'game':
-      loadDetailPage(id);
+      showPage('detail', id);
       break;
     case 'collection':
-      loadCollectionPage(id);
+      showPage('collection', id);
       break;
     case 'search':
       const q = searchParams.get('q');

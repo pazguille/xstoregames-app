@@ -75,11 +75,18 @@
           XStore
         </a>
       </h1>
-      <button class="page-back-btn header-btn" hidden>
+      <button class="page-back-btn header-btn" aria-label="Volver" hidden>
         <svg width="19" height="19" fill="none" aria-hidden="true"><path d="M18 9.5H1M9.5 18 1 9.5 9.5 1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="search-btn header-btn">
-        <svg width="25" height="25" viewBox="0 0 32 32" fill="#fff"><path d="M13 3a10 10 0 1 0 6.3 17.7l6 6a1 1 0 1 0 1.4-1.4l-6-6A10 10 0 0 0 13 3zm0 2a8 8 0 1 1 0 16 8 8 0 1 1 0-16z"/></svg>
+      <button class="search-btn header-btn" aria-label="Buscar">
+        <svg width="25" height="25" aria-hidden="true" viewBox="0 0 32 32" fill="#fff"><path d="M13 3a10 10 0 1 0 6.3 17.7l6 6a1 1 0 1 0 1.4-1.4l-6-6A10 10 0 0 0 13 3zm0 2a8 8 0 1 1 0 16 8 8 0 1 1 0-16z"/></svg>
+      </button>
+
+      <button class="share-btn header-btn" aria-label="Compartir" hidden>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="#fff"><path d="m17.5 7.5-5-5a.7.7 0 0 0-1 0l-5 5c-.3.3-.3.7 0 1s.7.3 1 0l3.8-3.7V15a.8.8 0 0 0 1.5 0V4.8l3.7 3.7a.7.7 0 0 0 1 0c.3-.3.3-.7 0-1z"/><path d="M19.7 22H4.3C3 22 2 21 2 19.6V14a.8.8 0 0 1 1.5 0v5.7c0 .4.4.7.8.7h15.4c.4 0 .8-.3.8-.7V14a.8.8 0 0 1 1.5 0v5.7c0 1.2-1 2.2-2.3 2.2z"/></svg>
+      </button>
+      <button class="fav-btn header-btn" aria-label="Favorito" hidden>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#fff"><path d="M12 21.6C9.4 21.6 2 15 2 8.5c0-3 2.5-5.8 5.4-5.8 2.2 0 3.8 1.6 4.6 2.8.8-1.2 2.4-2.8 4.6-2.8 3 0 5.4 2.7 5.4 5.8 0 6.4-7.4 13-10 13.1z"/></svg>
       </button>
 
       <form id="search" class="search" action="/search" hidden>
@@ -97,6 +104,14 @@
 
       <div class="home"></div>
 
+      <div class="wish list page page-fixed">
+        <div class="wish-content page-content"></div>
+      </div>
+
+      <div class="news page page-fixed">
+        <div class="news-content page-content"></div>
+      </div>
+
       <div class="collection list page">
         <div class="collection-content page-content"></div>
       </div>
@@ -108,20 +123,27 @@
       <div class="detail page">
         <div class="detail-content page-content"></div>
       </div>
-
-      <div class="news page">
-        <div class="news-content page-content"></div>
-      </div>
     </main>
 
     <footer>
       <div>
-        <button id="home" class="home-btn footer-btn" aria-label="Juegos">
-          <svg width="28" height="28" viewBox="0 0 980 980" aria-hidden="true" fill="#fff"><path d="M53 897c24 15 55 12 76-7 0 0 117-101 152-129 11-9 25-14 39-14h345c14 0 27 5 38 14 35 28 153 129 153 129 20 19 52 22 75 7 78-52 53-190 34-267-16-64-38-126-64-187-37-89-118-203-232-179-11 3-24 10-33 15-9 6-20 9-31 9h-73V118a40 40 0 1 0-80 0v170h-72c-11 0-22-3-32-9-9-5-22-12-33-15-113-24-195 90-232 179-25 61-47 123-63 187-19 77-45 215 33 267zm680-522a44 44 0 1 1 0 87 44 44 0 0 1 0-87zM630 502a44 44 0 1 1 0 87 44 44 0 0 1 0-87zm-432-49h51v-50a30 30 0 1 1 60 0v50h50a30 30 0 1 1 0 60h-50v51a30 30 0 1 1-60 0v-51h-51a30 30 0 1 1 0-60z"/></svg>
-        </button>
-        <button id="news" class="news-btn footer-btn" aria-label="Noticias">
-          <svg width="28" height="28" viewBox="-5 -5 32 32" aria-hidden="true" fill="#fff"><path d="M19.2 24C19.2 13.5 10.5 4.8 0 4.8V0c13.2 0 24 10.8 24 24h-4.8zm-16-6.6a3.3 3.3 0 1 1 0 6.6 3.3 3.3 0 0 1 0-6.6zM16 24h-4.7c0-6.2-5-11.2-11.2-11.2V8A16 16 0 0 1 16 24z"/></svg>
-        </button>
+        <ul>
+          <li>
+            <a id="home" href="/" class="home-btn footer-btn" aria-label="Juegos">
+              <svg width="28" height="28" viewBox="0 0 980 980" aria-hidden="true" fill="#fff"><path d="M53 897c24 15 55 12 76-7 0 0 117-101 152-129 11-9 25-14 39-14h345c14 0 27 5 38 14 35 28 153 129 153 129 20 19 52 22 75 7 78-52 53-190 34-267-16-64-38-126-64-187-37-89-118-203-232-179-11 3-24 10-33 15-9 6-20 9-31 9h-73V118a40 40 0 1 0-80 0v170h-72c-11 0-22-3-32-9-9-5-22-12-33-15-113-24-195 90-232 179-25 61-47 123-63 187-19 77-45 215 33 267zm680-522a44 44 0 1 1 0 87 44 44 0 0 1 0-87zM630 502a44 44 0 1 1 0 87 44 44 0 0 1 0-87zm-432-49h51v-50a30 30 0 1 1 60 0v50h50a30 30 0 1 1 0 60h-50v51a30 30 0 1 1-60 0v-51h-51a30 30 0 1 1 0-60z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a id="wishlist" href="/wishlist" class="link wish-btn footer-btn" aria-label="Favoritos">
+              <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" fill="#fff"><path d="M12 21.6C9.4 21.6 2 15 2 8.5c0-3 2.5-5.8 5.4-5.8 2.2 0 3.8 1.6 4.6 2.8.8-1.2 2.4-2.8 4.6-2.8 3 0 5.4 2.7 5.4 5.8 0 6.4-7.4 13-10 13.1z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a id="news" href="/news" class="link news-btn footer-btn" aria-label="Noticias">
+              <svg width="28" height="28" viewBox="-5 -5 32 32" aria-hidden="true" fill="#fff"><path d="M19.2 24C19.2 13.5 10.5 4.8 0 4.8V0c13.2 0 24 10.8 24 24h-4.8zm-16-6.6a3.3 3.3 0 1 1 0 6.6 3.3 3.3 0 0 1 0-6.6zM16 24h-4.7c0-6.2-5-11.2-11.2-11.2V8A16 16 0 0 1 16 24z"/></svg>
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
 
