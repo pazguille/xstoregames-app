@@ -3,8 +3,15 @@ const IIBB = 0.02;
 const AFIP = 0.35;
 const PAISA = 0.08;
 
-function toFixed(number) {
-  return parseFloat(Number(number.toFixed(3)).toFixed(2));
+function toFixed(num) {
+  var d = 2,
+    m = Math.pow(10, d),
+    n = +(d ? num * m : num).toFixed(8),
+    i = Math.floor(n), f = n - i,
+    e = 1e-8,
+    r = (f > 0.5 - e && f < 0.5 + e) ?
+    ((i % 2 == 0) ? i : i + 1) : Math.round(n);
+  return d ? r / m : r;
 }
 
 function convert(price, dollar) {
