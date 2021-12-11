@@ -3,14 +3,13 @@ const IIBB = 0.02;
 const AFIP = 0.35;
 const PAISA = 0.08;
 
-function toFixed(number, decimals) {
-  const x = Math.pow(10, Number(decimals) + 1);
-  return parseFloat((Number(number) + (1 / x)).toFixed(decimals));
+function toFixed(number) {
+  return parseFloat(Number(number.toFixed(3)).toFixed(2));
 }
 
 function convert(price, dollar) {
   const usdPrice = (price / dollar);
-  const final = toFixed(usdPrice * dollar, 2) + toFixed(price * IVA, 2) + toFixed(price * IIBB, 2) + toFixed(price * AFIP, 2) + toFixed(price * PAISA, 2);
+  const final = toFixed(usdPrice * dollar) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
   return final.toFixed(2);
 }
 
