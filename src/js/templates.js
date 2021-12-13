@@ -97,10 +97,16 @@ export function gameDetailTemplate(game) {
       ${gamePriceTemplate(game)}
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar ahora</a>
       ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
+
+      <h4>Fecha de lanzamiento</h4>
+      <time datetime="${new Date(game.release_date).toLocaleString('es-AR')}">${new Date(game.release_date).toLocaleString('es-AR', { day: '2-digit' , month: '2-digit', year: 'numeric',  })}</time>
+
+      <h4>Descripción</h4>
       <p class="game-description">${game.description}</p>
     </div>
     ${Array.isArray(game.images.screenshot) ? `
       <div class="game-preview-images">
+        <h4>Galeria</h4>
         <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video">
           <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" />
         </a>

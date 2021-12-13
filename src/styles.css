@@ -353,6 +353,10 @@ section h2 {
   will-change: none;
 }
 
+.detail h4 {
+  margin: 15px 0;
+}
+
 .detail .game-preview {
   box-shadow: none;
   width: 100%;
