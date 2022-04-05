@@ -7,7 +7,7 @@
   "theme_color": "#107C10",
   "background_color": "#107C10",
   "scope": "/",
-  "prefer_related_applications": false,
+  "prefer_related_applications": true,
   "icons": [
     {
       "src": "/src/assets/manifest-icon-192.maskable.png",
