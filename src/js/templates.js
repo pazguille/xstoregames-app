@@ -39,7 +39,7 @@ export function gameListTemplate(section) {
   return (`
 <div class="carousel">
   ${section.type === 'new' ?
-    section.list.map(game => gameCardNewTemplate(game)).join('')
+    section.list.map((game, index) => gameCardNewTemplate(game, index)).join('')
   : section.list.map(game => gameCardTemplate(game)).join('')
   }
 </div>
@@ -118,14 +118,14 @@ export function gameDetailTemplate(game) {
 `);
 }
 
-export function gameCardNewTemplate(game) {
+export function gameCardNewTemplate(game, index) {
   const img = game.images.titledheroart ?
     (game.images.titledheroart.url || game.images.titledheroart[0].url)
     : game.images.screenshot[0].url;
   return (`
 <article class="game-preview-new">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="315px" height="177px" alt="" decoding="async" src="${img}?w=630">
+  <img class="game-img" width="315px" height="177px" alt="" ${index === 0 ? `fetchpriority="high"` : `loading="lazy"` } decoding="async" src="${img}?w=630">
 </article>
 `);
 }
