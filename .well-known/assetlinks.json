@@ -1,0 +1,11 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.xstoregames.twa",
+      "sha256_cert_fingerprints":
+        ["F5:6B:CD:46:88:F6:CC:FB:0F:BD:B6:94:81:5C:F7:98:81:5D:23:4E:8A:8B:55:57:18:FA:EE:C3:98:46:84:27"]
+    }
+  }
+]
