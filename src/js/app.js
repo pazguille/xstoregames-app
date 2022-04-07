@@ -103,7 +103,9 @@ export default async function bootApp() {
   const $wishContent = document.querySelector('.wish-content');
 
   let $currentPage = null;
+  let $prevPage = null;
   let $currentPageContent = null;
+  let $prevFocus = null;
 
   $searchBtn.addEventListener('click', () => {
     $search.removeAttribute('hidden');
@@ -149,11 +151,14 @@ export default async function bootApp() {
 
   document.body.addEventListener('click', async (eve) => {
     if (!eve.target.classList.contains('link')) { return; }
+    $prevFocus = document.activeElement;
+
     eve.preventDefault();
     const data = eve.target.id.split('-');
     const page = data[0];
     const id = data[1];
     $pageBack.removeAttribute('hidden');
+
     showPage(page, id);
     history.pushState({ page, id }, '', eve.target.href);
   });
@@ -173,13 +178,23 @@ export default async function bootApp() {
       }, 300);
     }
 
-    $currentPage.classList.remove('page-on');
+    $prevPage = $currentPage;
+    $prevPage.classList.remove('page-on');
+    setTimeout(() => {
+      requestIdleCallback(() => {
+        $prevPage && $prevPage.setAttribute('hidden', true);
+        $prevPage = null;
+        $prevFocus.focus();
+      });
+    }, 300);
+
     $shareBtn.setAttribute('hidden', true);
     $favBtn.setAttribute('hidden', true);
 
     if (eve.state === null) {
       $main.style = undefined;
       document.body.style = undefined;
+      $home.removeAttribute('hidden');
       $pageBack.setAttribute('hidden', true);
       $searchBtn.removeAttribute('hidden');
       $search.elements[0].value = '';
@@ -286,8 +301,28 @@ export default async function bootApp() {
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
+    setTimeout(() => {
+      requestIdleCallback(() => {
+        $home.setAttribute('hidden', true);
+      });
+    }, 300);
+
+    if ($currentPage) {
+      $prevPage = $currentPage;
+      setTimeout(() => {
+        requestIdleCallback(() => {
+          $prevPage && $prevPage.setAttribute('hidden', true);
+          $prevPage = null;
+        });
+      }, 300);
+    }
+
     if (page === 'wishlist') {
-      $currentPage && $currentPage.classList.remove('page-on');
+      if ($currentPage) {
+        $currentPage.setAttribute('hidden', true);
+        $currentPage.classList.remove('page-on');
+      }
+
       $pageBack.setAttribute('hidden', true);
 
       $currentPage = $wish;
@@ -311,7 +346,10 @@ export default async function bootApp() {
     }
 
     if (page === 'news') {
-      $currentPage && $currentPage.classList.remove('page-on');
+      if ($currentPage) {
+        $currentPage.setAttribute('hidden', true);
+        $currentPage.classList.remove('page-on');
+      }
       $pageBack.setAttribute('hidden', true);
 
       $currentPage = $news;
@@ -397,16 +435,22 @@ export default async function bootApp() {
       $searchBtn.setAttribute('hidden', true);
     });
 
-    $currentPage.classList.add('page-on');
     $pullToRefresh = $currentPageContent;
+
+    $currentPage.removeAttribute('hidden');
+    requestIdleCallback(() => {
+      $currentPage.classList.add('page-on');
+    });
   }
 
   function loadHomePage() {
+    $home.removeAttribute('hidden');
     sections.forEach(section => {
       requestIdleCallback(() => {
         $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
       });
     });
+
   }
 
   async function loadSearchPage(q) {
@@ -421,7 +465,10 @@ export default async function bootApp() {
       history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
     }
 
-    $currentPage.classList.add('page-on');
+    $currentPage.removeAttribute('hidden');
+    requestIdleCallback(() => {
+      $currentPage.classList.add('page-on');
+    });
 
     $currentPageContent.innerHTML = '';
     $loading.removeAttribute('hidden');
