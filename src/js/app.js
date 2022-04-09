@@ -507,7 +507,8 @@ export default async function bootApp() {
       showPage('news');
       break;
     case 'game':
-      showPage('detail', id);
+      const gameId = id.split('_')[1];
+      showPage('detail', gameId);
       break;
     case 'collection':
       showPage('collection', id);

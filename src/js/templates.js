@@ -25,6 +25,18 @@ const formatter = new Intl.NumberFormat('es-AR', {
   currency: 'ARS',
 });
 
+function slugify(str) {
+  return str
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+}
+
 export function sectionTemplate(section) {
   return (`
 <section>
@@ -71,7 +83,7 @@ ${formatter.format(convert(game.price.amount, dollar))}
 export function gameInfoTemplate(game) {
   return (`
 <div>
-  <h3 class="game-title"><a id="detail-${game.id}" href="/game/${game.id}" class="link">${game.title}</a></h3>
+  <h3 class="game-title"><a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a></h3>
   <p class="game-by">by ${game.developer || game.publisher}</p>
   ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.png" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
   ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
