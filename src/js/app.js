@@ -399,6 +399,7 @@ export default async function bootApp() {
       $favBtn.setAttribute('hidden', true);
 
       if ($prev === null) {
+        $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
         const section = sections.find(section => section.type === id);
         section.list.map((game) => requestIdleCallback(() => {
