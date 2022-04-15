@@ -117,7 +117,7 @@ export default async function bootApp() {
   $favBtn.addEventListener('click', () => {
     const { pathname } = new URL(window.location.href);
     const pathSplit = pathname.split('/');
-    const id = pathSplit[2];
+    const id = pathSplit[2].split('_')[1];
 
     if (wishlist.has(id)) {
       wishlist.delete(id);
@@ -331,6 +331,7 @@ export default async function bootApp() {
       $currentPage.classList.add('page-on');
 
       const games = Array.from(wishlist).join(',');
+
       if (games.length) {
         $loading.removeAttribute('hidden');
         const wish = await fetch(gameXboxURL(games)).then(res => res.json());
