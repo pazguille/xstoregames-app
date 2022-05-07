@@ -428,6 +428,12 @@ async function bootApp() {
     games.forEach((game) => gamesCache.set(game.id, game));
   }));
 
+  const preloadLCP = sections[0].list[0];
+  const lcp = preloadLCP.images.titledheroart ?
+    (preloadLCP.images.titledheroart.url || preloadLCP.images.titledheroart[0].url)
+    : preloadLCP.images.screenshot[0].url;
+  document.querySelector('#preloadLCP').href = lcp + '?w=630';
+
   const { pathname, searchParams } = new URL(window.location.href);
   const pathSplit = pathname.split('/');
   const page = pathSplit[1];
