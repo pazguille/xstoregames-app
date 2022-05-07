@@ -335,7 +335,7 @@ async function bootApp() {
       $currentPage = $list;
       $currentPageContent = $listContent;
 
-      if ($prev === null) {
+      if ($prev === null || $currentPageContent.innerHTML === '') {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
         const section = sections.find(section => section.type === id);
@@ -421,7 +421,7 @@ async function bootApp() {
     }));
   }
 
-  await Promise.all(sections.map(async ({type}) => {
+  await Promise.all(sections.map(async ({ type }) => {
     const games = await fetch(getXboxURL(type)).then(res => res.json());
     const section = sections.find(section => section.type === type);
     section.list.push(...games);
