@@ -1,77 +1,46 @@
-const IVA = 0.21;
-const IIBB = 0.02;
-const AFIP = 0.35;
-const PAISA = 0.08;
-
-function toFixed(num) {
-  var d = 2,
-    m = Math.pow(10, d),
-    n = +(d ? num * m : num).toFixed(8),
-    i = Math.floor(n), f = n - i,
-    e = 1e-8,
-    r = (f > 0.5 - e && f < 0.5 + e) ?
-    ((i % 2 == 0) ? i : i + 1) : Math.round(n);
-  return d ? r / m : r;
-}
-
-function convert(price, dollar) {
-  const usdPrice = (price / dollar);
-  const final = toFixed(usdPrice * dollar) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
-  return final.toFixed(2);
-}
-
-const formatter = new Intl.NumberFormat('es-AR', {
-  style: 'currency',
-  currency: 'ARS',
-});
-
-function slugify(str) {
-  return str
-    .toString()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-');
-}
+import {
+  convertDollar,
+  slugify,
+} from './utils.js';
 
 export function sectionTemplate(section) {
   return (`
 <section>
   <h2>${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all link" id="collection-${section.type}" href="/collection/${section.type}">Ver todos →</a>
+  <a class="see-all link" id="collection-${section.type}" href="/collection/${section.type}" aria-label="Ver el listado de ${section.title}">Ver todos</a>
 </section>
 `);
 }
 
 export function gameListTemplate(section) {
   return (`
-<div class="carousel">
+<ul class="carousel" aria-roledescription="Carrusel" aria-label="${section.title}">
   ${section.type === 'new' ?
-    section.list.map((game, index) => gameCardNewTemplate(game, index)).join('')
-  : section.list.map(game => gameCardTemplate(game)).join('')
+    section.list.map((game, index) => `<li>${gameCardNewTemplate(game, index)}</li>`).join('')
+  : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
-</div>
+</ul>
 `);
 }
 
 export function gamePriceTemplate(game) {
   const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
+  const amount = convertDollar(game.price.deal, dollar);
+  const amountPrev = convertDollar(game.price.amount, dollar);
+
   return (`
 <div class="game-price">
   ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
   <span class="game-price-amount">
     ${game.price.amount > 0 ?
-      `🇦🇷 ${formatter.format(convert(game.price.deal, dollar))}`
+      `<x-price amount="${amount}"></x-price>`
       : game.demo ? 'Demo' : 'Gratis'
     }
   </span>
-  ${game.price.deal !== game.price.amount ? `<div class="game-price-prev"><s>
-${formatter.format(convert(game.price.amount, dollar))}
-</s></div>` : ''}
+  ${game.price.deal !== game.price.amount ? `<div class="game-price-prev">
+    <x-price amount="${amountPrev}" strike></x-price>
+  </div>` : ''}
   ${game.price.amount > 0 ?
     `<small class="game-price-taxes">impuestos incluídos</small>`
     : ''
@@ -119,10 +88,10 @@ export function gameDetailTemplate(game) {
     ${Array.isArray(game.images.screenshot) ? `
       <div class="game-preview-images">
         <h4>Galeria</h4>
-        <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video">
-          <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" />
+        <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video" aria-label="Ver trailers en YouTube">
+          <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" alt="" />
         </a>
-        ${game.images.screenshot.map((img) => `<img width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
+        ${game.images.screenshot.map((img) => `<img alt="" width="100%" loading="lazy" decoding="async" src="${img.url}?w=1000" />`).join('')}
       </div>
     ` : ''}
   </div>
@@ -157,12 +126,11 @@ export function newsTemplate(news) {
   return (`
 <article class="news-preview">
   <h2><a href="${news.link}">${news.title}</a></h2>
-  <img class="news-img" width="100%" height="auto" alt="" decoding="async" loading="lazy" src="${news.image}">
+  <img class="news-img" width="500px" height="500px" alt="" decoding="async" loading="lazy" src="${news.image}">
   <p>${news.description}</p>
 </article>
 `);
 }
-
 
 export function emptyWishlist() {
   return '<p class="empty-wishlist">Aún no tienes favoritos.</p>';

@@ -1,19 +1,8 @@
 import unistore from 'https://unpkg.com/unistore@3.5.2/dist/unistore.es.js';
 
-const initialState = {
-  urls: [],
-  from: 'urls',
-  running: false,
-  results: null,
-  leaderboardLoaded: false,
-  leaderboardError: false,
-  filters: {
-    device: 'PHONE',
-    connection: '4G',
-  }
-};
+const initialState = {};
 
-function leaderboard(state = {}, action) {
+function xstore(state = {}, action) {
   const newState = { ...state };
 
   switch (action.type) {
@@ -79,6 +68,6 @@ function leaderboard(state = {}, action) {
 const store = unistore(initialState);
 
 // Create a dispatch method like Redux
-store.dispatch = store.action(leaderboard);
+store.dispatch = store.action(xstore);
 
 export default store;
