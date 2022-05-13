@@ -44,28 +44,40 @@ class Loader extends HTMLElement {
 window.customElements.define('x-loader', Loader);
 
 class ShareButton extends HTMLButtonElement {
-  static observedAttributes = ['url', 'title'];
+  static observedAttributes = ['title', 'url'];
 
   constructor() {
     super();
     this.addEventListener('click', this._onClick.bind(this));
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {}
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case 'title':
+        this._title = newValue;
+        break;
 
-  get title() { return this.getAttribute('title'); }
+      case 'url':
+        this._url = newValue;
+        break;
+    }
+  }
+
+  get title() { return this._title }
   set title(title) { this.setAttribute('title', title); }
 
-  get url() { return this.getAttribute('url'); }
+  get url() { return this._url }
   set url(url) { this.setAttribute('url', url); }
 
   show({ title, url }) {
     if (url) {
       this.url = url;
     }
+
     if (title) {
       this.title = title;
     }
+
     this.removeAttribute('hidden');
   }
 
@@ -267,18 +279,27 @@ class Price extends HTMLElement {
     });
   }
 
-  attributeChangedCallback() {
+  attributeChangedCallback(name, oldValue, newValue) {
+    switch (name) {
+      case 'amount':
+        this._amount = newValue;
+        break;
+
+      case 'strike':
+        this._strike = ['on', 'true', ''].includes(newValue);
+        break;
+    }
     this._updateRendering();
   }
 
   _updateRendering() {
-    const amount = this.amount.split('.')[0].replace(/\,|\$/gi, '');
-    const fraction = this.amount.split('.')[1];
+    const amount = this._amount.split('.')[0].replace(/\,|\$/gi, '');
+    const fraction = this._amount.split('.')[1];
 
     const txt = `${amount} pesos con ${fraction} centavos`;
-    const a = this.formatter.format(this.getAttribute('amount'));
+    const a = this.formatter.format(this._amount);
 
-    this.shadowRoot.querySelector('.price').innerHTML = this.strike ?
+    this.shadowRoot.querySelector('.price').innerHTML = this._strike ?
       this._strikeTemplate(a, txt) :
       this._amountTemplate(a, txt);
   }
@@ -293,10 +314,10 @@ class Price extends HTMLElement {
     <span aria-hidden="true" class="amount">${amount}</span>`;
   }
 
-  get amount() { return this.getAttribute('amount'); }
+  get amount() { return this._amount; }
   set amount(a) { this.setAttribute('amount', a); }
 
-  get strike() { return ['on', 'true', ''].includes(this.getAttribute('strike')); }
+  get strike() { return ['on', 'true', ''].includes(this._strike); }
   set strike(s) { this.setAttribute('strike', s); }
 }
 window.customElements.define('x-price', Price);

@@ -68,7 +68,7 @@ export function gameDetailTemplate(game) {
   : game.images.superheroart.url;
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   return (`
-<article class="game-preview" style="background-image: url(${img}?w=1000)">
+<article class="game-preview" style="--game-preview-url: url(${img}?w=1000)">
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
@@ -88,6 +88,7 @@ export function gameDetailTemplate(game) {
     ${Array.isArray(game.images.screenshot) ? `
       <div class="game-preview-images">
         <h4>Galeria</h4>
+        <img alt="" width="100%" loading="lazy" decoding="async" src="${img}?w=1000" />
         <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" class="game-preview-video" aria-label="Ver trailers en YouTube">
           <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" alt="" />
         </a>
