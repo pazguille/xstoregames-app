@@ -212,6 +212,11 @@ async function bootApp() {
   });
 
   async function showPage(page, id) {
+    if (!id) {
+      window.location.href = 'https://xstoregames.com';
+      return;
+    }
+
     $prevPage = $currentPage;
 
     $main.style.overflow = 'hidden';
