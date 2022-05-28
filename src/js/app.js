@@ -3,6 +3,7 @@ import {
   searchXboxURL,
   gameXboxURL,
   getXboxNewsURL,
+  getGamePassURL,
   updateDollar,
 } from './utils.js';
 
@@ -11,7 +12,10 @@ import {
   gameCardTemplate,
   gameDetailTemplate,
   newsTemplate,
+  emptyList,
   emptyWishlist,
+  gamepassSection,
+  goldSection,
 } from './templates.js';
 
 const LIMIT = 10;
@@ -73,6 +77,7 @@ async function bootApp() {
   const $main = document.querySelector('main');
   const $loading = document.querySelector('x-loader');
 
+  const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
   const $shareBtn = document.querySelector('#share-btn');
   const $favBtn = document.querySelector('#fav-btn');
@@ -98,6 +103,17 @@ async function bootApp() {
   let $currentPageContent = null;
   let $prevFocus = null;
 
+  let db = null;
+  const iddb = window.indexedDB.open('wishlist', 1);
+  iddb.onupgradeneeded = eve => {
+    eve.currentTarget.result
+      .createObjectStore(
+        'wishlist', { keyPath: 'id', autoIncrement: true }
+      )
+      .createIndex('game', 'game', { unique: true });
+  };
+  iddb.onsuccess = eve => { db = eve.target.result; };
+
   $favBtn.addEventListener('click', () => {
     const { pathname } = new URL(window.location.href);
     const pathSplit = pathname.split('/');
@@ -105,8 +121,24 @@ async function bootApp() {
 
     if (wishlist.has(id)) {
       wishlist.delete(id);
+
+      db
+        .transaction('wishlist', 'readwrite')
+        .objectStore('wishlist')
+        .delete(id);
+
     } else {
       wishlist.add(id);
+
+      const game = gamesCache.get(id);
+      db
+        .transaction('wishlist', 'readwrite')
+        .objectStore('wishlist')
+        .add({
+          id,
+          title:  game.title,
+          amount: game.price.amount,
+        });
     }
 
     window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
@@ -117,9 +149,11 @@ async function bootApp() {
     $prevFocus = document.activeElement;
 
     eve.preventDefault();
-    const data = eve.target.id.split('-');
-    const page = data[0];
-    const id = data[1];
+
+    const { pathname } = new URL(eve.target.href);
+    const pathSplit = pathname.split('/');
+    const page = pathSplit[1];
+    const id = pathSplit[2];
 
     history.pushState({ page, id }, '', eve.target.href);
     showPage(page, id);
@@ -159,12 +193,13 @@ async function bootApp() {
       $favBtn.hide();
 
       $search.show();
+      $installBtn.show();
       $searchForm.elements[0].value = '';
 
       $currentPage = null;
       $currentPageContent = null;
 
-    } else if (eve.state.page === 'detail') {
+    } else if (eve.state.page === 'game') {
       $prevPage = $currentPage;
       showPage(eve.state.page, eve.state.id);
 
@@ -188,6 +223,32 @@ async function bootApp() {
       showPage(eve.state.page);
 
     } else if (eve.state.page === 'collection') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'gamepass') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'gold') {
       if ($currentPage) {
         $prevPage = $currentPage;
         $prevPage.classList.remove('page-on');
@@ -231,6 +292,7 @@ async function bootApp() {
         $shareBtn.hide();
         $favBtn.hide();
         $search.hide();
+        $installBtn.hide();
       });
 
       if ($prevPage) {
@@ -240,10 +302,9 @@ async function bootApp() {
 
       $currentPage = $wish;
       $currentPageContent = $wishContent;
-      $currentPageContent.innerHTML = '';
+      $currentPageContent.innerHTML = '<h2>Favoritos</h2>';
 
-      const games = Array.from(wishlist).join(',');
-
+      const games = Array.from(wishlist).reverse().join(',');
       if (games.length) {
         $loading.show();
         const wish = await fetch(gameXboxURL(games)).then(res => res.json());
@@ -263,6 +324,7 @@ async function bootApp() {
 
       requestIdleCallback(() => {
         $search.hide();
+        $installBtn.hide();
         $pageBack.hide();
       });
 
@@ -273,7 +335,7 @@ async function bootApp() {
 
       $currentPage = $news;
       $currentPageContent = $newsContent;
-      $currentPageContent.innerHTML = '';
+      $currentPageContent.innerHTML = '<h2>Noticias recientes</h2>';
 
       $loading.show();
       const news = await fetch(getXboxNewsURL()).then(res => res.json());
@@ -283,8 +345,10 @@ async function bootApp() {
       $loading.hide();
     }
 
-    if (page === 'detail') {
-      if (!id) {
+    if (page === 'game') {
+      const gameId = id.split('_')[1];
+
+      if (!gameId) {
         window.location.href = 'https://xstoregames.com';
         return;
       }
@@ -292,6 +356,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $search.hide();
+        $installBtn.hide();
       });
 
       if ($prevPage) {
@@ -306,11 +371,11 @@ async function bootApp() {
       $currentPageContent = $detailContent;
       $currentPageContent.innerHTML = '';
 
-      let game = gamesCache.get(id);
+      let game = gamesCache.get(gameId);
 
       if (!game) {
         $loading.show();
-        game = await fetch(gameXboxURL(id)).then(res => res.json()).then(game => game[0]);
+        game = await fetch(gameXboxURL(gameId)).then(res => res.json()).then(game => game[0]);
         gamesCache.set(game.id, game);
         $loading.hide();
       }
@@ -321,7 +386,7 @@ async function bootApp() {
           title: `${game.title} en XStore Games`,
           url: window.location.href,
         });
-        $favBtn.show(wishlist.has(id));
+        $favBtn.show(wishlist.has(gameId));
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
       });
@@ -331,6 +396,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $search.hide();
+        $installBtn.hide();
         $shareBtn.hide();
         $favBtn.hide();
       });
@@ -374,6 +440,73 @@ async function bootApp() {
       }
     }
 
+    if (page === 'gamepass') {
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $search.hide();
+        $installBtn.hide();
+        $shareBtn.hide();
+        $favBtn.hide();
+      });
+
+      const $prev = $currentPageContent;
+
+      $currentPage = $list;
+      $currentPageContent = $listContent;
+
+      if ($prev === null || $currentPageContent.innerHTML === '') {
+        $loading.show();
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+
+        const gamepassGames = await fetch(getGamePassURL(id)).then(res => res.json());
+        if (gamepassGames.length) {
+          gamepassGames.map((game) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+            gamesCache.set(game.id, game);
+          }));
+        } else {
+          $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
+        }
+
+        $loading.hide();
+      }
+    }
+
+    if (page === 'gold') {
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $search.hide();
+        $installBtn.hide();
+        $shareBtn.hide();
+        $favBtn.hide();
+      });
+
+      const $prev = $currentPageContent;
+
+      $currentPage = $list;
+      $currentPageContent = $listContent;
+
+      if ($prev === null || $currentPageContent.innerHTML === '') {
+        $loading.show();
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+
+        const goldGames = await fetch(getXboxURL(id)).then(res => res.json());
+        if (goldGames.length) {
+          goldGames.map((game) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+            gamesCache.set(game.id, game);
+          }));
+        } else {
+          $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
+        }
+
+        $loading.hide();
+      }
+
+    }
+
     $currentPage.removeAttribute('hidden');
     requestIdleCallback(() => {
       $currentPage.classList.add('page-on');
@@ -382,18 +515,29 @@ async function bootApp() {
 
   function loadHomePage() {
     $home.removeAttribute('hidden');
-    sections.forEach(section => {
+    sections.forEach((section, index) => {
       requestIdleCallback(() => {
         $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
+        if (index === 0) {
+          $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
+        }
+
+        if (index === 2) {
+          $home.insertAdjacentHTML('beforeend', gamepassSection());
+        }
+
+        if (index === 5) {
+          $home.insertAdjacentHTML('beforeend', goldSection());
+        }
       });
     });
-
   }
 
   async function loadSearchPage(q) {
     requestIdleCallback(() => {
       $pageBack.show();
       $search.show();
+      $installBtn.hide();
       $shareBtn.hide();
       $favBtn.hide();
     });
@@ -455,11 +599,16 @@ async function bootApp() {
       showPage('news');
       break;
     case 'game':
-      const gameId = id.split('_')[1];
-      showPage('detail', gameId);
+      showPage('game', id);
       break;
     case 'collection':
       showPage('collection', id);
+      break;
+    case 'gamepass':
+      showPage('gamepass', id);
+      break;
+    case 'gold':
+      showPage('gold', id);
       break;
     case 'search':
       const q = searchParams.get('q');
@@ -469,6 +618,36 @@ async function bootApp() {
 
   requestIdleCallback(() => {
     $loading.hide();
+  });
+
+  requestIdleCallback(() => {
+    $searchForm.addEventListener('submit', (eve) => {
+      gtag('event', 'search', {
+        search_term: eve.target.elements[0].value,
+      });
+    });
+    $shareBtn.addEventListener('click', (eve) => {
+      gtag('event', 'share', {
+        page_location: window.location.href,
+      });
+    });
+    $favBtn.addEventListener('click', (eve) => {
+      if (eve.target.active) {
+        gtag('event', 'add_to_wishlist', {
+          page_location: window.location.href,
+        });
+      }
+    });
+    $detailContent.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('game-buy-now')) {
+        gtag('event', 'begin_checkout', {
+          page_location: window.location.href,
+        });
+      }
+    });
+    window.addEventListener('appinstalled', (eve) => {
+      gtag('event', 'app_installed');
+    });
   });
 }
 bootApp();

@@ -25,26 +25,31 @@ export function gameListTemplate(section) {
 }
 
 export function gamePriceTemplate(game) {
-  const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
-  const amount = convertDollar(game.price.deal, dollar);
-  const amountPrev = convertDollar(game.price.amount, dollar);
+  if (!game.sold_separately) {
+    return '';
+  }
+
+  // const off = Math.round((game.price.amount - game.price.deal)*100/game.price.amount);
+  // const amount = convertDollar(game.price.deal, dollar);
+  // const amountPrev = convertDollar(game.price.amount, dollar);
 
   return (`
 <div class="game-price">
-  ${off > 0 ? `<span class="game-price-off">${off}% OFF</span>` : ''}
+  ${game.price.off ? `<span class="game-price-off">${game.price.off}% OFF</span>` : ''}
   <span class="game-price-amount">
-    ${game.price.amount > 0 ?
-      `<x-price amount="${amount}"></x-price>`
+    ${(game.price.deal || game.price.amount) ?
+      `<x-price amount="${convertDollar(game.price.deal || game.price.amount, dollar)}"></x-price>`
       : game.demo ? 'Demo' : 'Gratis'
     }
   </span>
-  ${game.price.deal !== game.price.amount ? `<div class="game-price-prev">
-    <x-price amount="${amountPrev}" strike></x-price>
+  ${game.price.deal ? `<div class="game-price-prev">
+    <x-price amount="${convertDollar(game.price.amount, dollar)}" strike></x-price>
   </div>` : ''}
   ${game.price.amount > 0 ?
     `<small class="game-price-taxes">impuestos incluídos</small>`
     : ''
   }
+  ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal, dollar)}"></x-price></div>` : ''}
 </div>
   `);
 }
@@ -75,6 +80,7 @@ export function gameDetailTemplate(game) {
       <p class="game-by">by ${game.developer || game.publisher}</p>
       ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.png" width="70px" height="13px" alt="Disponible en Game Pass">` : ''}
       ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play">` : ''}
+
       ${gamePriceTemplate(game)}
       <a href="https://www.xbox.com/es-ar/games/store/a/${game.id}" class="game-buy-now btn">Comprar ahora</a>
       ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
@@ -118,7 +124,7 @@ export function gameCardTemplate(game) {
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="155px" height="155px" alt="" decoding="async" loading="lazy" src="${img}?w=310">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=310">
 </article>
 `);
 }
@@ -134,5 +140,36 @@ export function newsTemplate(news) {
 }
 
 export function emptyWishlist() {
-  return '<p class="empty-wishlist">Aún no tienes favoritos.</p>';
+  return '<p class="empty-list">Aún no tienes favoritos.</p>';
+}
+
+export function emptyList() {
+  return '<p class="empty-list">No se encontraron juegos.</p>';
+}
+
+export function gamepassSection() {
+  return (`
+<section class="gamepass">
+  <h2>Xbox Game Pass</h2>
+  <ul>
+    <li><a href="/gamepass/new" id="gamepass-new" class="link">Recién agregados</a></li>
+    <li><a href="/gamepass/coming" id="gamepass-coming" class="link">Se están por sumar</a></li>
+    <li><a href="/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
+    <li><a href="/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
+  </ul>
+</section>
+  `);
+}
+
+export function goldSection() {
+  return (`
+<section class="gold">
+  <h2>Xbox Live Gold</h2>
+  <ul>
+    <li><a href="/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
+    <li><a href="/gold/gold-deals" id="gold-deals" class="link">Ofertas</a></li>
+    <li><a href="/gold/gold-free" id="gold-free" class="link">Días gratis</a></li>
+  </ul>
+</section>
+  `);
 }
