@@ -50,8 +50,8 @@ this.addEventListener('periodicsync', async (eve) => {
 
           if (deals.length) {
             this.registration.showNotification(`¡Nuevas ofertas!`, {
-              icon: 'http://localhost:3030/src/assets/favicon.png',
-              badge: 'http://localhost:3030/src/assets/favicon.png',
+              icon: `${this.registration.scope}src/assets/favicon.png`,
+              badge: `${this.registration.scope}src/assets/favicon.png`,
               body: `Encontramos ofertas para tus juegos favoritos.`,
               data: {
                 url: `${this.registration.scope}wishlist`,
