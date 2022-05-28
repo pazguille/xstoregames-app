@@ -675,7 +675,7 @@ section h2 {
 
 .gamepass li,
 .gold li {
-  flex: 48%;
+  flex: 47%;
   height: 100px;
   border-radius: 5px;
   display: flex;
