@@ -188,6 +188,8 @@ section h2 {
   overflow-x: auto;
   overflow-y: hidden;
   list-style: none;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
 }
 
 .game-preview-new {
@@ -201,6 +203,7 @@ section h2 {
   display: flex;
   flex-direction: column;
   position: relative;
+  scroll-snap-align: center;
 }
 
 .game-preview-new .game-title {
