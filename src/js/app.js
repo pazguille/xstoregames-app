@@ -18,6 +18,9 @@ import {
   goldSection,
 } from './templates.js';
 
+const documentTitle = document.title;
+const documentDescription = document.querySelector('[name="description"]').content;
+
 const LIMIT = 10;
 
 const gamesCache = new Map();
@@ -76,6 +79,8 @@ async function bootApp() {
 
   const $main = document.querySelector('main');
   const $loading = document.querySelector('x-loader');
+
+  const $metaDescription = document.querySelector('[name="description"]');
 
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
@@ -199,6 +204,9 @@ async function bootApp() {
       $currentPage = null;
       $currentPageContent = null;
 
+      document.title = documentTitle;
+      $metaDescription.content = documentDescription;
+
     } else if (eve.state.page === 'game') {
       $prevPage = $currentPage;
       showPage(eve.state.page, eve.state.id);
@@ -277,6 +285,8 @@ async function bootApp() {
 
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
+    document.title = documentTitle;
+    $metaDescription.content = documentDescription;
 
     setTimeout(() => {
       requestIdleCallback(() => {
@@ -382,8 +392,10 @@ async function bootApp() {
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
+        document.title = `${game.title} | XStore`;
+        $metaDescription.content = `${game.title}: ${game.description.split('.')[0].replace(/\n/gi, '')}.`;
         $shareBtn.show({
-          title: `${game.title} en XStore Games`,
+          title: `${game.title} en XStore`,
           url: window.location.href,
         });
         $favBtn.show(wishlist.has(gameId));
