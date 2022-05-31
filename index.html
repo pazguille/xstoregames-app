@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://www.dolarsi.com" />
     <link rel="preconnect" href="https://api.xstoregames.com" />
     <link rel="preconnect" href="https://store-images.s-microsoft.com" />
+    <link rel="preconnect" href="https://media.rawg.io/" />
 
     <link rel="preload" as="fetch" href="https://www.dolarsi.com/api/api.php?type=valoresprincipales" crossorigin="anonymous" />
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0" crossorigin="anonymous" />
@@ -243,6 +244,8 @@
       };
 
       async function bs() {
+        if (!navigator.permissions) { return; }
+
         const registration = await navigator.serviceWorker.ready;
         const status = await navigator.permissions.query({
           name: 'periodic-background-sync',

@@ -3,6 +3,7 @@ export const searchXboxURL = (query) => `https://api.xstoregames.com/api/search?
 export const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
 export const getXboxNewsURL = () => `https://api.xstoregames.com/api/news`;
 export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepass?list=${list}`;
+export const getVideoURL = (slug) => `https://api.xstoregames.com/api/videos?game=${slug}`;
 
 export function slugify(str) {
   return str

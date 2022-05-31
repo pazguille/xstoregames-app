@@ -74,6 +74,7 @@ export function gameDetailTemplate(game) {
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   return (`
 <article class="game-preview" style="--game-preview-url: url(${img}?w=1000)">
+  <video autoplay loop muted playsinline></video>
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>

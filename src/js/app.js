@@ -5,6 +5,8 @@ import {
   getXboxNewsURL,
   getGamePassURL,
   updateDollar,
+  getVideoURL,
+  slugify,
 } from './utils.js';
 
 import {
@@ -402,6 +404,13 @@ async function bootApp() {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
       });
+
+      requestIdleCallback(async () => {
+        if (!window.matchMedia('(prefers-reduced-motion)').matches || (navigator.connection && !navigator.connection.saveData)) {
+          const video = await fetch(getVideoURL(slugify(game.title))).then(res => res.json());
+          document.querySelector('video').src = video.full;
+        }
+      })
     }
 
     if (page === 'collection') {

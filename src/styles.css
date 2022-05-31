@@ -419,6 +419,7 @@ section h2 {
 
 .detail .game-preview > div {
   position: relative;
+  z-index: 2;
   top: 185px;
   margin: 0px;
 }
@@ -475,6 +476,12 @@ section h2 {
   white-space: pre-line;
   font-size: 16px !important;
   line-height: 1.2em;
+}
+
+.detail video {
+  width: 100vw;
+  position: absolute;
+  z-index: 1;
 }
 
 .btn {
@@ -769,6 +776,10 @@ section h2 {
 
   .news .news-preview {
     width: 310px;
+  }
+
+  .detail video {
+    display: none;
   }
 
   .detail .game-preview {

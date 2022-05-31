@@ -390,6 +390,8 @@ class NotificationPrompt extends HTMLElement {
   }
 
   async _permissions() {
+    if (!navigator.permissions) { return; }
+
     const bsStatus = await navigator.permissions.query({ name: 'periodic-background-sync' });
     const notifStatus = await navigator.permissions.query({ name: 'notifications' });
     if (bsStatus.state === 'granted') {
