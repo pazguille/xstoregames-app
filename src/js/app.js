@@ -408,7 +408,9 @@ async function bootApp() {
       requestIdleCallback(async () => {
         if (!window.matchMedia('(prefers-reduced-motion)').matches || (navigator.connection && !navigator.connection.saveData)) {
           const video = await fetch(getVideoURL(slugify(game.title))).then(res => res.json());
-          document.querySelector('video').src = video.full;
+          if (video && video.full) {
+            document.querySelector('video').src = video.full;
+          }
         }
       })
     }
