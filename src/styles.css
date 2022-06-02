@@ -478,7 +478,7 @@ section h2 {
   line-height: 1.2em;
 }
 
-.detail video {
+.detail .hero {
   width: 100vw;
   position: absolute;
   z-index: 1;
