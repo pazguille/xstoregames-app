@@ -121,7 +121,7 @@ export function gameCardNewTemplate(game, index) {
 
 export function gameCardTemplate(game) {
   const img = game.images.boxart ?
-    game.images.boxart.url : game.images.poster.url;
+    game.images.boxart.url : game.images.poster?.url;
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}

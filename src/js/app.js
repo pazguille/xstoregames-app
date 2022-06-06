@@ -67,6 +67,8 @@ const sections = [
 ];
 
 async function bootApp() {
+  const $loading = document.querySelector('x-loader');
+
   const dollar = JSON.parse(window.localStorage.getItem('dollar'));
   if (!dollar || dollar.date !== new Date().toDateString()) {
     await updateDollar();
@@ -80,8 +82,6 @@ async function bootApp() {
   );
 
   const $main = document.querySelector('main');
-  const $loading = document.querySelector('x-loader');
-
   const $metaDescription = document.querySelector('[name="description"]');
 
   const $installBtn = document.querySelector('#install-btn');
@@ -532,34 +532,81 @@ async function bootApp() {
 
     $currentPage.removeAttribute('hidden');
     requestIdleCallback(() => {
+      $loading.hide();
       $currentPage.classList.add('page-on');
     });
   }
 
-  function loadHomePage() {
+  async function loadHomePage() {
+    await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
+      const games = await fetch(getXboxURL(type)).then(res => res.json());
+      const section = sections.find(section => section.type === type);
+      section.list.push(...games);
+      games.forEach((game) => gamesCache.set(game.id, game));
+    }));
+
     const preloadLCP = sections[0].list[0];
     const lcp = preloadLCP.images.titledheroart ?
       (preloadLCP.images.titledheroart.url || preloadLCP.images.titledheroart[0].url)
       : preloadLCP.images.screenshot[0].url;
     document.querySelector('#preloadLCP').href = lcp + '?w=630';
 
-    $home.removeAttribute('hidden');
-    sections.forEach((section, index) => {
+    requestIdleCallback(() => {
+      $loading.hide();
+      $home.removeAttribute('hidden');
+    });
+
+    sections.slice(0, 2).forEach((section, index) => {
       requestIdleCallback(() => {
         $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
         if (index === 0) {
           $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
         }
+      });
+    });
 
-        if (index === 2) {
+
+    requestIdleCallback(async () => {
+
+    await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
+      const games = await fetch(getXboxURL(type)).then(res => res.json());
+      const section = sections.find(section => section.type === type);
+      section.list.push(...games);
+      games.forEach((game) => gamesCache.set(game.id, game));
+    }));
+
+    sections.slice(2, sections.length).forEach((section, index) => {
+      requestIdleCallback(() => {
+        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
+        if (index === 0) {
           $home.insertAdjacentHTML('beforeend', gamepassSection());
         }
 
-        if (index === 5) {
+        if (index === 3) {
           $home.insertAdjacentHTML('beforeend', goldSection());
         }
       });
     });
+
+    });
+
+    // $home.removeAttribute('hidden');
+    // sections.forEach((section, index) => {
+    //   requestIdleCallback(() => {
+    //     $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
+    //     if (index === 0) {
+    //       $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
+    //     }
+
+    //     if (index === 2) {
+    //       $home.insertAdjacentHTML('beforeend', gamepassSection());
+    //     }
+
+    //     if (index === 5) {
+    //       $home.insertAdjacentHTML('beforeend', goldSection());
+    //     }
+    //   });
+    // });
   }
 
   async function loadSearchPage(q) {
@@ -599,12 +646,12 @@ async function bootApp() {
     }));
   }
 
-  await Promise.all(sections.map(async ({ type }) => {
-    const games = await fetch(getXboxURL(type)).then(res => res.json());
-    const section = sections.find(section => section.type === type);
-    section.list.push(...games);
-    games.forEach((game) => gamesCache.set(game.id, game));
-  }));
+  // await Promise.all(sections.map(async ({ type }) => {
+  //   const games = await fetch(getXboxURL(type)).then(res => res.json());
+  //   const section = sections.find(section => section.type === type);
+  //   section.list.push(...games);
+  //   games.forEach((game) => gamesCache.set(game.id, game));
+  // }));
 
   const { pathname, searchParams } = new URL(window.location.href);
   const pathSplit = pathname.split('/');
@@ -640,7 +687,7 @@ async function bootApp() {
   }
 
   requestIdleCallback(() => {
-    $loading.hide();
+    // $loading.hide();
   });
 
   requestIdleCallback(() => {
