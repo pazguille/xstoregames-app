@@ -184,7 +184,7 @@ class ToggleCollapse extends HTMLElement {
           right: 0;
           z-index: 2;
           height: 50px;
-          background-color: var(--bg-xbox-color);
+          background-color: var(--bg-xbox-dark-color);
           text-align: left;
           display: flex;
           align-items: center;
