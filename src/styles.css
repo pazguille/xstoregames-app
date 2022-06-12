@@ -23,6 +23,7 @@
   --bg-highlight-color: #85006c;
   --bg-box-highlight-color: rgba(3, 218, 197, 0.12);
   --bg-xbox-color: #107C10;
+  --bg-xbox-light-color: #5DC21E;
   --bg-xbox-dark-color: #072523;
   /* --bg-xbox-color: #008746; */
 }
@@ -107,10 +108,9 @@ footer {
 
 header {
   /* background-color: var(--bg-xbox-color); */
-  background-color: #072523;
-  /* background-color: #107C10D9;
+  background-color: #072523D9;
   -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px); */
+  backdrop-filter: blur(5px);
   padding: 10px;
   height: 50px;
 }
@@ -198,8 +198,9 @@ section h2 {
   top: 0px;
   right: 10px;
   font-size: 12px;
-  background-color: var(--bg-highlight-color);
-  color: var(--txt-color);
+  /* background-color: var(--bg-highlight-color);
+  color: var(--txt-color); */
+  color: var(--bg-xbox-light-color);
   padding: 4px 10px;
   border-radius: 10px;
   text-decoration: none;
