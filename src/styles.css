@@ -1,3 +1,18 @@
+@font-face {
+  font-family: "Bahnschrift";
+  font-display: swap;
+  src: url("./assets/bahnschrift.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v7/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7W0Q5nw.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* color-scheme: dark light; */
   --txt-color: #fff;
@@ -31,13 +46,18 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-collapse: collapse;
   margin: 0 auto;
   background-color: var(--bg-color);
   color: var(--txt-color);
   font-size: 16px;
   line-height: 1.1em;
+}
+
+h1,h2,h3,h4,h5,h6,
+.game-price {
+  font-family: "Bahnschrift";
 }
 
 input {
@@ -173,12 +193,8 @@ section h2 {
   background-color: var(--bg-highlight-color);
   color: var(--txt-color);
   padding: 4px 10px;
-  border-radius: 15px;
+  border-radius: 10px;
   text-decoration: none;
-}
-
-.see-all:after {
-  content: ' →';
 }
 
 .carousel {
@@ -347,12 +363,10 @@ section h2 {
 }
 
 .game-buy-now {
-  background-image: url('./assets/xbox-logo.png');
-  background-repeat: no-repeat;
-  background-position: .5em center;
-  background-size: 15px;
-  padding-left: 28px !important;
-  margin-top: 10px;
+  display: inline-flex !important;
+  justify-items: center;
+  align-items: center;
+  gap: 5px;
 }
 
 .x-loader {

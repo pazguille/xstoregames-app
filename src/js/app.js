@@ -409,6 +409,10 @@ async function bootApp() {
         if (!window.matchMedia('(prefers-reduced-motion)').matches || (navigator.connection && !navigator.connection.saveData)) {
           const video = await fetch(getVideoURL(slugify(game.title))).then(res => res.json());
           if (video && video.full) {
+            document.querySelector('video')
+              .addEventListener('loadedmetadata', function() {
+                this.toggleAttribute('hidden');
+              });
             document.querySelector('video').src = video.full;
           }
         }
