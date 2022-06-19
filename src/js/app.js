@@ -11,6 +11,7 @@ import {
 
 import {
   sectionTemplate,
+  gameImportantTemplate,
   gameCardTemplate,
   gameDetailTemplate,
   newsTemplate,
@@ -31,36 +32,42 @@ const sections = [
   {
     type: 'new',
     title: 'Salidos del horno',
+    icon: '',
     list: [],
     skipitems: 0,
   },
   {
     type: 'deals',
     title: 'Ahorrate unos mangos',
+    icon: `<img src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
   },
   {
     type: 'coming',
     title: '¡Mirá lo que se viene!',
+    icon: '',
     list: [],
     skipitems: 0,
   },
   {
     type: 'best',
     title: 'Deberías jugarlos',
+    icon: '',
     list: [],
     skipitems: 0,
   },
   {
     type: 'most',
     title: 'Los más jugados',
+    icon: '<img src="/src/assets/icons/chart.svg" width="24" height="24" />',
     list: [],
     skipitems: 0,
   },
   {
     type: 'free',
     title: 'Gratarola',
+    icon: '',
     list: [],
     skipitems: 0,
   },
@@ -68,6 +75,7 @@ const sections = [
 
 async function bootApp() {
   const $loading = document.querySelector('x-loader');
+  const $splash = document.querySelector('.splash-loading');
 
   const dollar = JSON.parse(window.localStorage.getItem('dollar'));
   if (!dollar || dollar.date !== new Date().toDateString()) {
@@ -86,8 +94,6 @@ async function bootApp() {
 
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
-  const $shareBtn = document.querySelector('#share-btn');
-  const $favBtn = document.querySelector('#fav-btn');
 
   const $search = document.querySelector('#search-collapse');
   const $searchForm = document.querySelector('#search');
@@ -120,36 +126,6 @@ async function bootApp() {
       .createIndex('game', 'game', { unique: true });
   };
   iddb.onsuccess = eve => { db = eve.target.result; };
-
-  $favBtn.addEventListener('click', () => {
-    const { pathname } = new URL(window.location.href);
-    const pathSplit = pathname.split('/');
-    const id = pathSplit[2].split('_')[1];
-
-    if (wishlist.has(id)) {
-      wishlist.delete(id);
-
-      db
-        .transaction('wishlist', 'readwrite')
-        .objectStore('wishlist')
-        .delete(id);
-
-    } else {
-      wishlist.add(id);
-
-      const game = gamesCache.get(id);
-      db
-        .transaction('wishlist', 'readwrite')
-        .objectStore('wishlist')
-        .add({
-          id,
-          title:  game.title,
-          amount: game.price.amount,
-        });
-    }
-
-    window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
-  });
 
   document.body.addEventListener('click', async (eve) => {
     if (!eve.target.classList.contains('link')) { return; }
@@ -196,8 +172,6 @@ async function bootApp() {
       document.body.style = undefined;
       $home.removeAttribute('hidden');
       $pageBack.hide();
-      $shareBtn.hide();
-      $favBtn.hide();
 
       $search.show();
       $installBtn.show();
@@ -301,8 +275,6 @@ async function bootApp() {
 
       requestIdleCallback(() => {
         $pageBack.hide();
-        $shareBtn.hide();
-        $favBtn.hide();
         $search.hide();
         $installBtn.hide();
       });
@@ -314,16 +286,20 @@ async function bootApp() {
 
       $currentPage = $wish;
       $currentPageContent = $wishContent;
-      $currentPageContent.innerHTML = '<h2>Favoritos</h2>';
+      $currentPageContent.innerHTML = '<h2><img src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
 
       const games = Array.from(wishlist).reverse().join(',');
       if (games.length) {
         $loading.show();
         const wish = await fetch(gameXboxURL(games)).then(res => res.json());
-        wish.map((w) => requestIdleCallback(() => {
-          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(w));
-        }));
+        wish.map((w) => {
+          gamesCache.set(w.id, w);
+          requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(w));
+          });
+        });
         $loading.hide();
+        document.dispatchEvent(new CustomEvent('wishlistdone'));
       } else {
         requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', emptyWishlist());
@@ -347,7 +323,7 @@ async function bootApp() {
 
       $currentPage = $news;
       $currentPageContent = $newsContent;
-      $currentPageContent.innerHTML = '<h2>Noticias recientes</h2>';
+      $currentPageContent.innerHTML = '<h2><img src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
 
       $loading.show();
       const news = await fetch(getXboxNewsURL()).then(res => res.json());
@@ -396,13 +372,16 @@ async function bootApp() {
       requestIdleCallback(() => {
         document.title = `${game.title} | XStore`;
         $metaDescription.content = `${game.title}: ${game.description.split('.')[0].replace(/\n/gi, '')}.`;
-        $shareBtn.show({
-          title: `${game.title} en XStore`,
-          url: window.location.href,
-        });
-        $favBtn.show(wishlist.has(gameId));
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
+
+        setTimeout(() => {
+          document.querySelector('#share-btn').show({
+            title: `${game.title} en XStore`,
+            url: window.location.href,
+          });
+          document.querySelector('#fav-btn').show(wishlist.has(gameId));
+        }, 0);
       });
 
       requestIdleCallback(async () => {
@@ -424,8 +403,6 @@ async function bootApp() {
         $pageBack.show();
         $search.hide();
         $installBtn.hide();
-        $shareBtn.hide();
-        $favBtn.hide();
       });
 
       const $prev = $currentPageContent;
@@ -437,7 +414,7 @@ async function bootApp() {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
         const section = sections.find(section => section.type === id);
-        $currentPageContent.insertAdjacentHTML('beforeend', `<h2>${section.title}</h2>`);
+        $currentPageContent.insertAdjacentHTML('beforeend', `<h2>${section.icon}${section.title}</h2>`);
         section.list.map((game) => requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
           gamesCache.set(game.id, game);
@@ -472,8 +449,6 @@ async function bootApp() {
         $pageBack.show();
         $search.hide();
         $installBtn.hide();
-        $shareBtn.hide();
-        $favBtn.hide();
       });
 
       const $prev = $currentPageContent;
@@ -505,8 +480,6 @@ async function bootApp() {
         $pageBack.show();
         $search.hide();
         $installBtn.hide();
-        $shareBtn.hide();
-        $favBtn.hide();
       });
 
       const $prev = $currentPageContent;
@@ -542,6 +515,8 @@ async function bootApp() {
   }
 
   async function loadHomePage() {
+    $splash.toggleAttribute('hidden');
+
     await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
       const games = await fetch(getXboxURL(type)).then(res => res.json());
       const section = sections.find(section => section.type === type);
@@ -549,23 +524,35 @@ async function bootApp() {
       games.forEach((game) => gamesCache.set(game.id, game));
     }));
 
-    const preloadLCP = sections[0].list[0];
-    const lcp = preloadLCP.images.titledheroart ?
-      (preloadLCP.images.titledheroart.url || preloadLCP.images.titledheroart[0].url)
-      : preloadLCP.images.screenshot[0].url;
-    document.querySelector('#preloadLCP').href = lcp + '?w=630';
+    // const preloadLCP = sections[0].list[0];
+    // const lcp = preloadLCP.images.titledheroart ?
+    //   (preloadLCP.images.titledheroart.url || preloadLCP.images.titledheroart[0].url)
+    //   : preloadLCP.images.screenshot[0].url;
+
+    const hotSale = sections[1].list.reduce(function (p, v) {
+      return ( p.price.off > v.price.off ? p : v );
+    });
+    const lcp = hotSale.images.featurepromotionalsquareart ?
+      hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
+    document.querySelector('#preloadLCP').href = lcp + '?w=360&q=70';
+
+    $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
 
     requestIdleCallback(() => {
+      $splash.classList.add('bye');
+      setTimeout(() => {
+        $splash.toggleAttribute('hidden');
+      }, 500);
       $loading.hide();
       $home.removeAttribute('hidden');
     });
 
     sections.slice(0, 2).forEach((section, index) => {
       requestIdleCallback(() => {
-        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
         if (index === 0) {
           $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
         }
+        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
       });
     });
 
@@ -618,8 +605,6 @@ async function bootApp() {
       $pageBack.show();
       $search.show();
       $installBtn.hide();
-      $shareBtn.hide();
-      $favBtn.hide();
     });
 
     $currentPage = $results
@@ -667,6 +652,29 @@ async function bootApp() {
       loadHomePage();
       break;
     case 'wishlist':
+
+      if (id === 'export') {
+        alert(`${window.location.origin}/wishlist/import?ids=${Array.from(wishlist)}`);
+
+      } else if (id === 'import') {
+        const wishs = searchParams.get('ids').split(',');
+        wishs.forEach((id) => wishlist.add(id));
+        document.addEventListener('wishlistdone', () => {
+          wishs.forEach((id) => {
+            const game = gamesCache.get(id);
+            db
+              .transaction('wishlist', 'readwrite')
+              .objectStore('wishlist')
+              .add({
+                id,
+                title:  game.title,
+                amount: game.price.amount,
+              });
+          });
+          window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
+        });
+      }
+
       showPage('wishlist');
       break;
     case 'news':
@@ -691,32 +699,61 @@ async function bootApp() {
   }
 
   requestIdleCallback(() => {
-    // $loading.hide();
-  });
-
-  requestIdleCallback(() => {
     $searchForm.addEventListener('submit', (eve) => {
       gtag('event', 'search', {
         search_term: eve.target.elements[0].value,
       });
     });
-    $shareBtn.addEventListener('click', (eve) => {
-      gtag('event', 'share', {
-        page_location: window.location.href,
-      });
-    });
-    $favBtn.addEventListener('click', (eve) => {
-      if (eve.target.active) {
-        gtag('event', 'add_to_wishlist', {
-          page_location: window.location.href,
-        });
-      }
-    });
+
     $detailContent.addEventListener('click', (eve) => {
       if (eve.target.classList.contains('game-buy-now')) {
         gtag('event', 'begin_checkout', {
           page_location: window.location.href,
         });
+      }
+
+      if (eve.target.classList.contains('share-btn')) {
+        gtag('event', 'share', {
+          page_location: window.location.href,
+        });
+      }
+
+      if (eve.target.classList.contains('fav-btn')) {
+        if (eve.target.active) {
+          gtag('event', 'add_to_wishlist', {
+            page_location: window.location.href,
+          });
+        }
+      }
+
+      if (eve.target.classList.contains('fav-btn')) {
+        const { pathname } = new URL(window.location.href);
+        const pathSplit = pathname.split('/');
+        const id = pathSplit[2].split('_')[1];
+
+        if (wishlist.has(id)) {
+          wishlist.delete(id);
+
+          db
+            .transaction('wishlist', 'readwrite')
+            .objectStore('wishlist')
+            .delete(id);
+
+        } else {
+          wishlist.add(id);
+
+          const game = gamesCache.get(id);
+          db
+            .transaction('wishlist', 'readwrite')
+            .objectStore('wishlist')
+            .add({
+              id,
+              title:  game.title,
+              amount: game.price.amount,
+            });
+        }
+
+        window.localStorage.setItem('wishlist', JSON.stringify(Array.from(wishlist)));
       }
     });
     window.addEventListener('appinstalled', (eve) => {
