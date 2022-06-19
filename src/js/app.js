@@ -515,7 +515,6 @@ async function bootApp() {
   }
 
   async function loadHomePage() {
-    $splash.toggleAttribute('hidden');
 
     await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
       const games = await fetch(getXboxURL(type)).then(res => res.json());
@@ -523,11 +522,6 @@ async function bootApp() {
       section.list.push(...games);
       games.forEach((game) => gamesCache.set(game.id, game));
     }));
-
-    // const preloadLCP = sections[0].list[0];
-    // const lcp = preloadLCP.images.titledheroart ?
-    //   (preloadLCP.images.titledheroart.url || preloadLCP.images.titledheroart[0].url)
-    //   : preloadLCP.images.screenshot[0].url;
 
     const hotSale = sections[1].list.reduce(function (p, v) {
       return ( p.price.off > v.price.off ? p : v );
@@ -556,48 +550,29 @@ async function bootApp() {
       });
     });
 
-
     requestIdleCallback(async () => {
 
-    await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
-      const games = await fetch(getXboxURL(type)).then(res => res.json());
-      const section = sections.find(section => section.type === type);
-      section.list.push(...games);
-      games.forEach((game) => gamesCache.set(game.id, game));
-    }));
+      await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
+        const games = await fetch(getXboxURL(type)).then(res => res.json());
+        const section = sections.find(section => section.type === type);
+        section.list.push(...games);
+        games.forEach((game) => gamesCache.set(game.id, game));
+      }));
 
-    sections.slice(2, sections.length).forEach((section, index) => {
-      requestIdleCallback(() => {
-        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
-        if (index === 0) {
-          $home.insertAdjacentHTML('beforeend', gamepassSection());
-        }
+      sections.slice(2, sections.length).forEach((section, index) => {
+        requestIdleCallback(() => {
+          $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
+          if (index === 0) {
+            $home.insertAdjacentHTML('beforeend', gamepassSection());
+          }
 
-        if (index === 3) {
-          $home.insertAdjacentHTML('beforeend', goldSection());
-        }
+          if (index === 3) {
+            $home.insertAdjacentHTML('beforeend', goldSection());
+          }
+        });
       });
-    });
 
     });
-
-    // $home.removeAttribute('hidden');
-    // sections.forEach((section, index) => {
-    //   requestIdleCallback(() => {
-    //     $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
-    //     if (index === 0) {
-    //       $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
-    //     }
-
-    //     if (index === 2) {
-    //       $home.insertAdjacentHTML('beforeend', gamepassSection());
-    //     }
-
-    //     if (index === 5) {
-    //       $home.insertAdjacentHTML('beforeend', goldSection());
-    //     }
-    //   });
-    // });
   }
 
   async function loadSearchPage(q) {
@@ -634,13 +609,6 @@ async function bootApp() {
       gamesCache.set(game.id, game);
     }));
   }
-
-  // await Promise.all(sections.map(async ({ type }) => {
-  //   const games = await fetch(getXboxURL(type)).then(res => res.json());
-  //   const section = sections.find(section => section.type === type);
-  //   section.list.push(...games);
-  //   games.forEach((game) => gamesCache.set(game.id, game));
-  // }));
 
   const { pathname, searchParams } = new URL(window.location.href);
   const pathSplit = pathname.split('/');
