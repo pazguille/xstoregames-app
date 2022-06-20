@@ -115,7 +115,7 @@ export function gameDetailTemplate(game) {
     </div>
 
     ${Array.isArray(game.images.screenshot) ? `
-      <h4>Galeria</h4>
+      <h4>Imágenes</h4>
       <div class="carousel game-preview-images">
         <img alt="" width="580" loading="lazy" decoding="async" src="${img}?w=1000&q=70" />
         ${game.images.screenshot.map((img) => `<img alt="" width="580" loading="lazy" decoding="async" src="${img.url}?w=1000&q=70" />`).join('')}
@@ -125,7 +125,7 @@ export function gameDetailTemplate(game) {
     <h4>Videos</h4>
     <div class="carousel game-preview-playlist">
       <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" rel="noreferrer noopener" class="game-preview-video" aria-label="Ver trailers en YouTube">
-        <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" alt="" />
+        <img width="25" loading="lazy" decoding="async" src="/src/assets/icons/play.svg" alt="" />
       </a>
     </div>
 
