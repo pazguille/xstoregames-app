@@ -92,6 +92,8 @@ async function bootApp() {
   const $main = document.querySelector('main');
   const $metaDescription = document.querySelector('[name="description"]');
 
+  const $footer = document.querySelector('footer');
+
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
 
@@ -139,6 +141,7 @@ async function bootApp() {
     const id = pathSplit[2];
 
     history.pushState({ page, id }, '', eve.target.href);
+
     showPage(page, id);
   });
 
@@ -271,6 +274,8 @@ async function bootApp() {
     }, 300);
 
     if (page === 'wishlist') {
+      $footer.dataset.active = page;
+
       $home.setAttribute('hidden', true);
 
       requestIdleCallback(() => {
@@ -308,6 +313,8 @@ async function bootApp() {
     }
 
     if (page === 'news') {
+      $footer.dataset.active = page;
+
       $home.setAttribute('hidden', true);
 
       requestIdleCallback(() => {
@@ -543,10 +550,10 @@ async function bootApp() {
 
     sections.slice(0, 2).forEach((section, index) => {
       requestIdleCallback(() => {
+        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
         if (index === 0) {
           $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
         }
-        $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
       });
     });
 

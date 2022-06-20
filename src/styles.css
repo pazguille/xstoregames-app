@@ -272,6 +272,7 @@ h2 img {
   margin: 10px 15px 20px;
   font-size: 32px;
   text-align: right;
+  text-shadow: 1px 1px var(--bg-color);
 }
 
 .game-important .game-img {
@@ -690,16 +691,11 @@ span.game-img {
 }
 
 .detail .game-preview-images {
-  padding: 10px;
-  display: flex;
-  overflow: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  gap: 10px;
+  padding: 0;
 }
 
 .detail .game-preview-images img {
-  width: calc(100vw - 35px);
+  width: calc(100vw - 80px);
   height: auto;
   aspect-ratio: 16 / 9;
 }
@@ -864,13 +860,19 @@ span.game-img {
   width: 55px;
   transform: translateZ(0);
   display: inline-block;
-  padding: 3px 15px;
+  padding: 3px 35px;
   text-align: center;
   text-decoration: none;
 }
 
 .footer-btn svg {
   vertical-align: middle;
+}
+
+[data-active=""] .home-btn path,
+[data-active="wishlist"] .wish-btn path,
+[data-active="news"] .news-btn path {
+  fill: var(--bg-xbox-light-color);
 }
 
 .search label {
@@ -1126,8 +1128,8 @@ span.game-img {
 @media (min-width: 54em) {
   .page {
     opacity: 0;
-    transform: translateX(60px);
-    transition: transform 300ms ease-out, opacity 300ms ease-out;
+    transform: translateX(0);
+    transition: opacity 300ms ease-out;
 
     bottom: 0;
     right: 0;
@@ -1137,9 +1139,7 @@ span.game-img {
 
   .page-on {
     opacity: 1;
-    transform: translateX(0);
   }
-
 
   header {
     width: auto;
@@ -1165,6 +1165,10 @@ span.game-img {
     gap: 15px;
   }
 
+  .carousel {
+    scroll-snap-type: none;
+  }
+
   .page-content h2 {
     width: 100%;
   }
@@ -1180,7 +1184,7 @@ span.game-img {
 
   .home section:first-of-type {
     display: inline-block;
-    width: 70%;
+    width: calc(100vw - 490px);
     vertical-align: top;
   }
 
@@ -1267,11 +1271,6 @@ span.game-img {
     width: 65%;
   }
 
-  .detail .game-preview-images {
-    width: 98%;
-    scroll-snap-type: none;
-  }
-
   .detail .game-preview-images img {
     width: 500px;
   }
@@ -1279,5 +1278,9 @@ span.game-img {
   .gamepass li {
     flex: 1;
     height: 100px;
+  }
+
+  .footer-btn {
+    padding: 12px;
   }
 }

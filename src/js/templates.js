@@ -116,7 +116,7 @@ export function gameDetailTemplate(game) {
 
     ${Array.isArray(game.images.screenshot) ? `
       <h4>Galeria</h4>
-      <div class="game-preview-images">
+      <div class="carousel game-preview-images">
         <img alt="" width="580" loading="lazy" decoding="async" src="${img}?w=1000&q=70" />
         <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" rel="noreferrer noopener" class="game-preview-video" aria-label="Ver trailers en YouTube">
           <img width="100%" loading="lazy" decoding="async" src="/src/assets/video.jpg" alt="" />
