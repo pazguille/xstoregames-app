@@ -394,12 +394,18 @@ async function bootApp() {
       requestIdleCallback(async () => {
         if (!window.matchMedia('(prefers-reduced-motion)').matches || (navigator.connection && !navigator.connection.saveData)) {
           const video = await fetch(getVideoURL(slugify(game.title))).then(res => res.json());
+
           if (video && video.full) {
             document.querySelector('video')
               .addEventListener('loadedmetadata', function() {
                 this.toggleAttribute('hidden');
               });
             document.querySelector('video').src = video.full;
+          }
+          if (video && video.playlist.length > 0) {
+            document.querySelector('.game-preview-playlist').insertAdjacentHTML('beforeend',
+              video.playlist.map((id) => `<lite-youtube videoid="${id}" autoload></lite-youtube>`).join('')
+            )
           }
         }
       })

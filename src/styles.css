@@ -690,20 +690,37 @@ span.game-img {
   position: relative;
 }
 
-.detail .game-preview-images {
+.detail .game-preview-info h4 {
+  display: inline-block;
+}
+
+.detail .game-preview-images,
+.detail .game-preview-playlist {
   padding: 0;
 }
 
-.detail .game-preview-images img {
+.detail .game-preview-images img,
+.detail .game-preview-playlist a,
+.detail .game-preview-playlist lite-youtube {
   width: calc(100vw - 80px);
   height: auto;
   aspect-ratio: 16 / 9;
+  border-radius: 10px;
 }
 
-.detail .game-preview-images img,
-.detail .game-preview-images a  {
+.detail .game-preview-playlist a {
+  overflow: hidden;
+}
+
+.detail .game-preview-playlist lite-youtube,
+.detail .game-preview-playlist a  {
+  padding: 0;
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.detail .game-preview-images img {
   scroll-snap-align: center;
-  border-radius: 10px;
 }
 
 .detail .game-preview-video {
@@ -1271,7 +1288,8 @@ span.game-img {
     width: 65%;
   }
 
-  .detail .game-preview-images img {
+  .detail .game-preview-images img,
+  .detail .game-preview-playlist lite-youtube {
     width: 500px;
   }
 
