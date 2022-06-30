@@ -1268,6 +1268,7 @@ span.game-img {
     bottom: 0;
     z-index: 0;
     background-color: #1b201fc9;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
 
@@ -1350,6 +1351,7 @@ span.game-img {
     right: 0;
     bottom: 0;
     background: #1F1F1FE3;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
   }
 
