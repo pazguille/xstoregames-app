@@ -15,7 +15,8 @@
 
 :root {
   /* color-scheme: dark light; */
-  --bg-color: #1F1F1F;
+  /* --bg-color: #1F1F1F; */
+  --bg-color: #1B201F;
   --bg-highlight-color: #85006c;
 
   --txt-color: #ffffff;
@@ -60,9 +61,8 @@ body {
   font-family: "Bahnschrift", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-collapse: collapse;
   margin: 0 auto;
-  /* background-color: var(--bg-color); */
-  /* background-color: #072523; */
   background: var(--bg-xbox-dark-color) linear-gradient(var(--bg-xbox-dark-color) 5%, var(--bg-color) 15%) no-repeat;
+  /* background: var(--bg-color); */
   color: var(--txt-color);
   font-size: 16px;
   line-height: 1.1em;
@@ -98,7 +98,7 @@ main:before {
   position: absolute;
   top: 10px;
   left: 0;
-  width: 100%;
+  right: 0;
   height: 50px;
   text-align: center;
 }
@@ -136,7 +136,7 @@ header button {
 } */
 
 footer {
-  background-color: var(--bg-color);
+  background-color: var(--txt-color-dark);
   border-top: 1px solid #2f3336;
   bottom: 0;
   z-index: 1;
@@ -234,20 +234,38 @@ h2 img {
   list-style: none;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.arrow {
+  display: none;
 }
 
 .game-important {
   position: relative;
-  background: var(--bg-xbox-dark-color) linear-gradient(transparent 55%, var(--bg-color) 100%) no-repeat;
-  width: 360px;
+  background-color: var(--bg-color);
+  width: 330px;
   height: 330px;
   display: flex;
   flex-direction: column;
-  align-items: end;
+  align-items: start;
   justify-content: center;
   margin: 15px auto;
   border-radius: 10px;
-  overflow: hidden;
+}
+
+.game-important:before {
+  display: block;
+  content: '';
+  width: 90%;
+  z-index: -1;
+  background-image: linear-gradient(95deg, #027B8E 0%, #008571 50%, #058645 100%);
+  position: absolute;
+  left: 5%;
+  right: 0;
+  top: 25px;
+  height: 300px;
+  filter: blur(30px);
 }
 
 .game-important * {
@@ -259,19 +277,16 @@ h2 img {
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  /* background-color: var(--bg-box-deal-color);
-  color: var(--bg-box-light-color); */
   background-color: var(--bg-highlight-color);
   color: var(--txt-color);
   padding: 5px 8px;
   border-radius: 5px;
-  margin-right: 15px;
+  margin-left: 15px;
 }
 
 .game-important .game-title {
   margin: 10px 15px 20px;
   font-size: 32px;
-  text-align: right;
   text-shadow: 1px 1px var(--bg-color);
 }
 
@@ -498,13 +513,28 @@ span.game-img {
   box-sizing: border-box;
 }
 
-.game-title a:focus:before {
+/* .game-title a:focus:focus-visible:before {
   border: 4px solid var(--bg-box-deal-color);
+} */
+
+:focus:focus-visible {
+  /* border: 4px solid var(--bg-box-deal-color); */
+  box-shadow: 0px 0px 0px 3px var(--bg-box-deal-color);
+  outline: none;
 }
 
-.game-title a:focus:not(:focus-visible):before {
-  border: none;
+.game-title a:focus:focus-visible {
+  box-shadow: none;
 }
+
+.game-title a:focus:focus-visible:before {
+  /* border: 4px solid var(--bg-box-deal-color); */
+  box-shadow: inset 0px 0px 0px 4px var(--bg-box-deal-color);
+}
+
+/* .game-title a:focus:not(:focus-visible):before {
+  border: none;
+} */
 
 .game-by {
   font-size: 13px;
@@ -611,7 +641,6 @@ span.game-img {
   transform: translateX(100%);
   transition: transform 300ms ease;
   z-index: 2;
-  /* background-color: var(--bg-color); */
   background: var(--bg-xbox-dark-color) linear-gradient(var(--bg-xbox-dark-color) 5%, var(--bg-color) 15%) no-repeat;
 }
 
@@ -691,6 +720,7 @@ span.game-img {
 .detail .game-preview-images,
 .detail .game-preview-playlist {
   padding: 0;
+  margin: 15px 0 20px;
 }
 
 .detail .game-preview-images img,
@@ -820,7 +850,7 @@ span.game-img {
 .header-btn {
   border-radius: 100%;
   position: absolute;
-  color: var(--txt-color);
+  color: var(--txt-color-secondary);
   background: none;
   border: none;
   width: 55px;
@@ -841,7 +871,7 @@ span.game-img {
 
 .install-btn span {
   border-radius: 20px;
-  border: 1px solid var(--txt-color);
+  border: 1px solid var(--txt-color-secondary);
   padding: 7px 5px;
   display: flex;
   align-items: center;
@@ -874,7 +904,7 @@ span.game-img {
 }
 
 .footer-btn {
-  color: var(--txt-color);
+  color: var(--txt-color-secondary);
   background: none;
   border: none;
   width: 55px;
@@ -893,6 +923,12 @@ span.game-img {
 [data-active="wishlist"] .wish-btn path,
 [data-active="news"] .news-btn path {
   fill: var(--bg-xbox-light-color);
+}
+
+[data-active=""] .home-btn,
+[data-active="wishlist"] .wish-btn,
+[data-active="news"] .news-btn {
+  color: var(--bg-xbox-light-color);
 }
 
 .search label {
@@ -1120,6 +1156,7 @@ span.game-img {
 }
 
 @media (min-width: 54em) {
+
   .page {
     opacity: 0;
     transform: translateX(0);
@@ -1145,6 +1182,10 @@ span.game-img {
     margin-left: 80px;
   }
 
+  main:before {
+    left: 80px;
+  }
+
   footer {
     top: 0px;
     left: 0;
@@ -1157,6 +1198,14 @@ span.game-img {
   footer ul {
     flex-direction: column;
     gap: 15px;
+  }
+
+  .home,
+  .list .page-content,
+  .news .page-content,
+  .detail .game-preview > div {
+    max-width: 1100px;
+    margin: 0 auto;
   }
 
   .carousel {
@@ -1173,19 +1222,89 @@ span.game-img {
     flex-flow: wrap;
     align-content: baseline;
     padding: 0 5px;
-  }
-
-
-  .home section:first-of-type {
-    display: inline-block;
-    width: calc(100vw - 490px);
-    vertical-align: top;
+    margin: 0 auto;
   }
 
   .game-important {
-    display: inline-flex;
-    margin: 25px 15px;
-    background: var(--bg-box-light-color);
+    max-width: 100%;
+    width: auto;
+    margin: 50px 20px;
+    padding: 0 30px;
+    background-color: var(--bg-box-color);
+  }
+
+  .game-important:before {
+    top: 15px;
+    height: 330px;
+    filter: blur(50px);
+  }
+
+  .game-important .game-title {
+    width: 30%;
+  }
+
+  .game-important .game-img {
+    right: 0;
+    width: 65%;
+    opacity: 1;
+    object-fit: cover;
+    border-radius: 0 10px 0 0;
+  }
+
+  .game-preview-new {
+    width: 35vw;
+    border-radius: 10px;
+    background: var(--game-preview-new) no-repeat;
+    background-size: 100%;
+  }
+
+  .game-preview-new:before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    background-color: #1b201fc9;
+    backdrop-filter: blur(10px);
+  }
+
+  .game-preview-new > div {
+    padding: 20px;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .game-preview-new > .game-img {
+    z-index: 1;
+  }
+
+  .carousel:hover .arrow {
+    opacity: 1;
+  }
+
+  .arrow {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(20,20,20,.5);
+    color: var(--txt-color);
+    top: 40px;
+    bottom: 0;
+    width: 55px;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    will-change: opacity;
+  }
+
+  .arrow.prev {
+    left: 0;
+  }
+
+  .arrow.next {
+    right: 0;
   }
 
   .list .game-price-off {
@@ -1222,16 +1341,26 @@ span.game-img {
     background-size: cover;
   }
 
+  .detail .game-preview:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #1F1F1FE3;
+    backdrop-filter: blur(10px);
+  }
+
   .detail .hero {
     width: calc(100vw - 80px);
   }
 
   .detail .game-preview > div {
     top: 0;
-    background-color: #1F1F1FE3;
-    backdrop-filter: blur(10px);
+    background-color: transparent;
     padding: 20px 30px;
-    margin: 0;
   }
 
   .detail .game-price-taxes {
@@ -1250,15 +1379,14 @@ span.game-img {
     margin-bottom: 35px;
   }
 
-  .detail .game-preview-poster,
   .detail .game-preview-trailer {
-    position: absolute;
+    position: fixed;
     display: block !important;
-    top: 30px;
-    right: 30px;
+    top: 80px;
+    right: 10%;
     border-radius: 10px;
     z-index: 3;
-    width: 550px;
+    width: 420px;
   }
 
   .detail .game-description {

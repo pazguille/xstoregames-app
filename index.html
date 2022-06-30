@@ -13,7 +13,6 @@
 
     <link rel="preconnect" href="https://api.xstoregames.com" />
     <link rel="preconnect" href="https://www.dolarsi.com" />
-    <link rel="preconnect" href="https://store-images.s-microsoft.com" />
     <link rel="preconnect" href="https://media.rawg.io/" />
 
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0" crossorigin="anonymous" />
@@ -104,7 +103,7 @@
         hidden
       >
         <span>
-          <svg width="16" height="16" viewBox="0 0 38 38" fill="#fff" aria-hidden="true"><path class="clr-i-outline clr-i-outline-path-1" d="M31 8h-4a1 1 0 0 0 0 2h4v20H5V10h4a1 1 0 0 0 0-2H5a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h26a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2Z"/><path class="clr-i-outline clr-i-outline-path-2" d="m10 19 7 7a1 1 0 0 0 2 0l7-7a1 1 0 0 0-2-2l-5 6V4a1 1 0 0 0-2 0v19l-5-6a1 1 0 0 0-2 2Z"/><path fill="none" d="M0 0h36v36H0z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 38 38" fill="#9AA495" aria-hidden="true"><path class="clr-i-outline clr-i-outline-path-1" d="M31 8h-4a1 1 0 0 0 0 2h4v20H5V10h4a1 1 0 0 0 0-2H5a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h26a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2Z"/><path class="clr-i-outline clr-i-outline-path-2" d="m10 19 7 7a1 1 0 0 0 2 0l7-7a1 1 0 0 0-2-2l-5 6V4a1 1 0 0 0-2 0v19l-5-6a1 1 0 0 0-2 2Z"/><path fill="none" d="M0 0h36v36H0z"/></svg>
           Instalar
         </span>
       </button>
@@ -286,6 +285,127 @@
           });
         }
       }
+    </script>
+
+    <script>
+      (function(e){'use strict';function t(){this.collection={};this.maxListeners=10}t.prototype.addListener=function(e,t,n){if(e===undefined){throw new Error('jvent - "addListener(event, listener)": It should receive an event.')}if(t===undefined){throw new Error('jvent - "addListener(event, listener)": It should receive a listener function.')}var r=this.collection;t.once=n||false;if(r[e]===undefined){r[e]=[]}if(r[e].length+1>this.maxListeners&&this.maxListeners!==0){throw new Error("Warning: So many listeners for an event.")}r[e].push(t);this.emit("newListener");return this};t.prototype.on=t.prototype.addListener;t.prototype.once=function(e,t){this.on(e,t,true);return this};t.prototype.removeListener=function(e,t){if(e===undefined){throw new Error('jvent - "removeListener(event, listener)": It should receive an event.')}if(t===undefined){throw new Error('jvent - "removeListener(event, listener)": It should receive a listener function.')}var n=this.collection[e],r=0,i;if(n!==undefined){i=n.length;for(r;r<i;r+=1){if(n[r]===t){n.splice(r,1);break}}}return this};t.prototype.off=t.prototype.removeListener;t.prototype.removeAllListeners=function(e){if(e===undefined){throw new Error('jvent - "removeAllListeners(event)": It should receive an event.')}delete this.collection[e];return this};t.prototype.setMaxListeners=function(e){if(isNaN(e)){throw new Error('jvent - "setMaxListeners(n)": It should receive a number.')}this.maxListeners=e;return this};t.prototype.listeners=function(e){if(e===undefined){throw new Error('jvent - "listeners(event)": It should receive an event.')}return this.collection[e]};t.prototype.emit=function(){var e=Array.prototype.slice.call(arguments,0),t=e.shift(),n,r=0,i;if(t===undefined){throw new Error('jvent - "emit(event)": It should receive an event.')}if(typeof t==="string"){t={type:t}}if(!t.target){t.target=this}if(this.collection[t.type]!==undefined){n=this.collection[t.type];i=n.length;for(r;r<i;r+=1){n[r].apply(this,e);if(n[r].once){this.off(t.type,n[r]);i-=1;r-=1}}}return this};if(typeof e.define==="function"&&e.define.amd!==undefined){e.define("Jvent",[],function(){return t})}else if(typeof module!=="undefined"&&module.exports!==undefined){module.exports=t}else{e.Jvent=e.EventEmitter=t}})(this);
+      (function (window) {
+          'use strict';
+          var PS3 = {
+              'buttons': [
+                  'CROSS',
+                  'CIRCLE',
+                  'SQUARE',
+                  'TIRANGLE',
+                  'L1',
+                  'R1',
+                  'L2',
+                  'R2',
+                  'SELECT',
+                  'START',
+                  'L3',
+                  'R3',
+                  'UP',
+                  'DOWN',
+                  'LEFT',
+                  'RIGHT',
+                  'PS'
+              ],
+              'sticks': [
+                  'LEFT_STICK_X',
+                  'LEFT_STICK_Y',
+                  'RIGHT_STICK_X',
+                  'RIGHT_STICK_Y'
+              ]
+          };
+
+          function Gamepads() {
+              this.ports = [];
+              this.updateStatus();
+
+              return this;
+          }
+
+          Gamepads.prototype._THRESHOLD = 0.1;
+
+          Gamepads.prototype.updateStatus = function () {
+
+              var that = this,
+                  gamepads = navigator.getGamepads(),
+                  pad,
+                  key,
+                  i = 0;
+
+              for (key in gamepads) {
+
+                  if (this.ports[key] === undefined) {
+                      this.ports[key] = new Jvent();
+                      this.ports[key].pad = gamepads[key];
+                      this.ports[key].currentButtons = [];
+                  }
+
+                  pad = gamepads[key];
+
+                  if (pad !== null) {
+                      for (i; i < pad.buttons.length; i += 1) {
+                          if (pad.buttons[i].pressed && !this.ports[key].currentButtons.indexOf(PS3.buttons[i]) !== -1) {
+                            this.ports[key].currentButtons.push(PS3.buttons[i]);
+                            this.ports[key].emit('down', PS3.buttons[i]);
+                          } else if (!pad.buttons[i].pressed && this.ports[key].currentButtons.indexOf(PS3.buttons[i]) !== -1) {
+                              this.ports[key].currentButtons.splice(this.ports[key].currentButtons.indexOf(PS3.buttons[i]), 1);
+                              this.ports[key].emit('up', PS3.buttons[i]);
+                          }
+
+                      }
+
+                      for (var i = 0; i < pad.axes.length; i += 1) {
+                          if (pad.axes[i] > this._THRESHOLD || pad.axes[i] < -this._THRESHOLD) {
+                              this.ports[key].emit('stickmove', PS3.sticks[i], pad.axes[i]);
+                          }
+                      }
+                  }
+              }
+
+              window.requestAnimationFrame(function () {
+                  setTimeout(() => {
+                    that.updateStatus();
+                  }, 100);
+              });
+          };
+
+          window.Gamepads = Gamepads;
+      }(this));
+
+      window.addEventListener('gamepadconnected', () => {
+        let index = -1;
+        const focusableElements = document.querySelectorAll(
+          'button, a[href], button:not([hidden]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const pad = new Gamepads().ports[0];
+        pad.on('down', function (button) {
+          console.log(focusableElements[index]);
+
+          if (button === 'RIGHT') {
+            index++;
+            focusableElements[index].focus();
+          }
+
+          if (button === 'LEFT') {
+            index--;
+            focusableElements[index].focus();
+          }
+
+          if (button === 'CROSS') {
+            focusableElements[index].click();
+          }
+
+          if (button === 'CIRCLE') {
+            history.back();
+          }
+        });
+      });
+
+
     </script>
   </body>
 </html>

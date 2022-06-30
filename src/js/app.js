@@ -145,6 +145,16 @@ async function bootApp() {
     showPage(page, id);
   });
 
+
+  document.body.addEventListener('click', (eve) => {
+    if (eve.target.classList.contains('next')) {
+      eve.target.parentNode.scrollBy(660, 0);
+    }
+    if (eve.target.classList.contains('prev')) {
+      eve.target.parentNode.scrollBy(-660, 0);
+    }
+  });
+
   window.addEventListener('popstate', (eve) => {
     if (window.swipeToBack) {
       const $prev = $currentPage;
@@ -402,7 +412,7 @@ async function bootApp() {
               });
             document.querySelector('video').src = video.full;
           }
-          if (video && video.playlist.length > 0) {
+          if (video && video.playlist && video.playlist.length > 0) {
             document.querySelector('.game-preview-playlist').insertAdjacentHTML('beforeend',
               video.playlist.map((id) => `<lite-youtube videoid="${id}" autoload></lite-youtube>`).join('')
             )
@@ -448,6 +458,7 @@ async function bootApp() {
                 o.current = $currentPageContent.lastElementChild;
                 o.observe(o.current);
                 section.list.push(...moreGames);
+                $currentPageContent.insertAdjacentHTML('beforeend', `<br/>`);
               });
             }
           });

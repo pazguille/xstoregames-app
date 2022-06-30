@@ -16,12 +16,18 @@ export function sectionTemplate(section) {
 export function gameListTemplate(section) {
   return (`
 <ul class="carousel" aria-roledescription="Carrusel" aria-label="${section.title}">
+  <button class="prev arrow" aria-hidden="true">
+    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
+  </button>
   ${section.type === 'new' ?
       section.list.map(game => `<li>${gameCardNewTemplate(game)}</li>`).join('')
     : section.type === 'coming' ?
         section.list.map(game => `<li>${gameCardSoonTemplate(game)}</li>`).join('')
     : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
+  <button class="next arrow" aria-hidden="true">
+    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path style="transform: rotate(180deg) translate(-24px, -24px);" d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
+  </button>
 </ul>
 `);
 }
@@ -115,21 +121,21 @@ export function gameDetailTemplate(game) {
     </div>
 
     ${Array.isArray(game.images.screenshot) ? `
-      <h4>Imágenes</h4>
+      <h4 class="visually-hidden">Imágenes</h4>
       <div class="carousel game-preview-images">
-        <img alt="" width="580" loading="lazy" decoding="async" src="${img}?w=1000&q=70" />
-        ${game.images.screenshot.map((img) => `<img alt="" width="580" loading="lazy" decoding="async" src="${img.url}?w=1000&q=70" />`).join('')}
+        <img alt="" width="580" loading="lazy" decoding="async" src="${img}?w=1160&q=70" />
+        ${game.images.screenshot.map((img) => `<img alt="" width="580" loading="lazy" decoding="async" src="${img.url}?w=1160&q=70" />`).join('')}
       </div>
     ` : ''}
 
-    <h4>Videos</h4>
+    <h4 class="visually-hidden">Videos</h4>
     <div class="carousel game-preview-playlist">
       <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" rel="noreferrer noopener" class="game-preview-video" aria-label="Ver trailers en YouTube">
-        <img width="25" loading="lazy" decoding="async" src="/src/assets/icons/play.svg" alt="" />
+        <img width="25" height="32" loading="lazy" decoding="async" src="/src/assets/icons/play.svg" alt="" />
       </a>
     </div>
 
-    <h4>Descripción</h4>
+    <h4 class="visually-hidden">Descripción</h4>
     <p class="game-description">${game.description}</p>
   </div>
 </article>
@@ -139,11 +145,11 @@ export function gameDetailTemplate(game) {
 export function gameCardNewTemplate(game) {
   const img = game.images.poster?.url;
   return (`
-<article class="game-preview-new">
+<article class="game-preview-new" style="--game-preview-new: url(${img}?w=630)">
   ${gameInfoTemplate(game)}
 
   ${img ?
-    `<img class="game-img" width="180px" height="270px" alt="" loading="lazy" decoding="async" src="${img}?w=630">`
+    `<img class="game-img" width="180px" height="270px" alt="" loading="lazy" decoding="async" src="${img}?w=360">`
     : '<span class="game-img"><svg viewBox="0 0 2048 2048" width="32px" height="32px" fill="#ffffff" aria-hidden="true"><path d="M492 158q-4 0-5-1v-2l2-3Q614 77 746 39t278-39q143 0 277 38t256 113l3 2q-3 5-6 5-8 0-17-2t-17-4q-9-1-18-1t-18 0q-47 0-95 9t-96 24-92 34-88 39q-22 11-44 21t-43 25h-5q-43-27-100-54t-120-49-123-36-113-14q-19 0-39 4t-34 4zm251 412q-44 53-101 128T525 862t-117 184-102 189-72 180-28 156q0 17 2 37t8 36l-1 2-2 1-4-2q-103-139-156-293T0 1024q0-98 20-199t60-196 96-180 130-153q5-4 15-5t15-2q30 0 66 14t75 38 76 53 74 60 65 59 51 50l1 4-1 3zm968-281q7 0 16 1t15 6q73 71 130 155t96 178 59 194 21 201q0 173-53 328t-156 293l-6 1-2-3q3-4 5-14t3-21 2-22 1-16q0-69-27-155t-72-180-102-190-117-184-117-163-102-129l-1-3 1-3q21-21 50-49t65-58 73-61 77-53 75-38 66-15zm-687 533q29 18 56 42t54 47q42 37 102 94t127 128 131 149 117 155 84 149 32 129q0 23-6 43t-23 37q-31 31-69 57t-76 49q-120 72-254 109t-275 38q-141 0-274-37t-255-110q-17-10-43-26t-51-37-47-40-27-39q-7-20-7-45 0-54 30-122t78-142 110-149 123-142 118-123 97-92q34-30 72-64t76-58z"></path></svg></span>'
   }
 </article>
@@ -157,7 +163,7 @@ export function gameCardSoonTemplate(game) {
   return (`
 <article class="game-preview-soon">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="256px" height="144px" alt="" loading="lazy" decoding="async" src="${img}?w=256">
+  <img class="game-img" width="256px" height="144px" alt="" loading="lazy" decoding="async" src="${img}?w=512&q=70">
 </article>
 `);
 }
@@ -172,7 +178,7 @@ export function gameImportantTemplate(game) {
     <a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
   </h2>
   <span class="game-important-tag game-price-off">${game.price.off}% OFF</span>
-  <img class="game-img" width="360px" height="360px" alt="" fetchpriority="high" decoding="async" src="${img}?w=360&q=70">
+  <img class="game-img" width="330px" height="330px" alt="" fetchpriority="high" decoding="async" src="${img}?w=720&q=70">
 </article>
   `);
 }
@@ -183,7 +189,7 @@ export function gameCardTemplate(game) {
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=310">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=165">
 </article>
 `);
 }
@@ -192,7 +198,7 @@ export function newsTemplate(news) {
   return (`
 <article class="news-preview">
   <h2><a href="${news.link}">${news.title}</a></h2>
-  <img class="news-img" width="500px" height="500px" alt="" decoding="async" loading="lazy" src="${news.image}">
+  <img class="news-img" width="180px" height="500px" alt="" decoding="async" loading="lazy" src="${news.image}">
   <p>${news.description}</p>
 </article>
 `);
