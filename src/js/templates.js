@@ -189,7 +189,7 @@ export function gameCardTemplate(game) {
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=165">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=330">
 </article>
 `);
 }
