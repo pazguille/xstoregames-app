@@ -362,17 +362,12 @@ h2 img {
   bottom: 0;
 }
 
-span.game-img {
-  flex: none;
-  width: 160px;
-  height: 270px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-
-  /* background: var(--bg-box-light-color);
-  border-radius: 10px 0px 0px 10px; */
+.game-img,
+.news-img,
+.detail .game-preview-images img,
+.detail .game-preview-playlist lite-youtube {
+  background: var(--bg-box-light-color) url('/src/assets/logo.svg') no-repeat center center;
+  background-size: 10%;
 }
 
 .game-preview-soon {
@@ -721,6 +716,7 @@ span.game-img {
 .detail .game-preview-playlist {
   padding: 0;
   margin: 15px 0 20px;
+  height: 174px;
 }
 
 .detail .game-preview-images img,
@@ -1192,7 +1188,7 @@ span.game-img {
     width: 80px;
     border-right: 1px solid var(--bg-box-light-color);
     z-index: 3;
-    padding-top: 25px;
+    padding-top: 50px;
   }
 
   footer ul {
@@ -1229,7 +1225,7 @@ span.game-img {
     max-width: 100%;
     width: auto;
     margin: 50px 20px;
-    padding: 0 30px;
+    padding: 0 15px;
     background-color: var(--bg-box-color);
   }
 
@@ -1395,10 +1391,16 @@ span.game-img {
     width: 65%;
   }
 
+  .detail .game-preview-images,
+  .detail .game-preview-playlist {
+    height: 326px;
+  }
+
   .detail .game-preview-images img,
   .detail .game-preview-playlist lite-youtube,
   .detail .game-preview-playlist a {
-    width: 500px;
+    width: 580px;
+    height: 326px;
   }
 
   .gamepass li,
