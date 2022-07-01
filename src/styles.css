@@ -1390,11 +1390,6 @@ h2 img {
     width: 65%;
   }
 
-  .detail .game-preview-images,
-  .detail .game-preview-playlist {
-    height: 326px;
-  }
-
   .detail .game-preview-images img,
   .detail .game-preview-playlist lite-youtube,
   .detail .game-preview-playlist a {
