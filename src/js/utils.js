@@ -33,7 +33,7 @@ export async function updateDollar() {
 
 const IVA = 0.21;
 const IIBB = 0.02;
-const AFIP = 0.35;
+const AFIP = 0.45;
 const PAISA = 0.08;
 
 export function convertDollar(price, dollar) {
