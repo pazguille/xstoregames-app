@@ -1,0 +1,34 @@
+{
+  "name": "xstore",
+  "version": "1.0.0",
+  "description": "Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox en precios argentinos (impuestos incluídos)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "serve -p 3030 --single",
+    "partytown": "partytown copylib ~partytown",
+    "inline": "html-inline --ignore-images --ignore-links --ignore-scripts -i ./index.html -o ./dist/index.html",
+    "minify": "html-minifier-terser --collapse-whitespace --remove-comments --remove-optional-tags --remove-redundant-attributes --remove-script-type-attributes --remove-tag-whitespace --use-short-doctype --minify-css true --minify-js '{\"compress\":{\"drop_console\":\"true\"},\"mangle\":{\"toplevel\":\"true\"}}' --output ./dist/index.html ./dist/index.html",
+    "copy": "rm -rf dist && mkdir -p dist && cp -rf ./src ./dist/src",
+    "minify-js": "for filename in ./dist/src/js/*.js; do terser \"${filename}\" --compress --mangle --output \"${filename}\"; done",
+    "dist": "npm run copy && npm run inline && npm run minify && npm run minify-js && node revision-hash.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pazguille/xbox-games-app.git"
+  },
+  "author": "Guille Paz <guille87paz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pazguille/xbox-games-app/issues"
+  },
+  "homepage": "https://xstoregames.com",
+  "devDependencies": {
+    "@builder.io/partytown": "^0.5.4",
+    "html-inline": "^1.2.0",
+    "html-minifier-terser": "^5.1.1",
+    "replace-in-file": "^6.2.0",
+    "rev-hash": "^3.0.0",
+    "serve": "^13.0.2",
+    "terser": "^5.7.1"
+  }
+}

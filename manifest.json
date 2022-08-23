@@ -1,0 +1,38 @@
+{
+  "id": "xstore",
+  "name": "XStore",
+  "short_name": "XStore",
+  "start_url": "/",
+  "description": "Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox en precios argentinos con impuentos incluídos.",
+  "display": "standalone",
+  "theme_color": "#072523",
+  "background_color": "#072523",
+  "scope": "/",
+  "prefer_related_applications": true,
+  "icons": [
+    {
+      "src": "/src/assets/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/src/assets/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/src/assets/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/src/assets/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
