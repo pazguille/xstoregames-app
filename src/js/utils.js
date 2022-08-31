@@ -17,28 +17,13 @@ export function slugify(str) {
     .replace(/--+/g, '-');
 }
 
-export async function updateDollar() {
-  await fetch('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
-  .then(res => res.json())
-  .then(data => {
-    return parseFloat(data[0].casa.compra.replace(',', '.'));
-  })
-  .then(data => {
-    window.dollar = data;
-    window.localStorage.setItem('dollar', JSON.stringify({
-      amount: data, date: new Date().toDateString(),
-    }));
-  });
-}
-
 const IVA = 0.21;
 const IIBB = 0.02;
 const AFIP = 0.45;
 const PAISA = 0.08;
 
-export function convertDollar(price, dollar) {
-  const usdPrice = (price / dollar);
-  const final = toFixed(usdPrice * dollar) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
+export function convertDollar(price) {
+  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
   return final.toFixed(2);
 }
 

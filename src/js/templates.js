@@ -41,11 +41,11 @@ export function gamePriceTemplate(game) {
 <div class="game-price">
   ${game.price.off ? `<span class="game-price-off">${game.price.off}% OFF</span>` : ''}
   ${game.price.deal ? `<div class="game-price-prev">
-    <x-price amount="${convertDollar(game.price.amount, dollar)}" strike></x-price>
+    <x-price amount="${convertDollar(game.price.amount)}" strike></x-price>
   </div>` : ''}
   <span class="game-price-amount">
     ${(game.price.deal || game.price.amount) ?
-      `<x-price amount="${convertDollar(game.price.deal || game.price.amount, dollar)}"></x-price>`
+      `<x-price amount="${convertDollar(game.price.deal || game.price.amount)}"></x-price>`
       : game.demo ? 'Demo' : 'Gratis'
     }
   </span>
@@ -53,7 +53,7 @@ export function gamePriceTemplate(game) {
     `<small class="game-price-taxes">*impuestos incluídos</small>`
     : ''
   }
-  ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal, dollar)}"></x-price></div>` : ''}
+  ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal)}"></x-price></div>` : ''}
 </div>
   `);
 }
@@ -62,7 +62,7 @@ export function gameInfoTemplate(game) {
   return (`
 <div>
   <h3 class="game-title"><a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a></h3>
-  <p class="game-by">by ${game.developer || game.publisher}</p>
+  <p class="game-by">by ${game.developer ||game.publisher}</p>
   ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.svg" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
   ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
   ${gamePriceTemplate(game)}
@@ -83,7 +83,7 @@ export function gameDetailTemplate(game) {
   <div>
     <div class="game-preview-info">
       <h3 class="game-title">${game.title}</h3>
-      <p class="game-by">by ${game.developer || game.publisher}</p>
+      <p class="game-by">by ${game.developer || game.publisher}</p>
 
       <button
         is="switch-button"

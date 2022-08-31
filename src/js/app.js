@@ -4,7 +4,6 @@ import {
   gameXboxURL,
   getXboxNewsURL,
   getGamePassURL,
-  updateDollar,
   getVideoURL,
   slugify,
 } from './utils.js';
@@ -76,14 +75,6 @@ const sections = [
 async function bootApp() {
   const $loading = document.querySelector('x-loader');
   const $splash = document.querySelector('.splash-loading');
-
-  const dollar = JSON.parse(window.localStorage.getItem('dollar'));
-  if (!dollar || dollar.date !== new Date().toDateString()) {
-    await updateDollar();
-  } else {
-    window.dollar = dollar.amount;
-    updateDollar();
-  }
 
   const wishlist = new Set(
     JSON.parse(window.localStorage.getItem('wishlist'))
