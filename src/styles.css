@@ -839,7 +839,7 @@ h2 img {
 .empty-list {
   position: absolute;
   top: 50%;
-  width: 100%;
+  width: calc(100vw - 25%);
   text-align: center;
 }
 
