@@ -543,7 +543,7 @@ async function bootApp() {
     });
     const lcp = hotSale.images.featurepromotionalsquareart ?
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-    document.querySelector('#preloadLCP').href = lcp + '?w=360&q=70';
+    document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
 
     $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
 
