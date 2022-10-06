@@ -120,146 +120,6 @@ async function bootApp() {
   };
   iddb.onsuccess = eve => { db = eve.target.result; };
 
-  document.body.addEventListener('click', async (eve) => {
-    if (!eve.target.classList.contains('link')) { return; }
-    $prevFocus = document.activeElement;
-
-    eve.preventDefault();
-
-    const { pathname } = new URL(eve.target.href);
-    const pathSplit = pathname.split('/');
-    const page = pathSplit[1];
-    const id = pathSplit[2];
-
-    history.pushState({ page, id }, '', eve.target.href);
-
-    showPage(page, id);
-  });
-
-
-  document.body.addEventListener('click', (eve) => {
-    if (eve.target.classList.contains('next')) {
-      eve.target.parentNode.scrollBy(660, 0);
-    }
-    if (eve.target.classList.contains('prev')) {
-      eve.target.parentNode.scrollBy(-660, 0);
-    }
-  });
-
-  window.addEventListener('popstate', (eve) => {
-    if (window.swipeToBack) {
-      const $prev = $currentPage;
-      $currentPage.setAttribute('hidden', true);
-      setTimeout(() => {
-        requestIdleCallback(() => {
-          $prev.removeAttribute('hidden');
-        });
-      }, 300);
-    }
-
-    if (eve.state === null) {
-      if ($home.innerHTML === '') {
-        window.location.reload();
-        return;
-      }
-
-      $prevPage = $currentPage;
-      $prevPage.classList.remove('page-on');
-      setTimeout(() => {
-        requestIdleCallback(() => {
-          $prevPage.setAttribute('hidden', true);
-          $prevFocus && $prevFocus.focus();
-        });
-      }, 300);
-
-      $main.style = undefined;
-      document.body.style = undefined;
-      $home.removeAttribute('hidden');
-      $pageBack.hide();
-
-      $search.show();
-      $installBtn.show();
-      $searchForm.elements[0].value = '';
-
-      $currentPage = null;
-      $currentPageContent = null;
-
-      document.title = documentTitle;
-      $metaDescription.content = documentDescription;
-
-    } else if (eve.state.page === 'game') {
-      $prevPage = $currentPage;
-      showPage(eve.state.page, eve.state.id);
-
-    } else if (eve.state.page === 'results') {
-      if ($currentPage) {
-        $prevPage = $currentPage;
-        $prevPage.classList.remove('page-on');
-        setTimeout(() => {
-          requestIdleCallback(() => {
-            $prevPage.setAttribute('hidden', true);
-            $prevFocus && $prevFocus.focus();
-          });
-        }, 300);
-      }
-      loadSearchPage(eve.state.q);
-
-    } else if (eve.state.page === 'wishlist') {
-      showPage(eve.state.page);
-
-    } else if (eve.state.page === 'news') {
-      showPage(eve.state.page);
-
-    } else if (eve.state.page === 'collection') {
-      if ($currentPage) {
-        $prevPage = $currentPage;
-        $prevPage.classList.remove('page-on');
-        setTimeout(() => {
-          requestIdleCallback(() => {
-            $prevPage.setAttribute('hidden', true);
-            $prevFocus && $prevFocus.focus();
-          });
-        }, 300);
-      }
-      showPage(eve.state.page, eve.state.id);
-
-    } else if (eve.state.page === 'gamepass') {
-      if ($currentPage) {
-        $prevPage = $currentPage;
-        $prevPage.classList.remove('page-on');
-        setTimeout(() => {
-          requestIdleCallback(() => {
-            $prevPage.setAttribute('hidden', true);
-            $prevFocus && $prevFocus.focus();
-          });
-        }, 300);
-      }
-      showPage(eve.state.page, eve.state.id);
-
-    } else if (eve.state.page === 'gold') {
-      if ($currentPage) {
-        $prevPage = $currentPage;
-        $prevPage.classList.remove('page-on');
-        setTimeout(() => {
-          requestIdleCallback(() => {
-            $prevPage.setAttribute('hidden', true);
-            $prevFocus && $prevFocus.focus();
-          });
-        }, 300);
-      }
-      showPage(eve.state.page, eve.state.id);
-    }
-
-    window.swipeToBack = false;
-  });
-
-  $searchForm.addEventListener('submit', async (eve) => {
-    eve.preventDefault();
-    const q = eve.target.elements[0].value;
-    $pageBack.show();
-    loadSearchPage(q);
-  });
-
   async function showPage(page, id) {
     $prevPage = $currentPage;
 
@@ -530,7 +390,6 @@ async function bootApp() {
   }
 
   async function loadHomePage() {
-
     await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
       const games = await fetch(getXboxURL(type)).then(res => res.json());
       const section = sections.find(section => section.type === type);
@@ -545,9 +404,11 @@ async function bootApp() {
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
     document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
 
-    $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+    await yieldToMain(() => {
+      $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+    });
 
-    requestIdleCallback(() => {
+    await yieldToMain(() => {
       $splash.classList.add('bye');
       setTimeout(() => {
         $splash.toggleAttribute('hidden');
@@ -556,8 +417,8 @@ async function bootApp() {
       $home.removeAttribute('hidden');
     });
 
-    sections.slice(0, 2).forEach((section, index) => {
-      requestIdleCallback(() => {
+    sections.slice(0, 2).forEach(async (section, index) => {
+      await yieldToMain(() => {
         $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
         if (index === 0) {
           $home.insertAdjacentHTML('beforeend', '<notification-prompt hidden></notification-prompt>');
@@ -566,7 +427,6 @@ async function bootApp() {
     });
 
     requestIdleCallback(async () => {
-
       await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
         const games = await fetch(getXboxURL(type)).then(res => res.json());
         const section = sections.find(section => section.type === type);
@@ -574,13 +434,12 @@ async function bootApp() {
         games.forEach((game) => gamesCache.set(game.id, game));
       }));
 
-      sections.slice(2, sections.length).forEach((section, index) => {
-        requestIdleCallback(() => {
+      sections.slice(2, sections.length).forEach(async(section, index) => {
+        await yieldToMain(() => {
           $home.insertAdjacentHTML('beforeend', sectionTemplate(section));
           if (index === 0) {
             $home.insertAdjacentHTML('beforeend', gamepassSection());
           }
-
           if (index === 3) {
             $home.insertAdjacentHTML('beforeend', goldSection());
           }
@@ -681,6 +540,147 @@ async function bootApp() {
       break;
   }
 
+  window.addEventListener('popstate', (eve) => {
+    if (window.swipeToBack) {
+      const $prev = $currentPage;
+      $currentPage.setAttribute('hidden', true);
+      setTimeout(() => {
+        requestIdleCallback(() => {
+          $prev.removeAttribute('hidden');
+        });
+      }, 300);
+    }
+
+    if (eve.state === null) {
+      if ($home.innerHTML === '') {
+        window.location.reload();
+        return;
+      }
+
+      $prevPage = $currentPage;
+      $prevPage.classList.remove('page-on');
+      setTimeout(() => {
+        requestIdleCallback(() => {
+          $prevPage.setAttribute('hidden', true);
+          $prevFocus && $prevFocus.focus();
+        });
+      }, 300);
+
+      $main.style = undefined;
+      document.body.style = undefined;
+      $home.removeAttribute('hidden');
+      $pageBack.hide();
+
+      $search.show();
+      $installBtn.show();
+      $searchForm.elements[0].value = '';
+
+      $currentPage = null;
+      $currentPageContent = null;
+
+      document.title = documentTitle;
+      $metaDescription.content = documentDescription;
+
+    } else if (eve.state.page === 'game') {
+      $prevPage = $currentPage;
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'results') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      loadSearchPage(eve.state.q);
+
+    } else if (eve.state.page === 'wishlist') {
+      showPage(eve.state.page);
+
+    } else if (eve.state.page === 'news') {
+      showPage(eve.state.page);
+
+    } else if (eve.state.page === 'collection') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'gamepass') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'gold') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page, eve.state.id);
+    }
+
+    window.swipeToBack = false;
+  });
+
+  requestIdleCallback(() => {
+    document.body.addEventListener('click', async (eve) => {
+      if (!eve.target.classList.contains('link')) { return; }
+      $prevFocus = document.activeElement;
+
+      eve.preventDefault();
+
+      const { pathname } = new URL(eve.target.href);
+      const pathSplit = pathname.split('/');
+      const page = pathSplit[1];
+      const id = pathSplit[2];
+
+      history.pushState({ page, id }, '', eve.target.href);
+
+      showPage(page, id);
+    });
+
+    document.body.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('next')) {
+        eve.target.parentNode.scrollBy(660, 0);
+      }
+      if (eve.target.classList.contains('prev')) {
+        eve.target.parentNode.scrollBy(-660, 0);
+      }
+    });
+
+    $searchForm.addEventListener('submit', async (eve) => {
+      eve.preventDefault();
+      const q = eve.target.elements[0].value;
+      $pageBack.show();
+      loadSearchPage(q);
+    });
+  });
+
   requestIdleCallback(() => {
     $searchForm.addEventListener('submit', (eve) => {
       gtag('event', 'search', {
@@ -743,9 +743,9 @@ async function bootApp() {
       gtag('event', 'app_installed');
     });
   });
+
+  requestIdleCallback(() => {
+    import('./swipes.js');
+  });
 }
 bootApp();
-
-requestIdleCallback(() => {
-  import('./swipes.js');
-});
