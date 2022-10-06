@@ -8,7 +8,30 @@
   "theme_color": "#072523",
   "background_color": "#072523",
   "scope": "/",
+  "lang": "es",
   "prefer_related_applications": true,
+  "screenshots": [
+    {
+      "src": "/src/assets/screenshots-1.png",
+      "sizes": "320x640",
+      "type": "image/png"
+    },
+    {
+      "src": "/src/assets/screenshots-2.png",
+      "sizes": "320x640",
+      "type": "image/png"
+    },
+    {
+      "src": "/src/assets/screenshots-3.png",
+      "sizes": "320x640",
+      "type": "image/png"
+    },
+    {
+      "src": "/src/assets/screenshots-4.png",
+      "sizes": "320x640",
+      "type": "image/png"
+    }
+  ],
   "icons": [
     {
       "src": "/src/assets/manifest-icon-192.maskable.png",
