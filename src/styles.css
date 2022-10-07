@@ -600,9 +600,13 @@ h2 img {
 .detail .game-preview-images img,
 .detail .game-preview-playlist a,
 .detail .game-preview-playlist lite-youtube {
-  width: calc(100vw - 80px);
-  aspect-ratio: 16 / 9;
   border-radius: 10px;
+  aspect-ratio: 16 / 9;
+}
+
+.detail .game-preview-playlist a,
+.detail .game-preview-playlist lite-youtube {
+  width: calc(100vw - 75px);
 }
 
 .detail .game-preview-playlist a {
