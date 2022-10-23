@@ -78,7 +78,7 @@ export function gameDetailTemplate(game) {
   : game.images.superheroart.url;
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   return (`
-<article class="game-preview" style="--game-preview-url: url(${img}?w=1000&q=70)">
+<article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
   <video class="hero game-preview-trailer" autoplay loop muted playsinline hidden></video>
   <div>
     <div class="game-preview-info">

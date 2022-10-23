@@ -847,6 +847,15 @@ h2 img {
   text-align: center;
 }
 
+.list .page-content,
+.news .page-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(316px,1fr));
+  align-content: start;
+  padding: 0 5px;
+  margin: 0 auto;
+}
+
 .list .game-preview {
   width: auto;
   height: 165px;
@@ -1090,15 +1099,11 @@ h2 img {
 
   .page-content h2 {
     width: 100%;
+    grid-column: 1 / -1;
   }
 
-  .list .page-content,
-  .news .page-content {
-    display: flex;
-    flex-flow: wrap;
-    align-content: baseline;
-    padding: 0 5px;
-    margin: 0 auto;
+  .list .page-content br {
+    display: none;
   }
 
   .game-important {
