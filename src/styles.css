@@ -720,7 +720,6 @@ h2 img {
 .page-content h2 {
   display: block;
   margin: 20px 15px 15px;
-  width: 100%;
   grid-column: 1 / -1;
 }
 
