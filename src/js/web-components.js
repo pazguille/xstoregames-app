@@ -436,7 +436,9 @@ class InstallButton extends HTMLButtonElement {
   }
 
   _onClick() {
-    this._deferredPrompt.prompt();
+    if (this._deferredPrompt) {
+      this._deferredPrompt.prompt();
+    }
   }
 }
 window.customElements.define('install-button', InstallButton, { extends: 'button' });
