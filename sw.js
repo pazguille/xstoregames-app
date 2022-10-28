@@ -1,6 +1,8 @@
 this.addEventListener('install', async (eve) => { this.skipWaiting(); });
 
-this.addEventListener('fetch', eve => {});
+this.addEventListener('fetch', eve => {
+  eve.respondWith(fetch(eve.request));
+});
 
 this.addEventListener('notificationclick', eve => {
   eve.notification.close();

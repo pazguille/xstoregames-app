@@ -216,6 +216,8 @@ async function bootApp() {
       });
 
       if ($prevPage) {
+        $prevPage.classList.add('page-prev-on');
+
         setTimeout(() => {
           requestIdleCallback(() => {
             $prevPage.setAttribute('hidden', true);
@@ -289,10 +291,15 @@ async function bootApp() {
         $currentPageContent.innerHTML = '';
         const section = sections.find(section => section.type === id);
         $currentPageContent.insertAdjacentHTML('beforeend', `<h2>${section.icon}${section.title}</h2>`);
-        section.list.map((game) => requestIdleCallback(() => {
-          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-          gamesCache.set(game.id, game);
-        }));
+
+        if (section.list.length === 0) {
+          section.skipitems -= LIMIT;
+        } else {
+          section.list.map((game) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+            gamesCache.set(game.id, game);
+          }));
+        }
 
         requestIdleCallback(() => {
           const o = new IntersectionObserver(async (entries) => {
@@ -382,7 +389,20 @@ async function bootApp() {
 
     }
 
+    if (!$prevPage) {
+      $home.classList.add('page-prev-on');
+    }
+
     $currentPage.removeAttribute('hidden');
+
+    if (window.swipeToBack) {
+      $currentPage.classList.remove('page-prev-on');
+    } else {
+      yieldToMain(() => {
+        $currentPage.classList.remove('page-prev-on');
+      });
+    }
+
     requestIdleCallback(() => {
       $loading.hide();
       $currentPage.classList.add('page-on');
@@ -569,6 +589,13 @@ async function bootApp() {
       $main.style = undefined;
       document.body.style = undefined;
       $home.removeAttribute('hidden');
+      if (window.swipeToBack) {
+        $home.classList.remove('page-prev-on');
+      } else {
+        yieldToMain(() => {
+          $home.classList.remove('page-prev-on');
+       });
+      }
       $pageBack.hide();
 
       $search.show();

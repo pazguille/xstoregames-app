@@ -557,6 +557,12 @@ h2 img {
   will-change: none;
 }
 
+.page-prev-on {
+  transform: translateX(-80px) !important;
+  will-change: transform !important;
+  transition: transform 400ms ease !important;
+}
+
 .detail .game-preview {
   box-shadow: none;
   width: 100%;
@@ -838,6 +844,10 @@ h2 img {
 
 .home {
   padding-bottom: calc(60px + env(safe-area-inset-bottom));
+
+  will-change: transform;
+  transition: transform 400ms ease;
+  transform: translateX(0);
 }
 
 .empty-list {
@@ -1056,6 +1066,11 @@ h2 img {
 
   .page-on {
     opacity: 1;
+  }
+
+  .page-prev-on {
+    transform: translateX(0px) !important;
+    transition: none !important;
   }
 
   header {

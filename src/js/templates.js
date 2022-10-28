@@ -145,7 +145,7 @@ export function gameDetailTemplate(game) {
 export function gameCardNewTemplate(game) {
   const img = game.images.poster?.url;
   return (`
-<article class="game-preview-new" style="--game-preview-new: url(${img}?w=630)">
+<article class="game-preview-new" style="--game-preview-new: url(${img}?w=360)">
   ${gameInfoTemplate(game)}
   <img class="game-img" width="180px" height="270px" alt="" loading="lazy" decoding="async" src="${img}?w=360">
 </article>
