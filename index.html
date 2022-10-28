@@ -259,7 +259,7 @@
       });
 
       try {
-        if (navigator.serviceWorker && navigator.userAgent.includes('Chrome/')) {
+        if (navigator.serviceWorker) {
           navigator.serviceWorker
             .register('./sw.js', { scope: '/' })
             .then((reg) => {
@@ -269,17 +269,16 @@
             });
 
           bs();
-        } else {
-          navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for (let registration of registrations) {
-              if (registration.active.scriptURL.includes('/sw.js')) {
-                registration.unregister();
-              }
-            }
-          });
         }
       } catch {}
 
+      // navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      //   for (let registration of registrations) {
+      //     if (registration.active.scriptURL.includes('/sw.js')) {
+      //       registration.unregister();
+      //     }
+      //   }
+      // });
 
       async function bs() {
         if (!navigator.permissions) { return; }
