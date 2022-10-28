@@ -259,7 +259,7 @@
       });
 
       try {
-        if (navigator.serviceWorker) {
+        if (navigator.serviceWorker && navigator.userAgent.includes('Chrome/')) {
           navigator.serviceWorker
             .register('./sw.js', { scope: '/' })
             .then((reg) => {
@@ -271,6 +271,12 @@
           bs();
         }
       } catch {}
+
+      // navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      //   for (let registration of registrations) {
+      //     registration.unregister();
+      //   }
+      // });
 
       async function bs() {
         if (!navigator.permissions) { return; }
