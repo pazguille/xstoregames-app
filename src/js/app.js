@@ -490,6 +490,14 @@ async function bootApp() {
       $currentPage.classList.add('page-on');
     });
 
+    if (window.swipeToBack) {
+      $currentPage.classList.remove('page-prev-on');
+    } else {
+      yieldToMain(() => {
+        $currentPage.classList.remove('page-prev-on');
+      });
+    }
+
     $currentPageContent.innerHTML = '';
     $loading.show();
     $search.close();
