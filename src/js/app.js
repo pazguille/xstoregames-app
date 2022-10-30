@@ -267,7 +267,7 @@ async function bootApp() {
           }
           if (video && video.playlist && video.playlist.length > 0) {
             document.querySelector('.game-preview-playlist').insertAdjacentHTML('beforeend',
-              video.playlist.map((id) => `<lite-youtube videoid="${id}" autoload></lite-youtube>`).join('')
+              video.playlist.map((id) => `<lite-youtube videoid="${id}" autoload noCookie="true"></lite-youtube>`).join('')
             )
           }
         }
@@ -508,7 +508,6 @@ async function bootApp() {
     $loading.hide();
     searchResults.map((game) => requestIdleCallback(() => {
       $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-      gamesCache.set(game.id, game);
     }));
   }
 
