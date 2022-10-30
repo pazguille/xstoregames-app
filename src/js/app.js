@@ -504,10 +504,37 @@ async function bootApp() {
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
 
-    const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
+    // const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
+    function fetchSearchGames(query) {
+      const params = new URLSearchParams({
+        market: 'es-ar',
+        clientId: '7F27B536-CF6B-4C65-8638-A0F8CBDFCA65',
+        sources: 'DCatAll-Products',
+        filter: '+ClientType:StoreWeb',
+        counts: '20,0,0',
+        query,
+      }).toString();
+      return fetch(`https://www.microsoft.com/msstoreapiprod/api/autosuggest?${params}`, {
+        headers: {
+          'accept-language': 'es,es-419;q=0.9,en;q=0.8',
+        }
+      })
+      .then(response => response.json())
+      .then(response => response.ResultSets[0])
+      .then(data => {
+        if (!data) { return Promise.reject(new Error()); }
+        return data.Suggests
+          .filter((result) => result.Source === 'Games')
+          .map((result) => result.Metas[0].Value);
+      })
+      .then((games) => fetch(gameXboxURL(games)).then(res => res.json()))
+      .catch(err => { throw { error: err }; });
+    };
+    const searchResults = await fetchSearchGames(q);
     $loading.hide();
     searchResults.map((game) => requestIdleCallback(() => {
       $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+      gamesCache.set(game.id, game);
     }));
   }
 
