@@ -524,7 +524,7 @@ async function bootApp() {
       .then(data => {
         if (!data) { return Promise.reject(new Error()); }
         return data.Suggests
-          .filter((result) => result.Source === 'Games')
+          .filter((result) => result.Source === 'Juego')
           .map((result) => result.Metas[0].Value);
       })
       .then((games) => fetch(gameXboxURL(games)).then(res => res.json()))
