@@ -6,6 +6,7 @@ import {
   getGamePassURL,
   getVideoURL,
   slugify,
+  getTheGameAwardsURL,
 } from './utils.js';
 
 import {
@@ -18,6 +19,7 @@ import {
   emptyWishlist,
   gamepassSection,
   goldSection,
+  theGameAward,
 } from './templates.js';
 
 const documentTitle = document.title;
@@ -326,6 +328,34 @@ async function bootApp() {
       }
     }
 
+    if (page === 'tga') {
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $search.hide();
+        $installBtn.hide();
+      });
+
+      const $prev = $currentPageContent;
+
+      $currentPage = $list;
+      $currentPageContent = $listContent;
+
+      if ($prev === null || $currentPageContent.innerHTML === '') {
+        $loading.show();
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+
+        const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
+        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>Los nominados a The Game Awards 2022</h2>');
+        tgaGames.map((game) => requestIdleCallback(() => {
+          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+          gamesCache.set(game.id, game);
+        }));
+
+        $loading.hide();
+      }
+    }
+
     if (page === 'gamepass') {
       requestIdleCallback(() => {
         $pageBack.show();
@@ -425,8 +455,12 @@ async function bootApp() {
     document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
 
     await yieldToMain(() => {
-      $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+      $home.insertAdjacentHTML('beforeend', theGameAward());
     });
+
+    // await yieldToMain(() => {
+    //   $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+    // });
 
     await yieldToMain(() => {
       $splash.classList.add('bye');
@@ -582,6 +616,9 @@ async function bootApp() {
     case 'collection':
       showPage('collection', id);
       break;
+    case 'tga':
+      showPage('tga');
+      break;
     case 'gamepass':
       showPage('gamepass', id);
       break;
@@ -677,6 +714,19 @@ async function bootApp() {
         }, 300);
       }
       showPage(eve.state.page, eve.state.id);
+
+    } else if (eve.state.page === 'tga') {
+      if ($currentPage) {
+        $prevPage = $currentPage;
+        $prevPage.classList.remove('page-on');
+        setTimeout(() => {
+          requestIdleCallback(() => {
+            $prevPage.setAttribute('hidden', true);
+            $prevFocus && $prevFocus.focus();
+          });
+        }, 300);
+      }
+      showPage(eve.state.page);
 
     } else if (eve.state.page === 'gamepass') {
       if ($currentPage) {

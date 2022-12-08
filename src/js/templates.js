@@ -164,6 +164,18 @@ export function gameCardSoonTemplate(game) {
 `);
 }
 
+export function theGameAward() {
+  return (`
+<article class="game-important">
+  <strong class="game-important-tag">Destacado</strong>
+  <h2 class="game-title">
+    <a id="tga" href="/tga" class="link">Los nominados a <br> The Game Awards</a>
+  </h2>
+  <img class="game-img" width="330px" height="330px" style="object-position: top;" alt="" fetchpriority="high" decoding="async" src="/src/assets/tga-sq.jpg">
+</article>
+  `);
+}
+
 export function gameImportantTemplate(game) {
   const img = game.images.featurepromotionalsquareart ?
     game.images.featurepromotionalsquareart.url : game.images.boxart?.url;
