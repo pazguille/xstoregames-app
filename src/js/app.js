@@ -447,20 +447,21 @@ async function bootApp() {
       games.forEach((game) => gamesCache.set(game.id, game));
     }));
 
-    const hotSale = sections[1].list.reduce(function (p, v) {
-      return ( p.price.off > v.price.off ? p : v );
-    });
-    const lcp = hotSale.images.featurepromotionalsquareart ?
-      hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-    document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
-
-    await yieldToMain(() => {
-      $home.insertAdjacentHTML('beforeend', theGameAward());
-    });
+    // const hotSale = sections[1].list.reduce(function (p, v) {
+    //   return ( p.price.off > v.price.off ? p : v );
+    // });
+    // const lcp = hotSale.images.featurepromotionalsquareart ?
+    //   hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
+    // document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
 
     // await yieldToMain(() => {
     //   $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
     // });
+
+    document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/tga-sq.jpg';
+    await yieldToMain(() => {
+      $home.insertAdjacentHTML('beforeend', theGameAward());
+    });
 
     await yieldToMain(() => {
       $splash.classList.add('bye');
