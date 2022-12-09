@@ -346,7 +346,7 @@ async function bootApp() {
         $currentPageContent.innerHTML = '';
 
         const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
-        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>Los nominados a The Game Awards 2022</h2>');
+        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>The Game Awards 2022</h2>');
         tgaGames.map((game) => requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
           gamesCache.set(game.id, game);

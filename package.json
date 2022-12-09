@@ -23,12 +23,12 @@
   },
   "homepage": "https://xstoregames.com",
   "devDependencies": {
-    "@builder.io/partytown": "^0.5.4",
+    "@builder.io/partytown": "^0.7.3",
     "html-inline": "^1.2.0",
-    "html-minifier-terser": "^5.1.1",
-    "replace-in-file": "^6.2.0",
-    "rev-hash": "^3.0.0",
-    "serve": "^13.0.2",
-    "terser": "^5.7.1"
+    "html-minifier-terser": "^7.1.0",
+    "replace-in-file": "^6.3.5",
+    "rev-hash": "^4.0.0",
+    "serve": "^14.1.2",
+    "terser": "^5.16.1"
   }
 }
