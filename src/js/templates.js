@@ -169,9 +169,9 @@ export function theGameAward() {
 <article class="game-important">
   <strong class="game-important-tag">Destacado</strong>
   <h2 class="game-title">
-    <a id="tga" href="/tga" class="link">The Game Awards 2022</a>
+    <a id="developer-direct" href="/developer-direct" class="link">Developer Direct 2023</a>
   </h2>
-  <img class="game-img" width="330px" height="330px" style="object-position: top;" alt="" fetchpriority="high" decoding="async" src="/src/assets/tga-sq.jpg">
+  <img class="game-img" width="330px" height="330px" style="object-position: top;" alt="" fetchpriority="high" decoding="async" src="/src/assets/xbox-direct.jpg">
 </article>
   `);
 }

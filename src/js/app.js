@@ -328,7 +328,7 @@ async function bootApp() {
       }
     }
 
-    if (page === 'tga') {
+    if (page === 'developer-direct') {
       requestIdleCallback(() => {
         $pageBack.show();
         $search.hide();
@@ -346,7 +346,7 @@ async function bootApp() {
         $currentPageContent.innerHTML = '';
 
         const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
-        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>The Game Awards 2022</h2>');
+        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>Developer Direct 2023</h2>');
         tgaGames.map((game) => requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
           gamesCache.set(game.id, game);
@@ -458,7 +458,7 @@ async function bootApp() {
     //   $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
     // });
 
-    document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/tga-sq.jpg';
+    document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/xbox-direct.jpg';
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', theGameAward());
     });
@@ -617,8 +617,8 @@ async function bootApp() {
     case 'collection':
       showPage('collection', id);
       break;
-    case 'tga':
-      showPage('tga');
+    case 'developer-direct':
+      showPage('developer-direct');
       break;
     case 'gamepass':
       showPage('gamepass', id);
@@ -716,7 +716,7 @@ async function bootApp() {
       }
       showPage(eve.state.page, eve.state.id);
 
-    } else if (eve.state.page === 'tga') {
+    } else if (eve.state.page === 'developer-direct') {
       if ($currentPage) {
         $prevPage = $currentPage;
         $prevPage.classList.remove('page-on');
