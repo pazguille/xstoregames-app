@@ -50,7 +50,7 @@ export function gamePriceTemplate(game) {
     }
   </span>
   ${game.price.amount > 0 ?
-    `<small class="game-price-taxes">*impuestos incluídos</small>`
+    `<small class="game-price-taxes">*impuestos incluidos</small>`
     : ''
   }
   ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal)}"></x-price></div>` : ''}
