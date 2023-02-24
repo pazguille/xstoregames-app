@@ -6,7 +6,7 @@ import {
   getGamePassURL,
   getVideoURL,
   slugify,
-  getTheGameAwardsURL,
+  // getTheGameAwardsURL,
 } from './utils.js';
 
 import {
@@ -19,7 +19,7 @@ import {
   emptyWishlist,
   gamepassSection,
   goldSection,
-  theGameAward,
+  // theGameAward,
 } from './templates.js';
 
 const documentTitle = document.title;
@@ -328,32 +328,33 @@ async function bootApp() {
       }
     }
 
-    if (page === 'tga') {
-      requestIdleCallback(() => {
-        $pageBack.show();
-        $search.hide();
-        $installBtn.hide();
-      });
+    if (page === 'developer-direct') {
+      window.location.href = window.location.origin;
+      // requestIdleCallback(() => {
+      //   $pageBack.show();
+      //   $search.hide();
+      //   $installBtn.hide();
+      // });
 
-      const $prev = $currentPageContent;
+      // const $prev = $currentPageContent;
 
-      $currentPage = $list;
-      $currentPageContent = $listContent;
+      // $currentPage = $list;
+      // $currentPageContent = $listContent;
 
-      if ($prev === null || $currentPageContent.innerHTML === '') {
-        $loading.show();
-        $currentPage.scrollTo(0, 0);
-        $currentPageContent.innerHTML = '';
+      // if ($prev === null || $currentPageContent.innerHTML === '') {
+      //   $loading.show();
+      //   $currentPage.scrollTo(0, 0);
+      //   $currentPageContent.innerHTML = '';
 
-        const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
-        $currentPageContent.insertAdjacentHTML('beforeend', '<h2>The Game Awards 2022</h2>');
-        tgaGames.map((game) => requestIdleCallback(() => {
-          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-          gamesCache.set(game.id, game);
-        }));
+      //   const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
+      //   $currentPageContent.insertAdjacentHTML('beforeend', '<h2>Developer Direct 2023</h2>');
+      //   tgaGames.map((game) => requestIdleCallback(() => {
+      //     $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+      //     gamesCache.set(game.id, game);
+      //   }));
 
-        $loading.hide();
-      }
+      //   $loading.hide();
+      // }
     }
 
     if (page === 'gamepass') {
@@ -447,21 +448,21 @@ async function bootApp() {
       games.forEach((game) => gamesCache.set(game.id, game));
     }));
 
-    // const hotSale = sections[1].list.reduce(function (p, v) {
-    //   return ( p.price.off > v.price.off ? p : v );
-    // });
-    // const lcp = hotSale.images.featurepromotionalsquareart ?
-    //   hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-    // document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
-
-    // await yieldToMain(() => {
-    //   $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
-    // });
-
-    document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/tga-sq.jpg';
-    await yieldToMain(() => {
-      $home.insertAdjacentHTML('beforeend', theGameAward());
+    const hotSale = sections[1].list.reduce(function (p, v) {
+      return ( p.price.off > v.price.off ? p : v );
     });
+    const lcp = hotSale.images.featurepromotionalsquareart ?
+      hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
+    document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
+
+    await yieldToMain(() => {
+      $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+    });
+
+    // document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/xbox-direct.jpg';
+    // await yieldToMain(() => {
+    //   $home.insertAdjacentHTML('beforeend', theGameAward());
+    // });
 
     await yieldToMain(() => {
       $splash.classList.add('bye');
@@ -617,8 +618,8 @@ async function bootApp() {
     case 'collection':
       showPage('collection', id);
       break;
-    case 'tga':
-      showPage('tga');
+    case 'developer-direct':
+      showPage('developer-direct');
       break;
     case 'gamepass':
       showPage('gamepass', id);
@@ -716,7 +717,7 @@ async function bootApp() {
       }
       showPage(eve.state.page, eve.state.id);
 
-    } else if (eve.state.page === 'tga') {
+    } else if (eve.state.page === 'developer-direct') {
       if ($currentPage) {
         $prevPage = $currentPage;
         $prevPage.classList.remove('page-on');

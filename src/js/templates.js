@@ -75,7 +75,7 @@ export function gameDetailTemplate(game) {
   const img = game.images.titledheroart ?
   (game.images.titledheroart.url || game.images.titledheroart[0].url)
   : game.images.screenshot ? game.images.screenshot[0].url
-  : game.images.superheroart.url;
+  : (game.images.superheroart?.url || game.images.boxart?.url);
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   return (`
 <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
@@ -169,9 +169,9 @@ export function theGameAward() {
 <article class="game-important">
   <strong class="game-important-tag">Destacado</strong>
   <h2 class="game-title">
-    <a id="tga" href="/tga" class="link">The Game Awards 2022</a>
+    <a id="developer-direct" href="/developer-direct" class="link">Developer Direct 2023</a>
   </h2>
-  <img class="game-img" width="330px" height="330px" style="object-position: top;" alt="" fetchpriority="high" decoding="async" src="/src/assets/tga-sq.jpg">
+  <img class="game-img" width="330px" height="330px" style="object-position: top;" alt="" fetchpriority="high" decoding="async" src="/src/assets/xbox-direct.jpg">
 </article>
   `);
 }
