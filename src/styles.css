@@ -891,10 +891,10 @@ h2 img {
 }
 
 .news-preview {
-  padding: 10px 15px;
+  padding: 24px;
   position: relative;
   margin: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   background-color: var(--bg-box-color);
   height: auto;
   width: auto;
@@ -915,6 +915,7 @@ h2 img {
 
 .news-preview a {
   color: var(--txt-color);
+  text-decoration: none;
 }
 
 .news-preview a:before {
@@ -932,6 +933,9 @@ h2 img {
 
 .news-preview p {
   color: var(--txt-color-secondary);
+  line-height: 1.4em;
+  font-family: 'Inter';
+  font-size: 15px;
 }
 
 .gamepass,
@@ -1222,8 +1226,7 @@ h2 img {
   }
 
   .news .news-preview {
-    width: 290px;
-    margin: 5px;
+    margin: 15px;
   }
 
   .detail .game-title {
