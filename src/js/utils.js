@@ -6,6 +6,15 @@ export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepas
 export const getVideoURL = (slug) => `https://api.xstoregames.com/api/videos?game=${slug}`;
 // export const getTheGameAwardsURL = () => `https://api.xstoregames.com/api/games?id=9NF0D13RPX5L,9NFTC552K3GJ,9NG8S82N9F4D,9P0KWH5FH7MD`;
 
+export function getPageFromURL(url) {
+  const { pathname, searchParams } = new URL(url);
+  const pathSplit = pathname.split('/');
+  const page = pathSplit[1];
+  const id = pathSplit[2];
+
+  return { id, page, searchParams };
+}
+
 export function slugify(str) {
   return str
     .toString()

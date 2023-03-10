@@ -6,6 +6,7 @@ import {
   getGamePassURL,
   getVideoURL,
   slugify,
+  getPageFromURL,
   // getTheGameAwardsURL,
 } from './utils.js';
 
@@ -574,10 +575,7 @@ async function bootApp() {
     }));
   }
 
-  const { pathname, searchParams } = new URL(window.location.href);
-  const pathSplit = pathname.split('/');
-  const page = pathSplit[1];
-  const id = pathSplit[2];
+  const { page, id, searchParams } = getPageFromURL(window.location.href);
 
   switch (page) {
     case '':
@@ -767,10 +765,7 @@ async function bootApp() {
 
       eve.preventDefault();
 
-      const { pathname } = new URL(eve.target.href);
-      const pathSplit = pathname.split('/');
-      const page = pathSplit[1];
-      const id = pathSplit[2];
+      const { page, id } = getPageFromURL(eve.target.href);
 
       history.pushState({ page, id }, '', eve.target.href);
 
@@ -823,9 +818,7 @@ async function bootApp() {
       }
 
       if (eve.target.classList.contains('fav-btn')) {
-        const { pathname } = new URL(window.location.href);
-        const pathSplit = pathname.split('/');
-        const id = pathSplit[2].split('_')[1];
+        const { id } = getPageFromURL(window.location.href);
 
         if (wishlist.has(id)) {
           wishlist.delete(id);
