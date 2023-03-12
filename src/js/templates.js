@@ -50,7 +50,7 @@ export function gamePriceTemplate(game) {
     }
   </span>
   ${game.price.amount > 0 ?
-    `<small class="game-price-taxes">*impuestos incluídos</small>`
+    `<small class="game-price-taxes">*impuestos incluidos</small>`
     : ''
   }
   ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal)}"></x-price></div>` : ''}
@@ -143,7 +143,7 @@ export function gameDetailTemplate(game) {
 }
 
 export function gameCardNewTemplate(game) {
-  const img = game.images.poster?.url;
+  const img = game.images.poster?.url || game.images.boxart?.url;
   return (`
 <article class="game-preview-new" style="--game-preview-new: url(${img}?w=360)">
   ${gameInfoTemplate(game)}
