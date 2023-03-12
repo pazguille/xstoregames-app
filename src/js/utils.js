@@ -11,8 +11,9 @@ export function getPageFromURL(url) {
   const pathSplit = pathname.split('/');
   const page = pathSplit[1];
   const id = pathSplit[2];
+  const gameId = pathSplit[2] ? pathSplit[2].split('_')[1] : null;
 
-  return { id, page, searchParams };
+  return { id, gameId, page, searchParams };
 }
 
 export function slugify(str) {

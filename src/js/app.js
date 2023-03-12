@@ -818,25 +818,25 @@ async function bootApp() {
       }
 
       if (eve.target.classList.contains('fav-btn')) {
-        const { id } = getPageFromURL(window.location.href);
+        const { gameId } = getPageFromURL(window.location.href);
 
-        if (wishlist.has(id)) {
-          wishlist.delete(id);
+        if (wishlist.has(gameId)) {
+          wishlist.delete(gameId);
 
           db
             .transaction('wishlist', 'readwrite')
             .objectStore('wishlist')
-            .delete(id);
+            .delete(gameId);
 
         } else {
-          wishlist.add(id);
+          wishlist.add(gameId);
 
-          const game = gamesCache.get(id);
+          const game = gamesCache.get(gameId);
           db
             .transaction('wishlist', 'readwrite')
             .objectStore('wishlist')
             .add({
-              id,
+              gameId,
               title:  game.title,
               amount: game.price.amount,
             });
