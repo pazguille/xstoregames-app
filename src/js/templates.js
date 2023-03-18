@@ -72,13 +72,16 @@ export function gameInfoTemplate(game) {
 
 
 export function gameDetailTemplate(game) {
-  const img = game.images.titledheroart ?
-  (game.images.titledheroart.url || game.images.titledheroart[0].url)
-  : game.images.screenshot ? game.images.screenshot[0].url
-  : (game.images.superheroart?.url || game.images.boxart?.url);
+  const img = game.lcp;
+  // const img = game.images.titledheroart ?
+  // (game.images.titledheroart.url || game.images.titledheroart[0].url)
+  // : game.images.screenshot ? game.images.screenshot[0].url
+  // : (game.images.superheroart?.url || game.images.boxart?.url);
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
+  // <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
   return (`
-<article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
+<article class="game-preview">
+  <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
   <video class="hero game-preview-trailer" autoplay loop muted playsinline hidden></video>
   <div>
     <div class="game-preview-info">
