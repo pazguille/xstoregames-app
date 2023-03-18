@@ -241,6 +241,13 @@ async function bootApp() {
         $loading.hide();
       }
 
+      game.lcp = game.images.titledheroart ?
+        (game.images.titledheroart.url || game.images.titledheroart[0].url)
+        : game.images.screenshot ? game.images.screenshot[0].url
+        : (game.images.superheroart?.url || game.images.boxart?.url);
+
+      document.querySelector('#preloadLCP').href = game.lcp + '?w=1160&q=70';
+
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
         document.title = `${game.title} | XStore`;
@@ -248,13 +255,13 @@ async function bootApp() {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
 
-        setTimeout(() => {
+        yieldToMain(() => {
           document.querySelector('#share-btn').show({
             title: `${game.title} en XStore`,
             url: window.location.href,
           });
           document.querySelector('#fav-btn').show(wishlist.has(gameId));
-        }, 0);
+        });
       });
 
       requestIdleCallback(async () => {
