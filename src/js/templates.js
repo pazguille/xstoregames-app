@@ -194,22 +194,22 @@ export function gameImportantTemplate(game) {
   `);
 }
 
-export function gameCardTemplate(game) {
+export function gameCardTemplate(game, lazy = true) {
   const img = game.images.boxart ?
     game.images.boxart.url : game.images.poster?.url;
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${img}?w=330">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${img}?w=330">
 </article>
 `);
 }
 
-export function newsTemplate(news) {
+export function newsTemplate(news, lazy = true) {
   return (`
 <article class="news-preview">
   <h2><a href="${news.link}">${news.title}</a></h2>
-  <img class="news-img" width="180px" height="500px" alt="" decoding="async" loading="lazy" src="${news.image}">
+  <img class="news-img" width="180px" height="500px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${news.image}">
   <p>${news.description}</p>
 </article>
 `);

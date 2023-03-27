@@ -198,8 +198,8 @@ async function bootApp() {
 
       $loading.show();
       const news = await fetch(getXboxNewsURL()).then(res => res.json());
-      news.map((n) => requestIdleCallback(() => {
-        $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n));
+      news.map((n, i) => requestIdleCallback(() => {
+        $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n, i !== 0));
       }));
       $loading.hide();
     }
@@ -291,6 +291,7 @@ async function bootApp() {
         $installBtn.hide();
       });
 
+
       const $prev = $currentPageContent;
 
       $currentPage = $list;
@@ -318,8 +319,8 @@ async function bootApp() {
               o.unobserve(o.current);
               const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
               if (moreGames.length === 0) { return; }
-              moreGames.map((game) => requestIdleCallback(() => {
-                $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+              moreGames.map((game,i) => requestIdleCallback(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
                 gamesCache.set(game.id, game);
               }));
               requestIdleCallback(() => {
@@ -384,8 +385,8 @@ async function bootApp() {
 
         const gamepassGames = await fetch(getGamePassURL(id)).then(res => res.json());
         if (gamepassGames.length) {
-          gamepassGames.map((game) => requestIdleCallback(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+          gamepassGames.map((game, i) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
             gamesCache.set(game.id, game);
           }));
         } else {
@@ -415,8 +416,8 @@ async function bootApp() {
 
         const goldGames = await fetch(getXboxURL(id)).then(res => res.json());
         if (goldGames.length) {
-          goldGames.map((game) => requestIdleCallback(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+          goldGames.map((game, i) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
             gamesCache.set(game.id, game);
           }));
         } else {
