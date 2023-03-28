@@ -1260,7 +1260,7 @@ h2 img {
     height: 200vh;
   }
 
-  .detail .game-preview::before,
+  .detail .game-preview:before,
   .detail .game-preview > .game-img {
     width: calc(100vw - 80px);
   }
