@@ -1,6 +1,5 @@
 import {
   getXboxURL,
-  searchXboxURL,
   gameXboxURL,
   getXboxNewsURL,
   getGamePassURL,
@@ -20,6 +19,7 @@ import {
   emptyWishlist,
   gamepassSection,
   goldSection,
+  supportSection,
   // theGameAward,
 } from './templates.js';
 
@@ -492,6 +492,8 @@ async function bootApp() {
     });
 
     requestIdleCallback(async () => {
+      $home.insertAdjacentHTML('beforeend', supportSection());
+
       await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
         const games = await fetch(getXboxURL(type)).then(res => res.json());
         const section = sections.find(section => section.type === type);
@@ -510,7 +512,6 @@ async function bootApp() {
           }
         });
       });
-
     });
   }
 
