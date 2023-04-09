@@ -945,19 +945,22 @@ h2 img {
 }
 
 .gamepass,
-.gold {
+.gold,
+.cafecito {
   padding: 10px 0px;
   margin: 0 15px;
   border-radius: 10px 10px 0 0;
   background: linear-gradient(180deg, #3B844D 0%, var(--bg-xbox-dark-color) 60%, var(--bg-color) 100%);
 }
 
-.gold {
+.gold,
+.cafecito {
   background: linear-gradient(180deg, var(--bg-box-color) 0%, var(--bg-color) 100%);
 }
 
 .gamepass ul,
-.gold ul {
+.gold ul,
+.cafecito ul {
   display: flex;
   list-style: none;
   padding: 0 15px;
@@ -966,7 +969,8 @@ h2 img {
 }
 
 .gamepass li,
-.gold li {
+.gold li,
+.cafecito li {
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -983,14 +987,31 @@ h2 img {
 }
 
 .gamepass li a,
-.gold li a {
+.gold li a,
+.cafecito li a {
   color: var(--txt-color);
   text-decoration: none;
   font-size: 18px;
 }
 
+.cafecito li a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.cafecito li:nth-child(2) {
+  background-color: #1d9bf0;
+}
+
+.cafecito li a {
+  font-size: 16px;
+}
+
 .gamepass li a:before,
-.gold li a:before {
+.gold li a:before,
+.cafecito li a:before {
   content: '';
   text-decoration: none;
   cursor: pointer;
@@ -1310,7 +1331,8 @@ h2 img {
   }
 
   .gamepass li,
-  .gold li {
+  .gold li,
+  .cafecito li {
     flex: 1;
     height: 100px;
   }

@@ -251,3 +251,38 @@ export function goldSection() {
 </section>
   `);
 }
+
+export function supportSection() {
+  return (`
+<section class="cafecito">
+  <h2>¡Apoyá el crecimiento de XStoreGames!</h2>
+  <ul>
+    <li>
+      <a href="https://cafecito.app/pazguille" rel="noopener" target="_blank">
+        <img
+          src="/src/assets/cafecito.svg"
+          alt="Invitame un café en cafecito.app"
+          width="192"
+          height="40"
+          decoding="async"
+          loading="lazy"
+        />
+      </a>
+    </li>
+    <li>
+      <a href="https://twitter.com/compose/tweet?text=Llegó%20la%20tienda%20de%20Xbox%20Argentina%20con%20impuestos%20incluidos%20https://xstoregames.com/" rel="noopener" target="_blank">
+        <img
+          src="/src/assets/twitter.svg"
+          alt=""
+          width="35"
+          height="35"
+          decoding="async"
+          loading="lazy"
+        />
+        <span>Compartir en Twitter</span>
+      </a>
+    </li>
+  </ul>
+</section>
+  `)
+}
