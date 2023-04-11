@@ -126,8 +126,8 @@ export function gameDetailTemplate(game) {
     ${Array.isArray(game.images.screenshot) ? `
       <h4 class="visually-hidden">Imágenes</h4>
       <div class="carousel game-preview-images">
-        <img alt="" width="345" height="194" loading="lazy" decoding="async" src="${img}?w=1160&q=70" />
-        ${game.images.screenshot.map((img) => `<img alt="" width="345" height="194" loading="lazy" decoding="async" src="${img.url}?w=1160&q=70" />`).join('')}
+        <img width="345" height="194" loading="lazy" decoding="async" src="${img}?w=1160&q=70" alt="" />
+        ${game.images.screenshot.map((img) => `<img width="345" height="194" loading="lazy" decoding="async" src="${img.url}?w=1160&q=70" alt="" />`).join('')}
       </div>
     ` : ''}
 

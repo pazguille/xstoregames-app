@@ -41,7 +41,7 @@ const sections = [
   {
     type: 'deals',
     title: 'Ahorrate unos mangos',
-    icon: `<img src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
   },
@@ -62,7 +62,7 @@ const sections = [
   {
     type: 'most',
     title: 'Los más jugados',
-    icon: '<img src="/src/assets/icons/chart.svg" width="24" height="24" />',
+    icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
     list: [],
     skipitems: 0,
   },
@@ -155,7 +155,7 @@ async function bootApp() {
 
       $currentPage = $wish;
       $currentPageContent = $wishContent;
-      $currentPageContent.innerHTML = '<h2><img src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
+      $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
 
       const games = Array.from(wishlist).reverse().join(',');
       if (games.length) {
@@ -194,7 +194,7 @@ async function bootApp() {
 
       $currentPage = $news;
       $currentPageContent = $newsContent;
-      $currentPageContent.innerHTML = '<h2><img src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
+      $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
 
       $loading.show();
       const news = await fetch(getXboxNewsURL()).then(res => res.json());
