@@ -189,7 +189,7 @@ export function gameImportantTemplate(game) {
     <a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
   </h2>
   <span class="game-important-tag game-price-off">${game.price.off}% OFF</span>
-  <img class="game-img" width="330px" height="330px" alt="" fetchpriority="high" decoding="async" src="${img}?w=720&q=70">
+  <img class="game-img" width="365px" height="365px" alt="" fetchpriority="high" decoding="async" src="${img}?w=720&q=70">
 </article>
   `);
 }
@@ -285,4 +285,31 @@ export function supportSection() {
   </ul>
 </section>
   `)
+}
+
+export function marketplaceItemsTemplate(items) {
+  return (`
+<section>
+  <h2>Accesorios destacados</h2>
+  <ul class="carousel" aria-roledescription="Carrusel" aria-label="Accesorios">
+    <button class="prev arrow" aria-hidden="true">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
+    </button>
+    ${items.map(item => `<li>
+      <article class="game-preview">
+        <div>
+          <h3 class="game-title"><a href="${item.permalink}" class="marketplace_item">${item.title}</a></h3>
+          <div class="game-price">
+            <x-price amount="${item.price}"></x-price>
+          </div>
+        </div>
+        <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${item.thumbnail.replace('http:', 'https:').replace('D_', 'D_2X_').replace('I.jpg', 'AB.webp')}">
+      </article>
+    </li>`).join('')}
+    <button class="next arrow" aria-hidden="true">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path style="transform: rotate(180deg) translate(-24px, -24px);" d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
+    </button>
+  </ul>
+</section>
+`);
 }
