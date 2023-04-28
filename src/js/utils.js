@@ -5,6 +5,7 @@ export const getXboxNewsURL = () => `https://api.xstoregames.com/api/news`;
 export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepass?list=${list}`;
 export const getVideoURL = (slug) => `https://api.xstoregames.com/api/videos?game=${slug}`;
 // export const getTheGameAwardsURL = () => `https://api.xstoregames.com/api/games?id=9NF0D13RPX5L,9NFTC552K3GJ,9NG8S82N9F4D,9P0KWH5FH7MD`;
+export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/MLA/search?category=MLA455245&limit=${limit}`;
 
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);
@@ -15,6 +16,14 @@ export function getPageFromURL(url) {
 
   return { id, gameId, page, searchParams };
 }
+
+// export function getPageFromURL(url) {
+//   const { pathname, searchParams } = new URL(url);
+//   const [page, id] = pathname.split('/').slice(1);
+//   const gameId = id ? id.split('_')[1] : null;
+//   return { id, page, searchParams, gameId };
+// }
+
 
 export function slugify(str) {
   return str

@@ -7,6 +7,8 @@ import {
   slugify,
   getPageFromURL,
   // getTheGameAwardsURL,
+  getMarketplaceItemsURL,
+  convertDollar,
 } from './utils.js';
 
 import {
@@ -20,6 +22,7 @@ import {
   gamepassSection,
   goldSection,
   supportSection,
+  marketplaceItemsTemplate,
   // theGameAward,
 } from './templates.js';
 
@@ -512,6 +515,22 @@ async function bootApp() {
           }
         });
       });
+
+      requestIdleCallback(() => {
+        const o = new IntersectionObserver(async (entries) => {
+          const first = entries[0];
+          if (first.isIntersecting) {
+            o.unobserve(o.current);
+            const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
+            await yieldToMain(() => {
+              $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
+            });
+          }
+        });
+
+        o.current = $home.lastElementChild;
+        o.observe(o.current);
+      });
     });
   }
 
@@ -805,10 +824,23 @@ async function bootApp() {
       });
     });
 
+    $home.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('marketplace_item')) {
+        gtag('event', 'marketplace_item', {
+          page_location: eve.target.href,
+        });
+      }
+    });
+
     $detailContent.addEventListener('click', (eve) => {
       if (eve.target.classList.contains('game-buy-now')) {
+        const { gameId } = getPageFromURL(window.location.href);
+        const game = gamesCache.get(gameId);
+
         gtag('event', 'begin_checkout', {
           page_location: window.location.href,
+          currency: 'ARS',
+          value: convertDollar(game.price.deal || game.price.amount),
         });
       }
 
