@@ -826,7 +826,6 @@ async function bootApp() {
 
     $home.addEventListener('click', (eve) => {
       if (eve.target.classList.contains('marketplace_item')) {
-        eve.preventDefault();
         gtag('event', 'marketplace_item', {
           page_location: eve.target.href,
         });

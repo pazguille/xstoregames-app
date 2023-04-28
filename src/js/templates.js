@@ -298,7 +298,7 @@ export function marketplaceItemsTemplate(items) {
     ${items.map(item => `<li>
       <article class="game-preview">
         <div>
-          <h3 class="game-title"><a href="${item.permalink}" class="marketplace_item">${item.title}</a></h3>
+          <h3 class="game-title"><a href="${item.permalink}" class="marketplace_item" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
           <div class="game-price">
             <x-price amount="${item.price}"></x-price>
           </div>
