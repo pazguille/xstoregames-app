@@ -840,7 +840,7 @@ async function bootApp() {
         gtag('event', 'begin_checkout', {
           page_location: window.location.href,
           currency: 'ARS',
-          value: convertDollar(game.price.deal || game.price.amount),
+          value: parseFloat(convertDollar(game.price.deal || game.price.amount)),
         });
       }
 
