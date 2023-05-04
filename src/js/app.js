@@ -6,7 +6,6 @@ import {
   getVideoURL,
   slugify,
   getPageFromURL,
-  // getTheGameAwardsURL,
   getMarketplaceItemsURL,
   convertDollar,
 } from './utils.js';
@@ -127,6 +126,7 @@ async function bootApp() {
   iddb.onsuccess = eve => { db = eve.target.result; };
 
   async function showPage(page, id) {
+
     $prevPage = $currentPage;
 
     $main.style.overflow = 'hidden';
@@ -294,7 +294,6 @@ async function bootApp() {
         $installBtn.hide();
       });
 
-
       const $prev = $currentPageContent;
 
       $currentPage = $list;
@@ -340,33 +339,31 @@ async function bootApp() {
       }
     }
 
-    if (page === 'developer-direct') {
-      window.location.href = window.location.origin;
-      // requestIdleCallback(() => {
-      //   $pageBack.show();
-      //   $search.hide();
-      //   $installBtn.hide();
-      // });
+    if (page === 'games') {
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $search.hide();
+        $installBtn.hide();
+      });
 
-      // const $prev = $currentPageContent;
+      const $prev = $currentPageContent;
 
-      // $currentPage = $list;
-      // $currentPageContent = $listContent;
+      $currentPage = $list;
+      $currentPageContent = $listContent;
 
-      // if ($prev === null || $currentPageContent.innerHTML === '') {
-      //   $loading.show();
-      //   $currentPage.scrollTo(0, 0);
-      //   $currentPageContent.innerHTML = '';
+      if ($prev === null || $currentPageContent.innerHTML === '') {
+        $loading.show();
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
 
-      //   const tgaGames = await fetch(getTheGameAwardsURL(id)).then(res => res.json());
-      //   $currentPageContent.insertAdjacentHTML('beforeend', '<h2>Developer Direct 2023</h2>');
-      //   tgaGames.map((game) => requestIdleCallback(() => {
-      //     $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
-      //     gamesCache.set(game.id, game);
-      //   }));
-
-      //   $loading.hide();
-      // }
+        const ids = searchParams.get('ids').split(',');
+        const customGames = await fetch(gameXboxURL(ids)).then(res => res.json());
+        $currentPageContent.insertAdjacentHTML('beforeend', `<h2><img alt="" src="/src/assets/icons/pad.svg" width="24" height="24" /> Juegos</h2>`);
+        customGames.map((game) => requestIdleCallback(() => {
+          $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+          gamesCache.set(game.id, game);
+        }));
+      }
     }
 
     if (page === 'gamepass') {
@@ -609,8 +606,8 @@ async function bootApp() {
     case '':
       loadHomePage();
       break;
-    case 'wishlist':
 
+    case 'wishlist':
       if (id === 'export') {
         alert(`${window.location.origin}/wishlist/import?ids=${Array.from(wishlist)}`);
 
@@ -635,27 +632,20 @@ async function bootApp() {
 
       showPage('wishlist');
       break;
-    case 'news':
-      showPage('news');
-      break;
-    case 'game':
-      showPage('game', id);
-      break;
-    case 'collection':
-      showPage('collection', id);
-      break;
-    case 'developer-direct':
-      showPage('developer-direct');
-      break;
-    case 'gamepass':
-      showPage('gamepass', id);
-      break;
-    case 'gold':
-      showPage('gold', id);
-      break;
+
     case 'search':
       const q = searchParams.get('q');
       loadSearchPage(q);
+      break;
+
+    case 'news':
+    case 'game':
+    case 'games':
+    case 'collection':
+    case 'gamepass':
+    case 'gold':
+      history.replaceState({ page, id }, document.title, window.location.href);
+      showPage(page, id);
       break;
   }
 
@@ -743,7 +733,7 @@ async function bootApp() {
       }
       showPage(eve.state.page, eve.state.id);
 
-    } else if (eve.state.page === 'developer-direct') {
+    } else if (eve.state.page === 'games') {
       if ($currentPage) {
         $prevPage = $currentPage;
         $prevPage.classList.remove('page-on');
@@ -754,7 +744,7 @@ async function bootApp() {
           });
         }, 300);
       }
-      showPage(eve.state.page);
+      showPage(eve.state.page, eve.state.id);
 
     } else if (eve.state.page === 'gamepass') {
       if ($currentPage) {

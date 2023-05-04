@@ -165,11 +165,12 @@ h3 {
 }
 
 h1 a {
-  color: var(--txt-color);
+  color: var(--txt-color-secondary);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  font-size: 18px;
 }
 
 section {
@@ -342,8 +343,8 @@ h2 img {
 .news-img,
 .detail .game-preview-images img,
 .detail .game-preview-playlist lite-youtube {
-  background: var(--bg-box-light-color) url('/src/assets/logo.svg') no-repeat center center;
-  background-size: 10%;
+  background: var(--bg-box-light-color) url('/src/assets/xs-logo.svg') no-repeat center center;
+  background-size: 20%;
 }
 
 .game-preview-soon {
@@ -1065,10 +1066,10 @@ h2 img {
 }
 
 .splash-loading svg {
-  position: absolute;
-  top: calc(50vh - 100px);
-  left: calc(50vw - 50px);
   will-change: opacity, transform;
+  position: absolute;
+  top: calc(50vh - 80px);
+  left: calc(50vw - 40px);
 }
 
 .bye {
