@@ -270,7 +270,7 @@ export function supportSection() {
       </a>
     </li>
     <li>
-      <a href="https://twitter.com/compose/tweet?text=Llegó%20la%20tienda%20de%20Xbox%20Argentina%20con%20impuestos%20incluidos%20https://xstoregames.com/" rel="noopener" target="_blank">
+      <a href="https://twitter.com/compose/tweet?text=📣%20Ya%20podés%20explorar%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20Argentina%20con%20los%20precios%20finales%20incluidos%20los%20impuestos%20🎮🇦🇷✨%20https://xstoregames.com/" rel="noopener" target="_blank">
         <img
           src="/src/assets/twitter.svg"
           alt=""
