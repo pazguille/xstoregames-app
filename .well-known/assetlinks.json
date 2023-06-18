@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "com.xstoregames.android",
-        "sha256_cert_fingerprints": ["39:4A:F5:46:3D:BF:E2:B5:30:85:10:8E:93:EF:60:DB:76:B7:FC:CB:E7:FB:EA:2E:06:ED:50:69:7C:DF:FE:E9"]
+        "sha256_cert_fingerprints": ["EF:17:89:D0:C1:23:78:27:FC:8C:6A:48:ED:77:3D:14:5C:01:8D:48:3D:33:57:30:03:00:CD:28:E1:7E:AA:19"]
       }
     }]
