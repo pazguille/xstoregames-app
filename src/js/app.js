@@ -42,7 +42,7 @@ const sections = [
   },
   {
     type: 'deals',
-    title: 'Ahorrate unos mangos',
+    title: 'Ahorrate unos pesos',
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
@@ -542,9 +542,9 @@ async function bootApp() {
     $currentPageContent = $resultsContent;
 
     if (history.state === null) {
-      history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
     } else {
-      history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
     }
 
     $currentPage.removeAttribute('hidden');
@@ -569,7 +569,7 @@ async function bootApp() {
     // const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
     function fetchSearchGames(query) {
       const params = new URLSearchParams({
-        market: 'es-ar',
+        market: `${lang}-${store}`,
         clientId: '7F27B536-CF6B-4C65-8638-A0F8CBDFCA65',
         sources: 'DCatAll-Products',
         filter: '+ClientType:StoreWeb',
@@ -600,16 +600,15 @@ async function bootApp() {
     }));
   }
 
-  const { page, id, searchParams } = getPageFromURL(window.location.href);
-
+  const { page, id, searchParams } = getPageFromURL(window.location.href);;
   switch (page) {
-    case '':
+    case 'home':
       loadHomePage();
       break;
 
     case 'wishlist':
       if (id === 'export') {
-        alert(`${window.location.origin}/wishlist/import?ids=${Array.from(wishlist)}`);
+        alert(`${window.location.origin}${basePath}/wishlist/import?ids=${Array.from(wishlist)}`);
 
       } else if (id === 'import') {
         const wishs = searchParams.get('ids').split(',');

@@ -8,7 +8,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.icon}${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all link" id="collection-${section.type}" href="/collection/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>
+  <a class="see-all link" id="collection-${section.type}" href="${basePath}/collection/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>
 </section>
 `);
 }
@@ -61,7 +61,7 @@ export function gamePriceTemplate(game) {
 export function gameInfoTemplate(game) {
   return (`
 <div>
-  <h3 class="game-title"><a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a></h3>
+  <h3 class="game-title"><a id="detail-${game.id}" href="${basePath}/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a></h3>
   <p class="game-by">by ${game.developer ||game.publisher}</p>
   ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.svg" width="60px" height="11px" alt="Disponible en Game Pass">` : ''}
   ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="60px" height="11px" alt="Disponible en EA Play">` : ''}
@@ -187,7 +187,7 @@ export function gameImportantTemplate(game) {
 <article class="game-important">
   <strong class="game-important-tag">Oferta destacada</strong>
   <h2 class="game-title">
-    <a id="detail-${game.id}" href="/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
+    <a id="detail-${game.id}" href="${basePath}/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
   </h2>
   <span class="game-important-tag game-price-off">${game.price.off}% OFF</span>
   <img class="game-img" width="365px" height="365px" alt="" fetchpriority="high" decoding="async" src="${img}?w=720&q=70">
@@ -231,10 +231,10 @@ export function gamepassSection() {
     <svg width="140" height="25" fill="none" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="m105.8 14 2.5-6.6 2.5 6.5h-5Zm3.7-8.8H107l-5.6 14.3h2.3l1.4-3.7h6.4l1.4 3.7h2.2l-5.6-14.3ZM140 15.6c0 1.3-.5 2.4-1.5 3.1-1 .8-2.3 1.2-4 1.2-2 0-3.5-.5-4.5-1.3-1-.9-1.6-2.1-1.6-3.8h2.2c0 1 .3 1.9 1 2.4.6.5 1.6.8 2.9.8 1 0 1.8-.2 2.4-.6.5-.4.8-1 .8-1.8 0-.6-.2-1-.7-1.4-.4-.3-1.3-.7-2.5-1l-1.2-.2a7 7 0 0 1-3.4-1.4 3.6 3.6 0 0 1-1-2.8c0-1.2.4-2.2 1.3-2.9a6 6 0 0 1 3.7-1c1.9 0 3.3.4 4.2 1.2 1 .8 1.5 2 1.5 3.3h-2.2c0-.9-.3-1.6-.9-2-.5-.4-1.4-.6-2.6-.6-1 0-1.6.1-2.1.5-.5.3-.8.8-.8 1.4 0 .7.3 1.2.7 1.5.4.4 1.3.7 2.4 1l1.3.2c1.6.3 2.8.8 3.5 1.5.7.7 1.1 1.6 1.1 2.7Zm-12.8 0c0 1.3-.5 2.4-1.4 3.1-1 .8-2.4 1.2-4.1 1.2-2 0-3.4-.5-4.5-1.3-1-.9-1.6-2.1-1.6-3.8h2.2c0 1 .4 1.9 1 2.4.7.5 1.6.8 2.9.8 1 0 1.9-.2 2.4-.6.6-.4.9-1 .9-1.8 0-.6-.3-1-.7-1.4-.5-.3-1.3-.7-2.5-1l-1.3-.2a7 7 0 0 1-3.3-1.4 3.6 3.6 0 0 1-1.2-2.8c0-1.2.5-2.2 1.4-2.9a6 6 0 0 1 3.7-1c1.9 0 3.3.4 4.3 1.2 1 .8 1.4 2 1.4 3.3h-2.1c-.1-.9-.4-1.6-1-2-.5-.4-1.4-.6-2.5-.6-1 0-1.7.1-2.2.5-.5.3-.7.8-.7 1.4 0 .7.2 1.2.6 1.5.5.4 1.3.7 2.5 1l1.2.2c1.7.3 2.8.8 3.6 1.5.7.7 1 1.6 1 2.7ZM94.2 7H98c.9 0 1.6.3 2 .7.5.5.7 1.1.7 2 0 .8-.2 1.4-.7 1.9-.4.4-1.1.6-2 .6h-3.9V7.1Zm7.5-.7c-.9-.8-2-1.2-3.6-1.2h-6.2v14.3h2.2v-5.2h4c1.5 0 2.7-.4 3.6-1.3.8-.8 1.3-1.9 1.3-3.3 0-1.3-.5-2.5-1.3-3.3ZM74 5.2v14.3h-2V8.2l-1.2 3-3.2 8.3h-1.8l-3.3-8.4c-.4-1-.8-2-1-2.9v11.3h-2.2V5.2h3l3 7.6 1.4 4 1.5-4.2L71 5.2h3Zm4.4 2v4.1h7.1v1.9h-7v4.4h8v2H76.2V5.1h10.3v2h-8Zm-35 4.8v7.6h-2.1v-2c-.6.8-1.2 1.3-2 1.7a7.2 7.2 0 0 1-5.5 0 6.8 6.8 0 0 1-3.6-4c-.2-.8-.4-1.8-.4-3 0-1 .2-2 .5-3a6.7 6.7 0 0 1 3.6-3.9c.8-.3 1.8-.5 2.8-.5 1.8 0 3.3.4 4.4 1.4 1.2.9 1.8 2.1 2 3.6H41c-.2-.9-.7-1.7-1.4-2.2-.8-.6-1.7-.9-2.7-.9-1.5 0-2.6.5-3.4 1.5a6 6 0 0 0-1.3 4c0 1.8.4 3.1 1.3 4.1.8 1 2 1.5 3.4 1.5 1.2 0 2.3-.4 3.1-1.1a4 4 0 0 0 1.4-3H37V12h6.2Zm5.4 2 2.5-6.6 2.5 6.5h-5Zm3.8-8.8H50l-5.6 14.3h2.3l1.3-3.7h6.4l1.4 3.7h2.3L52.6 5.2ZM15.2 6.8V7c2.4 2.9 7 9.7 6.1 12.5h.1a11.9 11.9 0 0 0-1.1-15.7c-.2-.1-1.4-.5-5 3.1ZM3.6 3.7a11.9 11.9 0 0 0-1.1 15.7c-.9-2.8 3.8-9.6 6.2-12.5-3.7-3.7-5-3.3-5.1-3.2ZM18.2 2A11.8 11.8 0 0 0 5.8 2c2.3-.4 5.8 1.6 6.1 1.8.4-.2 3.9-2.2 6.2-1.7Zm-6.3 7.8c3.6 2.8 9.8 9.5 7.9 11.4a11.9 11.9 0 0 1-15.7 0c-1.9-2 4.2-8.6 7.8-11.3Z" fill="#F2F2F2"/></svg>
   </h2>
   <ul>
-    <li><a href="/gamepass/new" id="gamepass-new" class="link">Recién agregados</a></li>
-    <li><a href="/gamepass/coming" id="gamepass-coming" class="link">Se están por sumar</a></li>
-    <li><a href="/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
-    <li><a href="/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
+    <li><a href="${basePath}/gamepass/new" id="gamepass-new" class="link">Recién agregados</a></li>
+    <li><a href="${basePath}/gamepass/coming" id="gamepass-coming" class="link">Se están por sumar</a></li>
+    <li><a href="${basePath}/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
+    <li><a href="${basePath}/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
   </ul>
 </section>
   `);
@@ -245,9 +245,9 @@ export function goldSection() {
 <section class="gold">
   <h2>Xbox Live Gold</h2>
   <ul>
-    <li><a href="/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
-    <li><a href="/gold/gold-deals" id="gold-deals" class="link">Ofertas</a></li>
-    <li><a href="/gold/gold-free" id="gold-free" class="link">Días gratis</a></li>
+    <li><a href="${basePath}/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
+    <li><a href="${basePath}/gold/gold-deals" id="gold-deals" class="link">Ofertas</a></li>
+    <li><a href="${basePath}/gold/gold-free" id="gold-free" class="link">Días gratis</a></li>
   </ul>
 </section>
   `);
@@ -258,7 +258,8 @@ export function supportSection() {
 <section class="cafecito">
   <h2>¡Apoyá el crecimiento de XStoreGames!</h2>
   <ul>
-    <li>
+    ${store === 'ar' ?
+    `<li>
       <a href="https://cafecito.app/pazguille" rel="noopener" target="_blank">
         <img
           src="/src/assets/cafecito.svg"
@@ -282,7 +283,34 @@ export function supportSection() {
         />
         <span>Compartir en Twitter</span>
       </a>
+    </li>`
+    :
+    `<li>
+      <a href="https://www.paypal.com/paypalme/pazguille" rel="noopener" target="_blank">
+        <img
+          src="/src/assets/paypal.svg"
+          alt="Doná en Paypal"
+          width="118"
+          height="35"
+          decoding="async"
+          loading="lazy"
+        />
+      </a>
     </li>
+    <li>
+      <a href="https://twitter.com/compose/tweet?text=📣%20Explorá%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20en%20https://xstoregames.com/${store}-store/%20🎮✨" rel="noopener" target="_blank">
+        <img
+          src="/src/assets/twitter.svg"
+          alt=""
+          width="35"
+          height="35"
+          decoding="async"
+          loading="lazy"
+        />
+        <span>Compartir en Twitter</span>
+      </a>
+    </li>`
+    }
   </ul>
 </section>
   `)
