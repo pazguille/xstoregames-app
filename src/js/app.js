@@ -87,6 +87,7 @@ async function bootApp() {
 
   const $main = document.querySelector('main');
   const $metaDescription = document.querySelector('[name="description"]');
+  const $canonical = document.querySelector('#canonical');
 
   const $footer = document.querySelector('footer');
 
@@ -126,13 +127,13 @@ async function bootApp() {
   iddb.onsuccess = eve => { db = eve.target.result; };
 
   async function showPage(page, id) {
-
     $prevPage = $currentPage;
 
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     document.title = documentTitle;
     $metaDescription.content = documentDescription;
+    $canonical.href = window.location.href;
 
     setTimeout(() => {
       requestIdleCallback(() => {
@@ -284,7 +285,8 @@ async function bootApp() {
             )
           }
         }
-      })
+      });
+
     }
 
     if (page === 'collection') {
@@ -695,6 +697,7 @@ async function bootApp() {
 
       document.title = documentTitle;
       $metaDescription.content = documentDescription;
+      $canonical.href = window.location.href;
 
     } else if (eve.state.page === 'game') {
       $prevPage = $currentPage;
