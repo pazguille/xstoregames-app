@@ -452,6 +452,17 @@ async function bootApp() {
   }
 
   async function loadHomePage() {
+    await yieldToMain(() => {
+      $canonical.href = window.location.href;
+      if (document.querySelector('[hreflang]') === null) {
+        document.head.insertAdjacentHTML('beforeend', `
+          <link href="https://xstoregames.com/" rel="alternate" hreflang="x-default" />
+          <link href="https://xstoregames.com/" rel="alternate" hreflang="es-ar" />
+          <link href="https://xstoregames.com/mx-store" rel="alternate" hreflang="es-mx" />
+        `);
+      }
+    });
+
     await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
       const games = await fetch(getXboxURL(type)).then(res => res.json());
       const section = sections.find(section => section.type === type);
