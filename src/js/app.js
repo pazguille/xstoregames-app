@@ -133,7 +133,7 @@ async function bootApp() {
     document.body.style.overflow = 'hidden';
     document.title = documentTitle;
     $metaDescription.content = documentDescription;
-    $canonical.href = window.location.href;
+    $canonical.href = window.location.origin + window.location.pathname;
 
     setTimeout(() => {
       requestIdleCallback(() => {
@@ -453,7 +453,7 @@ async function bootApp() {
 
   async function loadHomePage() {
     await yieldToMain(() => {
-      $canonical.href = window.location.href;
+      $canonical.href = window.location.origin + window.location.pathname;
       if (document.querySelector('[hreflang]') === null) {
         document.head.insertAdjacentHTML('beforeend', `
           <link href="https://xstoregames.com/" rel="alternate" hreflang="x-default" />
@@ -708,7 +708,7 @@ async function bootApp() {
 
       document.title = documentTitle;
       $metaDescription.content = documentDescription;
-      $canonical.href = window.location.href;
+      $canonical.href = window.location.origin + window.location.pathname;
 
     } else if (eve.state.page === 'game') {
       $prevPage = $currentPage;
