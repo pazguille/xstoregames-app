@@ -88,6 +88,7 @@ async function bootApp() {
   const $main = document.querySelector('main');
   const $metaDescription = document.querySelector('[name="description"]');
   const $canonical = document.querySelector('#canonical');
+  const $preloadLCP = document.querySelector('#preloadLCP');
 
   const $footer = document.querySelector('footer');
 
@@ -202,6 +203,9 @@ async function bootApp() {
 
       $loading.show();
       const news = await fetch(getXboxNewsURL()).then(res => res.json());
+
+      $preloadLCP.href = news[0].image;
+
       news.map((n, i) => requestIdleCallback(() => {
         $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n, i !== 0));
       }));
@@ -250,7 +254,7 @@ async function bootApp() {
         : game.images.screenshot ? game.images.screenshot[0].url
         : (game.images.superheroart?.url || game.images.boxart?.url);
 
-      document.querySelector('#preloadLCP').href = game.lcp + '?w=1160&q=70';
+        $preloadLCP.href = game.lcp + '?w=1160&q=70';
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -323,6 +327,13 @@ async function bootApp() {
               o.unobserve(o.current);
               const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
               if (moreGames.length === 0) { return; }
+
+              if (section.list.length === 0) {
+                const game = moreGames[0];
+                const lcp = game.images.boxart ? game.images.boxart.url : game.images.poster?.url;
+                $preloadLCP.href = lcp + '?w=330';
+              }
+
               moreGames.map((game,i) => requestIdleCallback(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
                 gamesCache.set(game.id, game);
@@ -475,13 +486,13 @@ async function bootApp() {
     });
     const lcp = hotSale.images.featurepromotionalsquareart ?
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-    document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
+      $preloadLCP.href = lcp + '?w=720&q=70';
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
     });
 
-    // document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/xbox-direct.jpg';
+    // $preloadLCP.href = window.location.origin + '/src/assets/xbox-direct.jpg';
     // await yieldToMain(() => {
     //   $home.insertAdjacentHTML('beforeend', theGameAward());
     // });
