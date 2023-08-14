@@ -202,7 +202,12 @@ async function bootApp() {
       $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
 
       $loading.show();
-      const news = await fetch(getXboxNewsURL()).then(res => res.json());
+      const news = await fetch(getXboxNewsURL())
+        .then(res => res.json())
+        .then(res => res.map(n => {
+          n.image = n.image.replace('1200%2C675', '670%2C380')
+          return n;
+        }));
 
       $preloadLCP.href = news[0].image;
 
