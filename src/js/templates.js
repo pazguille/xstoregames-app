@@ -72,7 +72,7 @@ export function gameInfoTemplate(game) {
 
 
 export function gameDetailTemplate(game) {
-  let img = game.lcp;
+  const img = game.lcp;
   // const img = game.images.titledheroart ?
   // (game.images.titledheroart.url || game.images.titledheroart[0].url)
   // : game.images.screenshot ? game.images.screenshot[0].url
