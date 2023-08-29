@@ -72,13 +72,18 @@ export function gameInfoTemplate(game) {
 
 
 export function gameDetailTemplate(game) {
-  const img = game.lcp;
+  let img = game.lcp;
   // const img = game.images.titledheroart ?
   // (game.images.titledheroart.url || game.images.titledheroart[0].url)
   // : game.images.screenshot ? game.images.screenshot[0].url
   // : (game.images.superheroart?.url || game.images.boxart?.url);
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   // <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
+
+  if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8'].includes(game.id)) {
+    game.images.screenshot = null;
+  }
+
   return (`
 <article class="game-preview">
   <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
@@ -119,9 +124,10 @@ export function gameDetailTemplate(game) {
 
       ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
 
-
+      ${game.release_date ? `
       <h4>Fecha de lanzamiento:</h4>
       <time datetime="${new Date(game.release_date).toLocaleString('es-AR')}">${new Date(game.release_date).toLocaleString('es-AR', { day: '2-digit' , month: '2-digit', year: 'numeric',  })}</time>
+      ` : ''}
     </div>
 
     ${Array.isArray(game.images.screenshot) ? `
@@ -236,6 +242,54 @@ export function gamepassSection() {
     <li><a href="${basePath}/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
     <li><a href="${basePath}/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
   </ul>
+
+  <h2>Elige tu plan</h2>
+  <div class="gamepass-plans carousel">
+    <article class="gamepass-plan">
+      <h3>
+        <img src="/src/assets/gamepass-ultimate.png" alt="Game Pass Ultimate" decoding="async" loading="lazy" width="160" height="20" />
+        <strong class="game-important-tag">Plan destacado</strong>
+      </h3>
+      <ul>
+        <li>Acceso ilimitado a más de 100 juegos de alta calidad en PC, consola y dispositivos móviles</li>
+        <li>Agregamos juegos nuevos en todo momento</li>
+        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
+        <li>Ofertas y descuentos para miembros</li>
+        <li>Beneficios gratuitos que incluyen contenido del juego y ofertas de asociados</li>
+        <li>Juega en el teléfono móvil y en la tableta desde la nube</li>
+        <li>Xbox Live Gold incluye Deals with Gold, Games with Gold y multijugador en consolas</li>
+        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros</li>
+      </ul>
+      <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0" class="link">Ver más</a>
+    </article>
+
+    <article class="gamepass-plan">
+      <h3>
+        <img src="/src/assets/gamepass-console.png" alt="Game Pass para Consola" decoding="async" loading="lazy" width="174" height="20" />
+      </h3>
+      <ul>
+        <li>Acceso ilimitado a más de 100 juegos de consola de alta calidad</li>
+        <li>Agregamos juegos nuevos en todo momento</li>
+        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
+        <li>Ofertas y descuentos para miembros</li>
+      </ul>
+      <a class="btn link" href="/game/xbox-game-pass-para-consola_CFQ7TTC0K6L8" class="link">Ver más</a>
+    </article>
+
+    <article class="gamepass-plan">
+      <h3>
+        <img src="/src/assets/gamepass-pc.png" alt="Game Pass para PC" decoding="async" loading="lazy" width="135" height="20" />
+      </h3>
+      <ul>
+        <li>Acceso ilimitado a más de 100 juegos de alta calidad para PC</li>
+        <li>Agregamos juegos nuevos en todo momento</li>
+        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
+        <li>Ofertas y descuentos para miembros</li>
+        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros en la PC</li>
+      </ul>
+      <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8" class="link">Ver más</a>
+    </article>
+  </div>
 </section>
   `);
 }
@@ -245,9 +299,8 @@ export function goldSection() {
 <section class="gold">
   <h2>Xbox Live Gold</h2>
   <ul>
-    <li><a href="${basePath}/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
     <li><a href="${basePath}/gold/gold-deals" id="gold-deals" class="link">Ofertas</a></li>
-    <li><a href="${basePath}/gold/gold-free" id="gold-free" class="link">Días gratis</a></li>
+    <li><a href="${basePath}/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
   </ul>
 </section>
   `);
