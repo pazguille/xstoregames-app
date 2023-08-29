@@ -260,7 +260,7 @@ export function gamepassSection() {
         <li>Xbox Live Gold incluye Deals with Gold, Games with Gold y multijugador en consolas</li>
         <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros</li>
       </ul>
-      <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0" class="link">Ver más</a>
+      <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
@@ -273,7 +273,7 @@ export function gamepassSection() {
         <li>Xbox Game Studios títulos el día de su lanzamiento</li>
         <li>Ofertas y descuentos para miembros</li>
       </ul>
-      <a class="btn link" href="/game/xbox-game-pass-para-consola_CFQ7TTC0K6L8" class="link">Ver más</a>
+      <a class="btn link" href="/game/xbox-game-pass-para-consola_CFQ7TTC0K6L8">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
@@ -287,7 +287,7 @@ export function gamepassSection() {
         <li>Ofertas y descuentos para miembros</li>
         <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros en la PC</li>
       </ul>
-      <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8" class="link">Ver más</a>
+      <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
     </article>
   </div>
 </section>
