@@ -1030,10 +1030,6 @@ h2 img {
   box-sizing: border-box;
 }
 
-.gamepass-plans {
-
-}
-
 .gamepass-plan {
   flex: 1;
   padding: 15px;
@@ -1047,6 +1043,10 @@ h2 img {
 .gamepass-plan h3 {
   display: flex;
   align-items: center;
+}
+
+.gamepass-plan .game-important-tag {
+  font-size: 10px;
 }
 
 .gamepass-plan ul {
