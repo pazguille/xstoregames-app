@@ -325,7 +325,7 @@ export function supportSection() {
       </a>
     </li>
     <li>
-      <a href="https://twitter.com/compose/tweet?text=📣%20Ya%20podés%20explorar%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20Argentina%20con%20los%20precios%20finales%20incluidos%20los%20impuestos%20🎮🇦🇷✨%20https://xstoregames.com/" rel="noopener" target="_blank">
+      <a href="https://twitter.com/intent/follow?screen_name=xstoregames&user_id=1652087224542928897" rel="noopener" target="_blank">
         <img
           src="/src/assets/twitter.svg"
           alt=""
@@ -334,7 +334,7 @@ export function supportSection() {
           decoding="async"
           loading="lazy"
         />
-        <span>Compartir en Twitter</span>
+        <span>Seguime en Twitter</span>
       </a>
     </li>`
     :
@@ -351,7 +351,7 @@ export function supportSection() {
       </a>
     </li>
     <li>
-      <a href="https://twitter.com/compose/tweet?text=📣%20Explorá%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20en%20https://xstoregames.com/${store}-store/%20🎮✨" rel="noopener" target="_blank">
+      <a href="https://twitter.com/intent/follow?screen_name=xstoregames&user_id=1652087224542928897" rel="noopener" target="_blank">
         <img
           src="/src/assets/twitter.svg"
           alt=""
@@ -360,13 +360,41 @@ export function supportSection() {
           decoding="async"
           loading="lazy"
         />
-        <span>Compartir en Twitter</span>
+        <span>Seguime en Twitter</span>
       </a>
     </li>`
     }
   </ul>
 </section>
-  `)
+  `);
+
+  // <li>
+  //   <a href="https://twitter.com/compose/tweet?text=📣%20Ya%20podés%20explorar%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20Argentina%20con%20los%20precios%20finales%20incluidos%20los%20impuestos%20🎮🇦🇷✨%20https://xstoregames.com/" rel="noopener" target="_blank">
+  //     <img
+  //       src="/src/assets/twitter.svg"
+  //       alt=""
+  //       width="35"
+  //       height="35"
+  //       decoding="async"
+  //       loading="lazy"
+  //     />
+  //     <span>Compartir en Twitter</span>
+  //   </a>
+  // </li>
+
+  // <li>
+  //   <a href="https://twitter.com/compose/tweet?text=📣%20Explorá%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20en%20https://xstoregames.com/${store}-store/%20🎮✨" rel="noopener" target="_blank">
+  //     <img
+  //       src="/src/assets/twitter.svg"
+  //       alt=""
+  //       width="35"
+  //       height="35"
+  //       decoding="async"
+  //       loading="lazy"
+  //     />
+  //     <span>Compartir en Twitter</span>
+  //   </a>
+  // </li>
 }
 
 export function marketplaceItemsTemplate(items) {
