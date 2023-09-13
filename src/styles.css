@@ -69,6 +69,12 @@ input {
   font-size: inherit;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 button {
   background: none;
   border: none;
@@ -958,7 +964,7 @@ h2 img {
   background: linear-gradient(180deg, var(--bg-box-color) 0%, var(--bg-color) 100%);
 }
 
-.gamepass ul,
+.gamepass > ul,
 .gold ul,
 .cafecito ul {
   display: flex;
@@ -968,7 +974,7 @@ h2 img {
   gap: 15px;
 }
 
-.gamepass li,
+.gamepass > ul li,
 .gold li,
 .cafecito li {
   border-radius: 5px;
@@ -986,7 +992,7 @@ h2 img {
   background-color: var(--bg-box-light-color);
 }
 
-.gamepass li a,
+.gamepass > ul li a,
 .gold li a,
 .cafecito li a {
   color: var(--txt-color);
@@ -1009,9 +1015,60 @@ h2 img {
   font-size: 16px;
 }
 
-.gamepass li a:before,
+.gamepass > ul li a:before,
 .gold li a:before,
 .cafecito li a:before {
+  content: '';
+  text-decoration: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.gamepass-plan {
+  flex: 1;
+  padding: 15px;
+  background: var(--bg-xbox-dark-color);
+  border-radius: 10px;
+  position: relative;
+  min-width: 290px;
+  scroll-snap-align: center;
+}
+
+.gamepass-plan h3 {
+  display: flex;
+  align-items: center;
+}
+
+.gamepass-plan .game-important-tag {
+  font-size: 10px;
+}
+
+.gamepass-plan ul {
+  margin: 10px 0;
+  font-size: 13px;
+  list-style-type: "✓";
+  list-style-position: inside;
+}
+
+.gamepass-plan li {
+  margin: 10px 0;
+  color: var(--txt-color-secondary);
+}
+
+.gamepass-plan .btn {
+  width: 100%;
+  margin-top: 10px;
+  border-color: var(--bg-box-light-color);
+  background-color: var(--bg-box-light-color);
+}
+
+.gamepass-plan .btn:before {
   content: '';
   text-decoration: none;
   cursor: pointer;
@@ -1330,7 +1387,7 @@ h2 img {
     height: 326px;
   }
 
-  .gamepass li,
+  .gamepass > ul li,
   .gold li,
   .cafecito li {
     flex: 1;

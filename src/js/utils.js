@@ -1,28 +1,23 @@
-export const getXboxURL = (list, skipitems = 0) => `https://api.xstoregames.com/api/games?list=${list}&skipitems=${skipitems}`;
-export const searchXboxURL = (query) => `https://api.xstoregames.com/api/search?q=${query}`;
-export const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
+export const getXboxURL = (list, skipitems = 0) => `https://api.xstoregames.com/api/games?list=${list}&skipitems=${skipitems}&lang=${lang}&store=${store}`;
+export const searchXboxURL = (query) => `https://api.xstoregames.com/api/search?q=${query}&lang=${lang}&store=${store}`;
+export const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}&lang=${lang}&store=${store}`;
 export const getXboxNewsURL = () => `https://api.xstoregames.com/api/news`;
-export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepass?list=${list}`;
+export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
 export const getVideoURL = (slug) => `https://api.xstoregames.com/api/videos?game=${slug}`;
-export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/MLA/search?category=MLA455245&limit=${limit}`;
+
+const mlId = { ar: 'MLA', mx: 'MLM', };
+export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
 
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);
-  const pathSplit = pathname.split('/');
-  const page = pathSplit[1];
-  const id = pathSplit[2];
-  const gameId = pathSplit[2] ? pathSplit[2].split('_')[1] : null;
+  let pathSplit = pathname.split('/');
+  pathSplit = pathSplit.filter(p => !['', `${store}-store`].includes(p));
+  const page = pathSplit[0] || 'home';
+  const id = pathSplit[1];
+  const gameId = pathSplit[1] ? pathSplit[1].split('_')[1] : null;
 
   return { id, gameId, page, searchParams };
 }
-
-// export function getPageFromURL(url) {
-//   const { pathname, searchParams } = new URL(url);
-//   const [page, id] = pathname.split('/').slice(1);
-//   const gameId = id ? id.split('_')[1] : null;
-//   return { id, page, searchParams, gameId };
-// }
-
 
 export function slugify(str) {
   return str
@@ -42,6 +37,10 @@ const AFIP = 0.45;
 const PAISA = 0.08;
 
 export function convertDollar(price) {
+  if (store !== 'ar') {
+    return price.toFixed(2)
+  }
+
   const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
   return final.toFixed(2);
 }

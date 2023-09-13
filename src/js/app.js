@@ -42,7 +42,7 @@ const sections = [
   },
   {
     type: 'deals',
-    title: 'Ahorrate unos mangos',
+    title: 'Ahorrate unos pesos',
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
@@ -87,6 +87,8 @@ async function bootApp() {
 
   const $main = document.querySelector('main');
   const $metaDescription = document.querySelector('[name="description"]');
+  const $canonical = document.querySelector('#canonical');
+  const $preloadLCP = document.querySelector('#preloadLCP');
 
   const $footer = document.querySelector('footer');
 
@@ -126,13 +128,13 @@ async function bootApp() {
   iddb.onsuccess = eve => { db = eve.target.result; };
 
   async function showPage(page, id) {
-
     $prevPage = $currentPage;
 
     $main.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     document.title = documentTitle;
     $metaDescription.content = documentDescription;
+    $canonical.href = window.location.origin + window.location.pathname;
 
     setTimeout(() => {
       requestIdleCallback(() => {
@@ -200,7 +202,15 @@ async function bootApp() {
       $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
 
       $loading.show();
-      const news = await fetch(getXboxNewsURL()).then(res => res.json());
+      const news = await fetch(getXboxNewsURL())
+        .then(res => res.json())
+        .then(res => res.map(n => {
+          n.image = n.image.replace('1200%2C675', '670%2C380')
+          return n;
+        }));
+
+      $preloadLCP.href = news[0].image;
+
       news.map((n, i) => requestIdleCallback(() => {
         $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n, i !== 0));
       }));
@@ -244,12 +254,12 @@ async function bootApp() {
         $loading.hide();
       }
 
-      game.lcp = game.images.titledheroart ?
+      game.lcp = (game.images.titledheroart ?
         (game.images.titledheroart.url || game.images.titledheroart[0].url)
         : game.images.screenshot ? game.images.screenshot[0].url
-        : (game.images.superheroart?.url || game.images.boxart?.url);
+        : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
-      document.querySelector('#preloadLCP').href = game.lcp + '?w=1160&q=70';
+      $preloadLCP.href = game.lcp + '?w=1160&q=70';
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -284,7 +294,8 @@ async function bootApp() {
             )
           }
         }
-      })
+      });
+
     }
 
     if (page === 'collection') {
@@ -321,6 +332,13 @@ async function bootApp() {
               o.unobserve(o.current);
               const moreGames = await fetch(getXboxURL(id, section.skipitems += LIMIT)).then(res => res.json());
               if (moreGames.length === 0) { return; }
+
+              if (section.list.length === 0) {
+                const game = moreGames[0];
+                const lcp = game.images.boxart ? game.images.boxart.url : game.images.poster?.url;
+                $preloadLCP.href = lcp + '?w=330';
+              }
+
               moreGames.map((game,i) => requestIdleCallback(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
                 gamesCache.set(game.id, game);
@@ -450,6 +468,17 @@ async function bootApp() {
   }
 
   async function loadHomePage() {
+    await yieldToMain(() => {
+      $canonical.href = window.location.origin + window.location.pathname;
+      if (document.querySelector('[hreflang]') === null) {
+        document.head.insertAdjacentHTML('beforeend', `
+          <link href="https://xstoregames.com/" rel="alternate" hreflang="x-default" />
+          <link href="https://xstoregames.com/" rel="alternate" hreflang="es-ar" />
+          <link href="https://xstoregames.com/mx-store" rel="alternate" hreflang="es-mx" />
+        `);
+      }
+    });
+
     await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
       const games = await fetch(getXboxURL(type)).then(res => res.json());
       const section = sections.find(section => section.type === type);
@@ -462,13 +491,13 @@ async function bootApp() {
     });
     const lcp = hotSale.images.featurepromotionalsquareart ?
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-    document.querySelector('#preloadLCP').href = lcp + '?w=720&q=70';
+      $preloadLCP.href = lcp + '?w=720&q=70';
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
     });
 
-    // document.querySelector('#preloadLCP').href = window.location.origin + '/src/assets/xbox-direct.jpg';
+    // $preloadLCP.href = window.location.origin + '/src/assets/xbox-direct.jpg';
     // await yieldToMain(() => {
     //   $home.insertAdjacentHTML('beforeend', theGameAward());
     // });
@@ -542,9 +571,9 @@ async function bootApp() {
     $currentPageContent = $resultsContent;
 
     if (history.state === null) {
-      history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
     } else {
-      history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `/search?q=${q}`);
+      history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
     }
 
     $currentPage.removeAttribute('hidden');
@@ -569,7 +598,7 @@ async function bootApp() {
     // const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
     function fetchSearchGames(query) {
       const params = new URLSearchParams({
-        market: 'es-ar',
+        market: `${lang}-${store}`,
         clientId: '7F27B536-CF6B-4C65-8638-A0F8CBDFCA65',
         sources: 'DCatAll-Products',
         filter: '+ClientType:StoreWeb',
@@ -600,16 +629,15 @@ async function bootApp() {
     }));
   }
 
-  const { page, id, searchParams } = getPageFromURL(window.location.href);
-
+  const { page, id, searchParams } = getPageFromURL(window.location.href);;
   switch (page) {
-    case '':
+    case 'home':
       loadHomePage();
       break;
 
     case 'wishlist':
       if (id === 'export') {
-        alert(`${window.location.origin}/wishlist/import?ids=${Array.from(wishlist)}`);
+        alert(`${window.location.origin}${basePath}/wishlist/import?ids=${Array.from(wishlist)}`);
 
       } else if (id === 'import') {
         const wishs = searchParams.get('ids').split(',');
@@ -696,6 +724,7 @@ async function bootApp() {
 
       document.title = documentTitle;
       $metaDescription.content = documentDescription;
+      $canonical.href = window.location.origin + window.location.pathname;
 
     } else if (eve.state.page === 'game') {
       $prevPage = $currentPage;
