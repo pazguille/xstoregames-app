@@ -666,8 +666,7 @@ async function bootApp() {
       $currentPage.classList.remove('page-prev-on');
 
     } else {
-
-      if ($prevPage) {
+      if ($prevPage && $prevPage !== $currentPage) {
         setTimeout(() => {
           requestIdleCallback(() => {
             $prevPage.classList.remove('page-on');
