@@ -122,12 +122,17 @@
         </button>
         <form id="search" class="search" action="/mx-store/search" slot="content" hidden>
           <label for="query">Buscar</label>
-          <input type="search" id="query" name="q" placeholder="Buscar juegos..." />
+          <input type="search" id="query" name="q" required autocapitalize="off" placeholder="Buscar juegos..." />
           <button type="submit" aria-label="Buscar">
             <svg width="25" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path opacity=".1" d="M10.5 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z" fill="#9AA495"/><path d="M20.8 21.7a1 1 0 0 0 1.4-1.4l-1.4 1.4Zm-4.6-7.4a1 1 0 0 0-1.4 1.4l1.4-1.4Zm6 6-6-6-1.4 1.4 6 6 1.4-1.4ZM16.5 10a6 6 0 0 1-6 6v2a8 8 0 0 0 8-8h-2Zm-6 6a6 6 0 0 1-6-6h-2a8 8 0 0 0 8 8v-2Zm-6-6a6 6 0 0 1 6-6V2a8 8 0 0 0-8 8h2Zm6-6a6 6 0 0 1 6 6h2a8 8 0 0 0-8-8v2Z" fill="#9AA495"/></svg>
           </button>
         </form>
       </x-toggle-collapse>
+
+      <a id="cart" href="/mx-store/cart" class="link cart-btn header-btn" aria-label="Carrito">
+        <span class="cart-quantity"></span>
+        <svg width="22" height="22" viewBox="0 0 768 768" aria-hidden="true"><path d="M352 672a64 64 0 1 0-128 0 64 64 0 0 0 128 0zm352 0a64 64 0 1 0-128 0 64 64 0 0 0 128 0zM231 224h466l-44 230a32 32 0 0 1-32 26H309c-7 0-14-2-20-6-6-5-10-12-12-20zM32 64h102l27 136c3 14 16 24 31 24h39l-13-64h-26a32 32 0 0 0-31 40l53 267a96 96 0 0 0 96 77h311c24 0 46-8 64-23 15-14 27-33 31-54l51-269a32 32 0 0 0-31-38H218L191 26c-3-15-16-26-31-26H32a32 32 0 0 0 0 64z" fill="#9AA495" /></svg>
+      </a>
     </header>
 
     <main>
@@ -169,12 +174,16 @@
         <div class="collection-content page-content"></div>
       </div>
 
+      <div class="detail page" hidden>
+        <div class="detail-content page-content"></div>
+      </div>
+
       <div class="results list page" hidden>
         <div class="results-content page-content"></div>
       </div>
 
-      <div class="detail page" hidden>
-        <div class="detail-content page-content"></div>
+      <div class="cart list page" hidden>
+        <div class="cart-content page-content"></div>
       </div>
     </main>
 

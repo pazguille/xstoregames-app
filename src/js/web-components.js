@@ -332,7 +332,7 @@ class NotificationPrompt extends HTMLElement {
           margin: 15px;
           padding: 15px;
           border-radius: 10px;
-          background: linear-gradient(210deg, #FF057C 0%, #8D0B93 50%, #321575 100%);
+          background: var(--bg-highlight-color);
           width: auto;
         }
 
