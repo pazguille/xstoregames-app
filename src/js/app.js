@@ -747,11 +747,11 @@ async function bootApp() {
         return;
       }
 
-      $prevPage.setAttribute('hidden', true);
-      $prevPage.classList.remove('page-prev-on');
       $prevPage.classList.remove('page-on');
       setTimeout(() => {
         requestIdleCallback(() => {
+          $prevPage.setAttribute('hidden', true);
+          $prevPage.classList.remove('page-prev-on');
           $prevFocus && $prevFocus.focus();
         });
       }, 300);
