@@ -53,7 +53,7 @@ export function gamePriceTemplate(game) {
     `<small class="game-price-taxes">*impuestos incluidos</small>`
     : ''
   }
-  ${game.gold_deal ? `<div>Precio Gold: <x-price amount="${convertDollar(game.price.gold_deal)}"></x-price></div>` : ''}
+  ${game.gold_deal ? `<div>con Game Pass: <x-price amount="${convertDollar(game.price.gold_deal)}"></x-price></div>` : ''}
 </div>
   `);
 }
@@ -80,7 +80,7 @@ export function gameDetailTemplate(game) {
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   // <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
 
-  if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8'].includes(game.id)) {
+  if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
     game.images.screenshot = null;
   }
 
@@ -103,6 +103,16 @@ export function gameDetailTemplate(game) {
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path opacity=".12" d="M16.111 3C19.633 3 22 6.353 22 9.48 22 15.814 12.178 21 12 21c-.178 0-10-5.186-10-11.52C2 6.352 4.367 3 7.889 3 9.91 3 11.233 4.024 12 4.924 12.767 4.024 14.089 3 16.111 3Z" fill="#9AA495"/><path d="m12 4.924-.761.648a1 1 0 0 0 1.522 0L12 4.924ZM16.111 4C18.924 4 21 6.734 21 9.48h2C23 5.971 20.342 2 16.111 2v2ZM21 9.48c0 1.321-.513 2.64-1.368 3.915-.854 1.273-2.013 2.447-3.21 3.456a28.537 28.537 0 0 1-3.31 2.39c-.458.282-.839.5-1.106.644a8.052 8.052 0 0 1-.337.172l-.012.006.009-.003a.55.55 0 0 1 .1-.032c.02-.005.112-.028.234-.028v2c.125 0 .221-.024.246-.03a1.098 1.098 0 0 0 .186-.063 10.016 10.016 0 0 0 .524-.262c.304-.164.719-.401 1.208-.704a30.511 30.511 0 0 0 3.547-2.561c1.281-1.08 2.589-2.39 3.582-3.87C22.285 13.03 23 11.324 23 9.48h-2ZM12 20a.895.895 0 0 1 .334.06l.01.003-.013-.005a22.257 22.257 0 0 1-1.442-.817 28.536 28.536 0 0 1-3.311-2.39c-1.197-1.009-2.356-2.183-3.21-3.456C3.513 12.121 3 10.801 3 9.48H1c0 1.845.715 3.55 1.707 5.03.993 1.48 2.3 2.79 3.582 3.87a30.516 30.516 0 0 0 3.547 2.561c.49.303.904.54 1.208.704.151.081.28.147.379.195a3.157 3.157 0 0 0 .24.103c.02.007.052.017.091.027.025.006.121.03.246.03v-2ZM3 9.48C3 6.734 5.076 4 7.889 4V2C3.658 2 1 5.971 1 9.48h2ZM7.889 4c1.641 0 2.708.818 3.35 1.572l1.522-1.297C11.871 3.23 10.292 2 7.89 2v2Zm4.872 1.572C13.404 4.818 14.47 4 16.111 4V2c-2.403 0-3.981 1.23-4.872 2.275l1.522 1.297Z" fill="#9AA495"/></svg>
       </button>
+
+      <button
+        is="switch-button"
+        id="cart-btn"
+        class="cart-btn header-btn"
+        aria-label="Carrito"
+      >
+        <svg width="22" height="22" viewBox="0 0 768 768" aria-hidden="true"><path d="M352 672a64 64 0 1 0-128 0 64 64 0 0 0 128 0zm352 0a64 64 0 1 0-128 0 64 64 0 0 0 128 0zM231 224h466l-44 230a32 32 0 0 1-32 26H309c-7 0-14-2-20-6-6-5-10-12-12-20zM32 64h102l27 136c3 14 16 24 31 24h39l-13-64h-26a32 32 0 0 0-31 40l53 267a96 96 0 0 0 96 77h311c24 0 46-8 64-23 15-14 27-33 31-54l51-269a32 32 0 0 0-31-38H218L191 26c-3-15-16-26-31-26H32a32 32 0 0 0 0 64z" fill="#9AA495" /></svg>
+      </button>
+
       <button
         is="share-button"
         id="share-btn"
@@ -223,6 +233,10 @@ export function newsTemplate(news, lazy = true) {
 `);
 }
 
+export function emptyCart() {
+  return '<p class="empty-list">No hay juegos en el carrito.</p>';
+}
+
 export function emptyWishlist() {
   return '<p class="empty-list">Aún no tienes favoritos.</p>';
 }
@@ -255,10 +269,10 @@ export function gamepassSection() {
         <li>Acceso ilimitado a más de 100 juegos de alta calidad en PC, consola y dispositivos móviles</li>
         <li>Agregamos juegos nuevos en todo momento</li>
         <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas y descuentos para miembros</li>
+        <li>Ofertas, descuentos y ventajas para miembros</li>
         <li>Beneficios gratuitos que incluyen contenido del juego y ofertas de asociados</li>
-        <li>Juega en el teléfono móvil y en la tableta desde la nube</li>
-        <li>Xbox Live Gold incluye Deals with Gold, Games with Gold y multijugador en consolas</li>
+        <li>Juega en el teléfono y en la tableta desde la nube</li>
+        <li>Modo multijugador en línea en consola</li>
         <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros</li>
       </ul>
       <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0">Ver más</a>
@@ -290,19 +304,19 @@ export function gamepassSection() {
       </ul>
       <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
     </article>
-  </div>
-</section>
-  `);
-}
 
-export function goldSection() {
-  return (`
-<section class="gold">
-  <h2>Xbox Live Gold</h2>
-  <ul>
-    <li><a href="${basePath}/gold/gold-deals" id="gold-deals" class="link">Ofertas</a></li>
-    <li><a href="${basePath}/gold/gold-new" id="gold-new" class="link">Disponibles</a></li>
-  </ul>
+    <article class="gamepass-plan">
+      <h3>
+        <img src="/src/assets/gamepass.svg" alt="Game Pass Core" decoding="async" loading="lazy" width="115" height="20" /><span>Core</span>
+      </h3>
+      <ul>
+        <li>Juegos multijugador online para consola</li>
+        <li>Un catálogo de más de 25 juegos de alta calidad para consola</li>
+        <li>Ofertas y descuentos para miembros</li>
+      </ul>
+      <a class="btn link" href="/game/game-pass-core_CFQ7TTC0K5DJ">Ver más</a>
+    </article>
+  </div>
 </section>
   `);
 }

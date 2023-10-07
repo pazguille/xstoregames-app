@@ -11,12 +11,18 @@ export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);
   let pathSplit = pathname.split('/');
-  pathSplit = pathSplit.filter(p => !['', `${store}-store`].includes(p));
-  const page = pathSplit[0] || 'home';
-  const id = pathSplit[1];
-  const gameId = pathSplit[1] ? pathSplit[1].split('_')[1] : null;
+  pathSplit = pathSplit.filter(p => !['', '-store'].includes(p));
 
-  return { id, gameId, page, searchParams };
+  const lang = 'es';
+  let store = pathname.split('/').filter(p => p.includes('-store'));
+
+  const page = store.length ? (pathSplit[1] || 'home') : (pathSplit[0] || 'home');
+  const id = store.length ? pathSplit[2] : pathSplit[1];
+  const gameId = id ? id.split('_')[1] : null;
+
+  store = store.length ? store[0].split('-store')[0] : 'ar';
+
+  return { id, gameId, page, searchParams, store, lang };
 }
 
 export function slugify(str) {
@@ -49,3 +55,40 @@ function toFixed(num) {
   const rounded = Math.round(num * 100) / 100;
   return Number.parseFloat(rounded.toFixed(2));
 }
+
+export function fetchSearchGames(query) {
+  const params = new URLSearchParams({
+    market: `${lang}-${store}`,
+    clientId: '7F27B536-CF6B-4C65-8638-A0F8CBDFCA65',
+    sources: 'DCatAll-Products',
+    filter: '+ClientType:StoreWeb',
+    counts: '20,0,0',
+    query,
+  }).toString();
+  return fetch(`https://www.microsoft.com/msstoreapiprod/api/autosuggest?${params}`, {
+    headers: {
+      'accept-language': 'es,es-419;q=0.9,en;q=0.8',
+    }
+  })
+  .then(response => response.json())
+  .then(response => response.ResultSets[0])
+  .then(data => {
+    if (!data) { return Promise.reject(new Error()); }
+    return data.Suggests
+      .filter((result) => result.Source === 'Juego')
+      .map((result) => result.Metas[0].Value);
+  })
+  .then((games) => fetch(gameXboxURL(games)).then(res => res.json()))
+  .catch(err => { throw { error: err }; });
+};
+
+const pr = new Intl.PluralRules(`${lang}-${store}`);
+const suffixes = new Map([
+  ['one',   'juego'],
+  ['other', 'juegos'],
+]);
+export function pluralGames(n) {
+  const rule = pr.select(n);
+  const suffix = suffixes.get(rule);
+  return `${n} ${suffix}`;
+};

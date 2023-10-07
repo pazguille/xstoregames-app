@@ -556,6 +556,7 @@ h2 img {
 
 .page-on {
   transform: translateX(0);
+  z-index: 3;
 }
 
 .page-fixed {
@@ -567,6 +568,7 @@ h2 img {
   transform: translateX(-80px) !important;
   will-change: transform !important;
   transition: transform 400ms ease !important;
+  z-index: 2 !important;
 }
 
 .detail .game-preview {
@@ -654,7 +656,7 @@ h2 img {
   font-size: 30px;
   line-height: 1.2em;
   margin: 5px 0;
-  width: 270px;
+  width: 245px;
 }
 
 .detail .game-price {
@@ -781,21 +783,51 @@ h2 img {
   right: 0px;
 }
 
-.switch-on path {
+.fav-btn.switch-on path {
   fill: #c51b1b;
 }
 
+.cart-btn.switch-on path {
+  fill: var(--bg-box-deal-color);
+}
+
 .fav-btn,
+.cart-btn,
 .share-btn {
   top: -5px;
 }
 
 .share-btn {
-  right: 0;
+  right: -10px;
+}
+
+.cart-btn {
+  right: 35px;
 }
 
 .fav-btn {
-  right: 45px;
+  right: 80px;
+}
+
+header .cart-btn {
+  top: 0;
+  right: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-quantity {
+  font-size: 12px;
+  color: var(--txt-color-secondary);
+  text-decoration: none;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 5px;
+  left: 23px;
+  line-height: 14px;
 }
 
 .footer-btn {
@@ -838,6 +870,9 @@ h2 img {
   border-radius: 20px;
   padding: 3px 10px;
   color: var(--bg-color);
+  height: 30px;
+  position: relative;
+  top: -3px;
 }
 
 .search input[type="search"]:focus {
@@ -1043,10 +1078,16 @@ h2 img {
 .gamepass-plan h3 {
   display: flex;
   align-items: center;
+  gap: 5px;
+}
+
+.gamepass-plan h3 span {
+  height: 19px;
 }
 
 .gamepass-plan .game-important-tag {
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .gamepass-plan ul {
@@ -1137,6 +1178,24 @@ h2 img {
 .bye svg {
   animation: boom 250ms linear;
   animation-fill-mode: forwards;
+}
+
+.cart h2 {
+  color: var(--txt-color-secondary);
+}
+
+.cart h2 x-price {
+  font-size: 25px;
+  color: var(--txt-color);
+  position: relative;
+  left: 4px;
+  top: 2px;
+}
+
+.cart-disclaimer {
+  margin: 0 15px 15px;
+  color: var(--txt-color-secondary);
+  grid-column: 1 / -1;
 }
 
 @media (min-width: 54em) {
@@ -1359,7 +1418,7 @@ h2 img {
 
   .detail .game-preview-info {
     background: none;
-    width: 45%;
+    width: 55%;
     min-width: 495px;
     min-height: 300px;
     padding: 0;
