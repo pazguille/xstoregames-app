@@ -24,6 +24,7 @@ import {
   gamepassSection,
   supportSection,
   marketplaceItemsTemplate,
+  filtersTemplate,
 } from './templates.js';
 
 const documentTitle = document.title;
@@ -32,6 +33,9 @@ const documentDescription = document.querySelector('[name="description"]').conte
 const LIMIT = 10;
 
 const gamesCache = new Map();
+const allGamesCache = new Map();
+
+const broadcast = new BroadcastChannel('worker-channel');
 
 const sections = [
   {
@@ -90,6 +94,8 @@ async function bootApp() {
     JSON.parse(window.sessionStorage.getItem('cart'))
   );
 
+  let sorted = null;
+
   if (cart.size) {
     requestIdleCallback(() => {
       $cartQuantity.textContent = cart.size;
@@ -133,6 +139,8 @@ async function bootApp() {
   const $newsContent = document.querySelector('.news-content');
   const $wish = document.querySelector('.wish');
   const $wishContent = document.querySelector('.wish-content');
+
+  const $modal = document.querySelector('.modal');
 
   let $currentPage = null;
   let $prevPage = null;
@@ -324,6 +332,9 @@ async function bootApp() {
     }
 
     if (page === 'collection') {
+      const { searchParams } = getPageFromURL(window.location.href);
+      const sort = searchParams.get('sort');
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
@@ -338,11 +349,17 @@ async function bootApp() {
       $currentPage = $list;
       $currentPageContent = $listContent;
 
-      if ($prev === null || $currentPageContent.innerHTML === '') {
+      const section = sections.find(section => section.type === id);
+
+      if (!sort && ($prev === null || $currentPageContent.innerHTML === '')) {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
-        const section = sections.find(section => section.type === id);
-        $currentPageContent.insertAdjacentHTML('beforeend', `<h2>${section.icon}${section.title}</h2>`);
+        $currentPageContent.insertAdjacentHTML('beforeend', `
+          <h2>${section.icon}${section.title}</h2>
+          <button id="sort-btn" class="sort-btn header-btn" aria-label="Ordenar">
+            <svg aria-hidden="true" fill="none" width="22" height="22" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M14.84 16.72a.76.76 0 0 1-.59.28.73.73 0 0 1-.53-.22l-3-3a.75.75 0 0 1 1.06-1.07l1.72 1.73V3.75a.75.75 0 0 1 1.5 0v10.68l1.72-1.71a.75.75 0 1 1 1.06 1.06l-2.94 2.94ZM6.34 3.28A.76.76 0 0 0 5.75 3c-.2 0-.38.07-.53.22l-3 3A.75.75 0 0 0 3.28 7.3L5 5.56v10.69a.75.75 0 0 0 1.5 0V5.57l1.72 1.71a.75.75 0 1 0 1.06-1.06L6.34 3.28Z" fill="#9AA495"/></svg>
+          </button>
+        `);
 
         if (section.list.length === 0) {
           section.skipitems -= LIMIT;
@@ -383,6 +400,42 @@ async function bootApp() {
           o.observe(o.current);
         });
       }
+
+      if (sort && sort !== sorted) {
+        sorted = sort;
+        $loading.show();
+
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+        $currentPageContent.insertAdjacentHTML('beforeend', `
+          <h2>${section.icon}${section.title}</h2>
+          <button id="sort-btn" class="sort-btn header-btn" aria-label="Ordenar">
+            <svg aria-hidden="true" fill="none" width="22" height="22" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M14.84 16.72a.76.76 0 0 1-.59.28.73.73 0 0 1-.53-.22l-3-3a.75.75 0 0 1 1.06-1.07l1.72 1.73V3.75a.75.75 0 0 1 1.5 0v10.68l1.72-1.71a.75.75 0 1 1 1.06 1.06l-2.94 2.94ZM6.34 3.28A.76.76 0 0 0 5.75 3c-.2 0-.38.07-.53.22l-3 3A.75.75 0 0 0 3.28 7.3L5 5.56v10.69a.75.75 0 0 0 1.5 0V5.57l1.72 1.71a.75.75 0 1 0 1.06-1.06L6.34 3.28Z" fill="#9AA495"/></svg>
+          </button>
+        `);
+
+        const allGames = allGamesCache.get(id) || await fetch(getXboxURL(id, 0, 10000))
+          .then(res => res.json()).then(res => { allGamesCache.set(id, res); return res; });
+
+        broadcast.postMessage({
+          sort,
+          games: allGames,
+        });
+
+        broadcast.addEventListener('message', eve => {
+          eve.data.sorted.map((game, i) => yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
+            requestIdleCallback(() => {
+              gamesCache.set(game.id, game);
+            });
+          }));
+          $loading.hide();
+        }, { once: true });
+      }
+
+      requestIdleCallback(() => {
+        $modal.querySelector('.modal-content').innerHTML = filtersTemplate();
+      });
     }
 
     if (page === 'games') {
@@ -509,8 +562,7 @@ async function bootApp() {
       $currentPage.classList.remove('page-prev-on');
 
     } else {
-
-      if ($prevPage) {
+      if ($prevPage && $prevPage !== $currentPage) {
         setTimeout(() => {
           requestIdleCallback(() => {
             $prevPage.classList.remove('page-on');
@@ -778,6 +830,8 @@ async function bootApp() {
       $currentPage = null;
       $currentPageContent = null;
 
+      sorted = null;
+
       document.title = documentTitle;
       $metaDescription.content = documentDescription;
       $canonical.href = window.location.origin + window.location.pathname;
@@ -810,9 +864,13 @@ async function bootApp() {
 
       eve.preventDefault();
 
-      const { page, id } = getPageFromURL(eve.target.href);
+      const { page, id, searchParams } = getPageFromURL(eve.target.href);
 
-      history.pushState({ page, id }, '', eve.target.href);
+      if (searchParams.get('sort')) {
+        history.replaceState({ page, id }, '', eve.target.href);
+      } else {
+        history.pushState({ page, id }, '', eve.target.href);
+      }
 
       showPage(page, id);
     });
@@ -824,6 +882,21 @@ async function bootApp() {
       if (eve.target.classList.contains('prev')) {
         eve.target.parentNode.scrollBy(-660, 0);
       }
+    });
+
+    document.body.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('sort-btn')) {
+        $modal.toggleAttribute('hidden');
+        yieldToMain(() => $modal.classList.add('modal-on'));
+        $currentPage.classList.add('page-scale');
+        $modal.querySelector('.modal-content').focus();
+      }
+    });
+
+    $modal.addEventListener('click', function() {
+      $modal.classList.remove('modal-on');
+      this.toggleAttribute('hidden');
+      $currentPage.classList.remove('page-scale');
     });
 
     $searchForm.addEventListener('submit', async (eve) => {

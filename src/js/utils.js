@@ -1,9 +1,10 @@
-export const getXboxURL = (list, skipitems = 0) => `https://api.xstoregames.com/api/games?list=${list}&skipitems=${skipitems}&lang=${lang}&store=${store}`;
-export const searchXboxURL = (query) => `https://api.xstoregames.com/api/search?q=${query}&lang=${lang}&store=${store}`;
-export const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}&lang=${lang}&store=${store}`;
-export const getXboxNewsURL = () => `https://api.xstoregames.com/api/news`;
-export const getGamePassURL = (list) => `https://api.xstoregames.com/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
-export const getVideoURL = (slug) => `https://api.xstoregames.com/api/videos?game=${slug}`;
+const API_DOMAIN = 'https://api.xstoregames.com';
+export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
+export const searchXboxURL = (query) => `${API_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
+export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
+export const getXboxNewsURL = () => `${API_DOMAIN}/api/news`;
+export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
+export const getVideoURL = (slug) => `${API_DOMAIN}/api/videos?game=${slug}`;
 
 const mlId = { ar: 'MLA', mx: 'MLM', };
 export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
@@ -42,6 +43,20 @@ const IIBB = 0.02;
 const AFIP = 0.45;
 const PAISA = 0.08;
 const BBPP = 0.25;
+
+// TODO
+// const IIBBs = {
+//   DEFAULT: 0,
+//   PAMP: 0.01,
+//   CABA: 0.02,
+//   BA: 0.02,
+//   CBA: 0.03,
+//   TFUE: 0.03,
+//   SALTA: 0.036,
+//   NEU: 0.04,
+//   RNEGRO: 0.05,
+//   CHACO: 0.055,
+// };
 
 export function convertDollar(price) {
   if (store !== 'ar') {
