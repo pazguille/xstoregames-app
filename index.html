@@ -185,6 +185,10 @@
       <div class="cart list page" hidden>
         <div class="cart-content page-content"></div>
       </div>
+
+      <div class="modal" hidden>
+        <div class="modal-content" tabindex="0" role="alertdialog" role-description="Ordenar"></div>
+      </div>
     </main>
 
     <footer data-active>
@@ -296,6 +300,7 @@
       //   for (let registration of registrations) {
       //     if (registration.active.scriptURL.includes('/sw.js')) {
       //       registration.unregister();
+      //       console.log('sw unregistered');
       //     }
       //   }
       // });

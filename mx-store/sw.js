@@ -65,3 +65,23 @@ this.addEventListener('periodicsync', async (eve) => {
     };
   }
 });
+
+const broadcast = new BroadcastChannel('worker-channel');
+const sorting = {
+  'lowest-price': (a, b) => (a.price.gold_deal || a.price.deal || a.price.amount) > (b.price.gold_deal || b.price.deal || b.price.amount) ? 1 : -1,
+  'highest-price': (a, b) => (b.price.gold_deal || b.price.deal || b.price.amount) > (a.price.gold_deal || a.price.deal || a.price.amount) ? 1 : -1,
+  discount: (a, b) => {
+    const aDeal = a.price.off || 0;
+    const bDeal = b.price.off || 0;
+    return bDeal > aDeal ? 1 : -1;
+  },
+  az: (a, b) => a.title > b.title ? 1 : -1,
+  za: (a, b) => b.title > a.title ? 1 : -1,
+  'release-oldest': (a, b) => a.release_date > b.release_date ? 1 : -1,
+  'release-newest': (a, b) => b.release_date > a.release_date ? 1 : -1,
+};
+broadcast.addEventListener('message', eve => {
+  const sort = eve.data.sort;
+  const sorted = eve.data.games.toSorted(sorting[sort]);
+  broadcast.postMessage({ sorted });
+});
