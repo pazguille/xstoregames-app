@@ -414,8 +414,17 @@ async function bootApp() {
           </button>
         `);
 
-        const allGames = allGamesCache.get(id) || await fetch(getXboxURL(id, 0, 10000))
-          .then(res => res.json()).then(res => { allGamesCache.set(id, res); return res; });
+        // TODO: Improve API repsonse to avoid this
+        const allGames = allGamesCache.get(id) || await Promise.all([
+          fetch(getXboxURL(id, 0, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 200, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 400, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 600, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 800, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 1000, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 1200, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 1400, 200)).then(res => res.json()),
+        ]).then(a => a.flat()).then(a => { allGamesCache.set(id, a); return a; });
 
         broadcast.postMessage({
           sort,
