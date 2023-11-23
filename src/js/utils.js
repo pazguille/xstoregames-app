@@ -40,7 +40,7 @@ export function slugify(str) {
 
 const IVA = 0.21;
 const IIBB = 0.02;
-const AFIP = 0.45;
+const AFIP = 1;
 const PAISA = 0.08;
 const BBPP = 0.25;
 
