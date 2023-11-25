@@ -85,6 +85,8 @@ export function gameDetailTemplate(game) {
   if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
     game.images.screenshot = null;
     storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
+  } else {
+    storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
   }
 
   return (`
@@ -125,7 +127,6 @@ export function gameDetailTemplate(game) {
 
       ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.svg" width="70px" height="13" alt="Disponible en Game Pass" loading="lazy" decoding="async" />` : ''}
       ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play" loading="lazy" decoding="async" />` : ''}
-
 
       ${gamePriceTemplate(game)}
 
