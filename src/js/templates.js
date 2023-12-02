@@ -86,7 +86,8 @@ export function gameDetailTemplate(game) {
     game.images.screenshot = null;
     storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
   } else {
-    storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
+    // storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
+    storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
   }
 
   return (`
@@ -158,8 +159,8 @@ export function gameDetailTemplate(game) {
       </a>
     </div>
 
-    <h4 class="visually-hidden">Descripción</h4>
-    <p class="game-description">${game.description}</p>
+    <h4>Todas las ediciones</h4>
+    <ul class="carousel game-editions"></ul>
   </div>
 </article>
 `);
