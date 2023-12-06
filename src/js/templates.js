@@ -159,8 +159,8 @@ export function gameDetailTemplate(game) {
       </a>
     </div>
 
-    <h4>Todas las ediciones</h4>
-    <ul class="carousel game-editions"></ul>
+    <h4 class="visually-hidden">Descripción</h4>
+    <p class="game-description">${game.description}</p>
   </div>
 </article>
 `);
