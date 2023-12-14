@@ -40,9 +40,8 @@ export function slugify(str) {
 
 const IVA = 0.21;
 const IIBB = 0.02;
-const AFIP = 1;
+const AFIP = 0.30;
 const PAISA = 0.08;
-const BBPP = 0.25;
 
 // TODO
 // const IIBBs = {
@@ -63,7 +62,7 @@ export function convertDollar(price) {
     return price.toFixed(2)
   }
 
-  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA) + toFixed(price * BBPP);
+  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
   return final.toFixed(2);
 }
 
