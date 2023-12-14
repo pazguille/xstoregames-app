@@ -238,7 +238,7 @@ async function bootApp() {
           return n;
         }));
 
-      $preloadLCP.href = news[0].image;
+      $preloadLCP.href = news[0].image.replace('xbox-games-api.vercel.app', 'api.xstoregames.com');
 
       news.map((n, i) => requestIdleCallback(() => {
         $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n, i !== 0));
@@ -259,18 +259,20 @@ async function bootApp() {
         $installBtn.hide();
       });
 
-      if (!$prevPage) {
-        $home.classList.add('page-prev-on');
-      }
+      if (history.state?.referer !== history.state?.page ) {
+        if (!$prevPage) {
+          $home.classList.add('page-prev-on');
+        }
 
-      if ($prevPage) {
-        $prevPage.classList.add('page-prev-on');
+        if ($prevPage) {
+          $prevPage.classList.add('page-prev-on');
 
-        setTimeout(() => {
-          requestIdleCallback(() => {
-            $prevPage.setAttribute('hidden', true);
-          });
-        }, 300);
+          setTimeout(() => {
+            requestIdleCallback(() => {
+              $prevPage.setAttribute('hidden', true);
+            });
+          }, 300);
+        }
       }
 
       $currentPage = $detail;
@@ -291,7 +293,7 @@ async function bootApp() {
         : game.images.screenshot ? game.images.screenshot[0].url
         : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
-      $preloadLCP.href = game.lcp + '?w=1160&q=70';
+      $preloadLCP.href = game.lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=1160&q=70';
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -328,7 +330,6 @@ async function bootApp() {
           }
         }
       });
-
     }
 
     if (page === 'collection') {
@@ -381,7 +382,7 @@ async function bootApp() {
               if (section.list.length === 0) {
                 const game = moreGames[0];
                 const lcp = game.images.boxart ? game.images.boxart.url : game.images.poster?.url;
-                $preloadLCP.href = lcp + '?w=330';
+                $preloadLCP.href = lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=330';
               }
 
               moreGames.map((game,i) => requestIdleCallback(() => {
@@ -612,7 +613,7 @@ async function bootApp() {
     });
     const lcp = hotSale.images.featurepromotionalsquareart ?
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-      $preloadLCP.href = lcp + '?w=720&q=70';
+      $preloadLCP.href = lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=720&q=70';
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
@@ -796,6 +797,11 @@ async function bootApp() {
 
 
   window.addEventListener('popstate', (eve) => {
+    if (history.state) {
+      history.state.referer = window.sessionStorage.getItem('page');
+      window.sessionStorage.setItem('page', history.state.page);
+    };
+
     $prevPage = $currentPage;
 
     if (window.swipeToBack) {
@@ -846,7 +852,7 @@ async function bootApp() {
       $canonical.href = window.location.origin + window.location.pathname;
 
     } else {
-      if ($prevPage && !['wishlist', 'news'].includes(eve.state.page)) {
+      if ($prevPage && history.state?.referer !== history.state?.page && !['wishlist', 'news'].includes(eve.state.page)) {
         $prevPage.classList.remove('page-on');
         setTimeout(() => {
           requestIdleCallback(() => {
@@ -875,10 +881,13 @@ async function bootApp() {
 
       const { page, id, searchParams } = getPageFromURL(eve.target.href);
 
+      const referer = history.state?.page;
+      window.sessionStorage.setItem('page', page);
+
       if (searchParams.get('sort')) {
-        history.replaceState({ page, id }, '', eve.target.href);
+        history.replaceState({ referer, page, id }, '', eve.target.href);
       } else {
-        history.pushState({ page, id }, '', eve.target.href);
+        history.pushState({ referer, page, id }, '', eve.target.href);
       }
 
       showPage(page, id);
@@ -911,11 +920,15 @@ async function bootApp() {
     $searchForm.addEventListener('submit', async (eve) => {
       eve.preventDefault();
       $resultsContent.innerHTML = '';
+
+      const referer = history.state?.page;
+      window.sessionStorage.setItem('page', page);
+
       const q = eve.target.elements[0].value;
       if ($currentPageContent === $resultsContent) {
-        history.replaceState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
+        history.replaceState({ referer, page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
       } else {
-        history.pushState({ page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
+        history.pushState({ referer, page: 'results', q, }, 'Resultados de busqueda', `${basePath}/search?q=${q}`);
       }
 
       loadSearchPage(q);
