@@ -261,6 +261,7 @@ export function gamepassSection() {
         <li><a href="${basePath}/gamepass/coming" id="gamepass-coming" class="link">Se están por sumar</a></li>
         <li><a href="${basePath}/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
         <li><a href="${basePath}/gamepass/ea" id="gamepass-ea" class="link">Con EA Play</a></li>
+        <li><a href="${basePath}/gamepass/gp-deals" id="gp-deals" class="link">Ofertas exclusivas</a></li>
         <li><a href="${basePath}/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
       </ul>
     </article>

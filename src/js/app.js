@@ -600,7 +600,8 @@ async function bootApp() {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
 
-        const gamepassGames = await fetch(getGamePassURL(id)).then(res => res.json());
+        const url = id === 'gp-deals' ? getXboxURL(id) : getGamePassURL(id);
+        const gamepassGames = await fetch(url).then(res => res.json());
         if (gamepassGames.length) {
           gamepassGames.map((game, i) => requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
