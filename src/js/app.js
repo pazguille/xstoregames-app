@@ -1,6 +1,8 @@
 import {
   getXboxURL,
   gameXboxURL,
+  gameXboxRelatedURL,
+  searchXboxURL,
   getXboxNewsURL,
   getGamePassURL,
   getVideoURL,
@@ -8,7 +10,6 @@ import {
   getPageFromURL,
   getMarketplaceItemsURL,
   convertDollar,
-  fetchSearchGames,
   pluralGames,
 } from './utils.js';
 
@@ -25,7 +26,10 @@ import {
   supportSection,
   marketplaceItemsTemplate,
   filtersTemplate,
+  settingsTemplate,
 } from './templates.js';
+
+let controller;
 
 const documentTitle = document.title;
 const documentDescription = document.querySelector('[name="description"]').content;
@@ -328,6 +332,51 @@ async function bootApp() {
               video.playlist.map((id) => `<lite-youtube videoid="${id}" autoload noCookie="true"></lite-youtube>`).join('')
             )
           }
+        }
+      });
+
+      requestIdleCallback(async () => {
+        controller = new AbortController();
+        const signal = controller.signal;
+        const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
+
+        if (related.CompareEditions) {
+          yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+              icon: '',
+              title: 'Todas las ediciones',
+              type: 'editions',
+              list: related.CompareEditions,
+              more: false,
+            }));
+            related.CompareEditions.forEach((game) => gamesCache.set(game.id, game));
+          });
+        }
+
+        if (related.AddOnsByParentWithDetails) {
+          yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+              icon: '',
+              title: 'Complementos',
+              type: 'addons',
+              list: related.AddOnsByParentWithDetails,
+              more: false,
+            }));
+            related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
+          });
+        }
+
+        if (related.PAL) {
+          yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+              icon: '',
+              title: 'Te pueden gustar',
+              type: 'related',
+              list: related.PAL,
+              more: false,
+            }));
+            related.PAL.forEach((game) => gamesCache.set(game.id, game));
+          });
         }
       });
     }
@@ -701,7 +750,7 @@ async function bootApp() {
 
     if ($currentPageContent.innerHTML === '') {
       $loading.show();
-      const searchResults = await fetchSearchGames(q);
+      const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
       if (searchResults.length) {
         searchResults.map((game) => {
           gamesCache.set(game.id, game);
@@ -797,6 +846,10 @@ async function bootApp() {
 
 
   window.addEventListener('popstate', (eve) => {
+    if (controller && !controller.aborted) {
+      controller.abort();
+    }
+
     if (history.state) {
       history.state.referer = window.sessionStorage.getItem('page');
       window.sessionStorage.setItem('page', history.state.page);
@@ -903,18 +956,36 @@ async function bootApp() {
     });
 
     document.body.addEventListener('click', (eve) => {
-      if (eve.target.classList.contains('sort-btn')) {
+      if (eve.target.classList.contains('sort-btn') || eve.target.classList.contains('settings-btn')) {
         $modal.toggleAttribute('hidden');
         yieldToMain(() => $modal.classList.add('modal-on'));
-        $currentPage.classList.add('page-scale');
+        $currentPage?.classList.add('page-scale');
+        $currentPage?.classList.add('page-scale');
         $modal.querySelector('.modal-content').focus();
       }
     });
 
-    $modal.addEventListener('click', function() {
+    document.body.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('settings-btn')) {
+        eve.preventDefault();
+        $modal.querySelector('.modal-content').innerHTML = settingsTemplate();
+      }
+    });
+
+    $modal.addEventListener('click', (eve) => {
+      if (eve.target.nodeName === 'SELECT') {
+        return;
+      }
       $modal.classList.remove('modal-on');
-      this.toggleAttribute('hidden');
-      $currentPage.classList.remove('page-scale');
+      $modal.toggleAttribute('hidden');
+      $currentPage?.classList.remove('page-scale');
+    });
+
+    $modal.addEventListener('submit', (eve) => {
+      eve.preventDefault();
+      const state = eve.target.elements[0].value;
+      window.localStorage.setItem('state', state);
+      window.location.reload();
     });
 
     $searchForm.addEventListener('submit', async (eve) => {

@@ -11,7 +11,8 @@ this.addEventListener('notificationclick', eve => {
   );
 });
 
-const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
+// const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
+const gameXboxURL = (id) => `http://localhost:3031/api/games?id=${id}`;
 function slugify(str) {
   return str
     .toString()
@@ -79,6 +80,7 @@ const sorting = {
   za: (a, b) => b.title > a.title ? 1 : -1,
   'release-oldest': (a, b) => a.release_date > b.release_date ? 1 : -1,
   'release-newest': (a, b) => b.release_date > a.release_date ? 1 : -1,
+  pc: (a, b) => b.platforms.includes('Windows.Desktop') ? 1 : -1,
 };
 broadcast.addEventListener('message', eve => {
   const sort = eve.data.sort;

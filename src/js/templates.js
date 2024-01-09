@@ -8,7 +8,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.icon}${section.title}</h2>
   ${gameListTemplate(section)}
-  <a class="see-all link" id="collection-${section.type}" href="${basePath}/collection/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>
+  ${section.more !== false ? `<a class="see-all link" id="collection-${section.type}" href="${basePath}/collection/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>` : ''}
 </section>
 `);
 }
@@ -92,7 +92,7 @@ export function gameDetailTemplate(game) {
 
   return (`
 <article class="game-preview">
-  <img class="game-img" src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
+  <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
   <video class="hero game-preview-trailer" autoplay loop muted playsinline hidden></video>
   <div>
     <div class="game-preview-info">
@@ -147,7 +147,7 @@ export function gameDetailTemplate(game) {
     ${Array.isArray(game.images.screenshot) ? `
       <h4 class="visually-hidden">Imágenes</h4>
       <div class="carousel game-preview-images">
-        <img width="345" height="194" loading="lazy" decoding="async" src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=1160&q=70" alt="" />
+        <img width="345" height="194" loading="lazy" decoding="async" src="${img}?w=1160&q=70" alt="" />
         ${game.images.screenshot.map((img) => `<img width="345" height="194" loading="lazy" decoding="async" src="${img.url.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=1160&q=70" alt="" />`).join('')}
       </div>
     ` : ''}
@@ -169,9 +169,9 @@ export function gameDetailTemplate(game) {
 export function gameCardNewTemplate(game) {
   const img = game.images.poster?.url || game.images.boxart?.url;
   return (`
-<article class="game-preview-new" style="--game-preview-new: url(${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=360)">
+<article class="game-preview-new" style="--game-preview-new: url(${img}?w=360)">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="180px" height="270px" alt="" loading="lazy" decoding="async" src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=360">
+  <img class="game-img" width="180px" height="270px" alt="" loading="lazy" decoding="async" src="${img}?w=360">
 </article>
 `);
 }
@@ -183,7 +183,7 @@ export function gameCardSoonTemplate(game) {
   return (`
 <article class="game-preview-soon">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="256px" height="144px" alt="" loading="lazy" decoding="async" src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=512&q=70">
+  <img class="game-img" width="256px" height="144px" alt="" loading="lazy" decoding="async" src="${img}?w=512&q=70">
 </article>
 `);
 }
@@ -210,7 +210,7 @@ export function gameImportantTemplate(game) {
     <a id="detail-${game.id}" href="${basePath}/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
   </h2>
   <span class="game-important-tag game-price-off">${game.price.off}% OFF</span>
-  <img class="game-img" width="365px" height="365px" alt="" fetchpriority="high" decoding="async" src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=720&q=70">
+  <img class="game-img" width="365px" height="365px" alt="" fetchpriority="high" decoding="async" src="${img}?w=720&q=70">
 </article>
   `);
 }
@@ -221,7 +221,7 @@ export function gameCardTemplate(game, lazy = true) {
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="165px" height="165px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${img.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=330">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${img?.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=330">
 </article>
 `);
 }
@@ -345,10 +345,10 @@ export function supportSection() {
     <li>
       <a href="https://twitter.com/intent/follow?screen_name=xstoregames&user_id=1652087224542928897" rel="noopener" target="_blank">
         <img
-          src="/src/assets/twitter.svg"
+          src="/src/assets/x.svg"
           alt=""
-          width="35"
-          height="35"
+          width="25"
+          height="25"
           decoding="async"
           loading="lazy"
         />
@@ -371,10 +371,10 @@ export function supportSection() {
     <li>
       <a href="https://twitter.com/intent/follow?screen_name=xstoregames&user_id=1652087224542928897" rel="noopener" target="_blank">
         <img
-          src="/src/assets/twitter.svg"
+          src="/src/assets/x.svg"
           alt=""
-          width="35"
-          height="35"
+          width="25"
+          height="25"
           decoding="async"
           loading="lazy"
         />
@@ -442,7 +442,6 @@ export function marketplaceItemsTemplate(items) {
 `);
 }
 
-
 export function filtersTemplate() {
   const { pathname } = window.location;
   return (`
@@ -469,6 +468,36 @@ export function filtersTemplate() {
   <li>
     <a href="${pathname}?sort=release-oldest" class="link" rel="nofollow">Fecha de lanzamiento más antigua</a>
   </li>
+  <li>
+    <a href="${pathname}?sort=pc" class="link" rel="nofollow">Disponibles en PC</a>
+  </li>
 </ul>
   `);
+}
+
+export function settingsTemplate() {
+  const IIBB = window.localStorage.getItem('state');
+  return (`
+<h2>Ajustes</h2>
+<section>
+  <h3>Impuestos Provinciales</h3>
+  <form id="state-tax" >
+    <select name="state">
+      <option value="">Seleccioná tu provincia...</option>
+      <option value="CABA" ${IIBB === 'CABA' && 'selected'}>CABA</option>
+      <option value="BA" ${IIBB === 'BA' && 'selected'}>Buenos Aires</option>
+      <option value="CBA" ${IIBB === 'CBA' && 'selected'}>Córdoba</option>
+      <option value="PAMP" ${IIBB === 'PAMP' && 'selected'}>La Pampa</option>
+      <option value="RNEGRO" ${IIBB === 'RNEGRO' && 'selected'}>Río Negro</option>
+      <option value="SALTA" ${IIBB === 'SALTA' && 'selected'}>Salta</option>
+      <option value="CHACO" ${IIBB === 'CHACO' && 'selected'}>Chaco</option>
+      <option value="NEU" ${IIBB === 'NEU' && 'selected'}>Neuquén</option>
+      <option value="TFUE" ${IIBB === 'TFUE' && 'selected'}>Tierra del Fuego</option>
+      <option value="NONE" ${IIBB === 'NONE' && 'selected'}>Otra</option>
+    </select>
+    <button class="btn btn-small" type="submit">Guardar</button>
+  </form>
+  <small>Elegí tu provincia para que el precio final sea más exacto.</small>
+</section>
+`);
 }

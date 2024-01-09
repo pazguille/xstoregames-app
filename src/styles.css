@@ -574,11 +574,13 @@ h2 img {
   z-index: 2 !important;
 }
 
-.detail .game-preview {
+.detail .detail-content > .game-preview {
   box-shadow: none;
   width: 100%;
+  height: auto;
   border-radius: 0;
-  overflow: visible;
+  padding-bottom: 50%;
+
   /* background-color: transparent;
   background-image: linear-gradient(transparent, var(--bg-color)), var(--game-preview-url);
   background-repeat: no-repeat;
@@ -586,14 +588,22 @@ h2 img {
   background-position: center top; */
 }
 
-.detail .game-preview > .game-img {
+.detail .detail-content > section:first-of-type {
+  margin-top: 0px;
+}
+
+.detail .detail-content > section:last-child .carousel {
+  padding-bottom: 15px;
+}
+
+.detail .detail-content > .game-preview > .game-img {
   width: 100vw;
   aspect-ratio: 16/9;
   position: absolute;
   z-index: 1;
 }
 
-.detail .game-preview > div {
+.detail .detail-content > .game-preview > div {
   position: relative;
   z-index: 2;
   top: 232px;
@@ -655,14 +665,14 @@ h2 img {
   position: relative;
 }
 
-.detail .game-title {
+.detail .detail-content > .game-preview .game-title {
   font-size: 30px;
   line-height: 1.2em;
   margin: 5px 0;
   width: 245px;
 }
 
-.detail .game-price {
+.detail .detail-content > .game-preview .game-price {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -670,30 +680,30 @@ h2 img {
   margin-bottom: 5px;
 }
 
-.detail .game-price div:nth-child(3) {
+.detail .detail-content > .game-preview .game-price div:nth-child(3) {
   flex: none;
   margin: 5px 0;
   font-size: 22px;
   color: var(--bg-xbox-light-color);
 }
 
-.detail .game-price-off {
+.detail .detail-content > .game-preview .game-price-off {
   position: static;
   border-radius: 5px;
 }
 
-.detail .game-price-amount {
+.detail .detail-content > .game-preview .game-price-amount {
   font-size: 26px;
   line-height: 1em;
   width: 100%;
 }
 
-.detail .game-price-taxes {
+.detail .detail-content > .game-preview .game-price-taxes {
   position: absolute;
   right: 20px;
 }
 
-.detail .game-pass {
+.detail .detail-content > .game-preview .game-pass {
   position: initial;
   display: block;
   margin: 15px 0 0;
@@ -709,6 +719,9 @@ h2 img {
   letter-spacing: 0.5px;
 
   overflow: auto;
+
+  margin: 0;
+  padding-bottom: 15px;
 }
 
 .detail .hero {
@@ -845,7 +858,7 @@ header .cart-btn {
   width: 55px;
   transform: translateZ(0);
   display: inline-block;
-  padding: 3px 35px;
+  padding: 3px 25px;
   text-align: center;
   text-decoration: none;
 }
@@ -1031,6 +1044,10 @@ header .cart-btn {
   height: 50px;
 }
 
+.cafecito li {
+  background-color: #7c64bf;
+}
+
 .gold li {
   background-color: var(--bg-box-light-color);
 }
@@ -1051,7 +1068,7 @@ header .cart-btn {
 }
 
 .cafecito li:nth-child(2) {
-  background-color: #1d9bf0;
+  background-color: #000000;
 }
 
 .cafecito li a {
@@ -1267,7 +1284,8 @@ header .cart-btn {
   display: inline-grid;
 }
 
-.modal h2 {
+.modal h2,
+.modal h3 {
   margin: 0 0 15px;
 }
 
@@ -1281,6 +1299,27 @@ header .cart-btn {
 
 .modal a:active {
   background-color: var(--bg-box-color);
+}
+
+.modal select {
+  font-size: .9em;
+  line-height: 1.5em;
+  background-color: transparent;
+  border: 1px solid var(--txt-color);
+  padding: 0.5em 0.7em;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: var(--txt-color);
+  width: 60%;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.modal .btn {
+  background-color: var(--txt-color);
+  border: 1px solid var(--txt-color);
+  color: var(--txt-color-dark);
+  padding: 0.4em 0.7em;
 }
 
 @media (min-width: 54em) {
@@ -1336,7 +1375,8 @@ header .cart-btn {
   .home,
   .list .page-content,
   .news .page-content,
-  .detail .game-preview > div {
+  .detail .detail-content > .game-preview > div,
+  .detail .detail-content > section {
     max-width: 1100px;
     margin: 0 auto;
   }
@@ -1457,15 +1497,16 @@ header .cart-btn {
     margin: 15px;
   }
 
-  .detail .game-title {
+  .detail .detail-content > .game-preview .game-title {
     width: 418px;
   }
 
-  .detail .game-preview {
+  .detail .detail-content > .game-preview {
     background-size: cover;
+    padding-bottom: 0;
   }
 
-  .detail .game-preview:before {
+  .detail .detail-content > .game-preview:before {
     content: '';
     display: block;
     position: absolute;
@@ -1482,18 +1523,18 @@ header .cart-btn {
     height: 200vh;
   }
 
-  .detail .game-preview:before,
-  .detail .game-preview > .game-img {
+  .detail .detail-content > .game-preview:before,
+  .detail .detail-content > .game-preview > .game-img {
     width: calc(100vw - 80px);
   }
 
-  .detail .game-preview > div {
+  .detail .detail-content > .game-preview > div {
     top: 0;
     background-color: transparent;
     padding: 20px 30px;
   }
 
-  .detail .game-price-taxes {
+  .detail .detail-content > .game-preview .game-price-taxes {
     position: static;
   }
 
