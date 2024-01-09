@@ -11,8 +11,7 @@ this.addEventListener('notificationclick', eve => {
   );
 });
 
-// const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
-const gameXboxURL = (id) => `http://localhost:3031/api/games?id=${id}`;
+const gameXboxURL = (id) => `https://api.xstoregames.com/api/games?id=${id}`;
 function slugify(str) {
   return str
     .toString()
