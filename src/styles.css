@@ -1007,7 +1007,6 @@ header .cart-btn {
 }
 
 .gamepass,
-.gold,
 .cafecito {
   padding: 10px 0px;
   margin: 0 15px;
@@ -1015,13 +1014,11 @@ header .cart-btn {
   background: linear-gradient(180deg, #3B844D 0%, var(--bg-xbox-dark-color) 60%, var(--bg-color) 100%);
 }
 
-.gold,
 .cafecito {
   background: linear-gradient(180deg, var(--bg-box-color) 0%, var(--bg-color) 100%);
 }
 
-.gamepass > ul,
-.gold ul,
+.gamepass-collections ul,
 .cafecito ul {
   display: flex;
   list-style: none;
@@ -1030,8 +1027,7 @@ header .cart-btn {
   gap: 15px;
 }
 
-.gamepass > ul li,
-.gold li,
+.gamepass-collections ul li,
 .cafecito li {
   border-radius: 5px;
   display: flex;
@@ -1044,16 +1040,32 @@ header .cart-btn {
   height: 50px;
 }
 
+.gamepass-collections ul {
+  padding: 0
+}
+
+.gamepass-collections article {
+  flex: 1;
+  min-width: 345px;
+  scroll-snap-align: center;
+}
+.gamepass-collections h2 {
+  margin-left: 0;
+}
+
+.gamepass-collections h2 img {
+  top: 0;
+}
+
+.gamepass ul:nth-of-type(3) li {
+  background-color: var(--bg-box-light-color);
+}
+
 .cafecito li {
   background-color: #7c64bf;
 }
 
-.gold li {
-  background-color: var(--bg-box-light-color);
-}
-
-.gamepass > ul li a,
-.gold li a,
+.gamepass-collections ul li a,
 .cafecito li a {
   color: var(--txt-color);
   text-decoration: none;
@@ -1075,8 +1087,7 @@ header .cart-btn {
   font-size: 16px;
 }
 
-.gamepass > ul li a:before,
-.gold li a:before,
+.gamepass-collections ul li a:before,
 .cafecito li a:before {
   content: '';
   text-decoration: none;
@@ -1572,11 +1583,14 @@ header .cart-btn {
     height: 326px;
   }
 
-  .gamepass > ul li,
-  .gold li,
+  .gamepass-collections ul li,
   .cafecito li {
     flex: 1;
-    height: 100px;
+    height: 65px;
+  }
+
+  .gamepass-collections {
+    flex-direction: column;
   }
 
   .footer-btn {
