@@ -518,23 +518,3 @@ export function settingsTemplate() {
 </section>
 `);
 }
-
-export function openGraphTemplate(data = {
-  url: 'https://xstoregames.com',
-  title: 'XStore: La tienda de Xbox Argentina con impuestos incluidos',
-  description: 'Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos.',
-  image: 'https://xstoregames.com/src/assets/xstore-og.jpg',
-}) {
-  document.head.querySelectorAll('.og').forEach((elem) => elem.remove());
-
-  return (`
-<meta class="og" property="og:url" content="${data.url}" />
-<meta class="og" property="og:title" content="${data.title}" />
-<meta class="og" property="og:description" content="${data.description} " />
-<meta class="og" property="og:image" content="${data.image}" />
-<meta class="og" property="twitter:url" content="${data.url}" />
-<meta class="og" name="twitter:title" content="${data.title}" />
-<meta class="og" name="twitter:description" content="${data.description}" />
-<meta class="og" name="twitter:image" content="${data.image}" />
-  `);
-}

@@ -304,12 +304,6 @@ async function bootApp() {
       requestIdleCallback(() => {
         document.title = `${game.title} | XStore`;
         $metaDescription.content = `${game.title}: ${game.description.split('.')[0].replace(/\n/gi, '')}.`;
-        document.head.insertAdjacentHTML('beforeend', openGraphTemplate({
-          url: window.location.href,
-          title: `${game.title} en XStoreGames`,
-          description: `${game.title}: ${game.description.split('.')[0].replace(/\n/gi, '')}...`,
-          image: game.lcp,
-        }));
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = html;
 
@@ -911,7 +905,6 @@ async function bootApp() {
       document.title = documentTitle;
       $metaDescription.content = documentDescription;
       $canonical.href = window.location.origin + window.location.pathname;
-      document.head.insertAdjacentHTML('beforeend', openGraphTemplate());
 
     } else {
       if ($prevPage && history.state?.referer !== history.state?.page && !['wishlist', 'news'].includes(eve.state.page)) {
