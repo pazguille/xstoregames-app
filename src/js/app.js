@@ -27,7 +27,6 @@ import {
   marketplaceItemsTemplate,
   filtersTemplate,
   settingsTemplate,
-  openGraphTemplate,
 } from './templates.js';
 
 let controller;
