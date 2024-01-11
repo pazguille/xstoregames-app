@@ -269,15 +269,24 @@ h2 img {
   z-index: 2;
 }
 
+.game-platform-tag,
 .game-important-tag {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  background-color: var(--bg-highlight-color);
   color: var(--txt-color);
   padding: 5px 8px;
   border-radius: 5px;
+}
+
+.game-platform-tag {
+  background-color: var(--bg-box-light-color);
+  margin: 15px 5px 10px 0;
+}
+
+.game-important-tag {
+  background-color: var(--bg-highlight-color);
   margin-left: 15px;
 }
 
