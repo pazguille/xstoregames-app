@@ -180,38 +180,56 @@ async function bootApp() {
     if (page === 'wishlist') {
       $footer.dataset.active = page;
 
-      $home.setAttribute('hidden', true);
-
       requestIdleCallback(() => {
         $pageBack.hide();
         $installBtn.hide();
       });
 
-      if ($prevPage) {
-        $prevPage.setAttribute('hidden', true);
-        $prevPage.classList.remove('page-on');
+      if (!$prevPage) {
+        $home.setAttribute('hidden', true);
       }
 
       $currentPage = $wish;
       $currentPageContent = $wishContent;
-      $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
 
-      const games = Array.from(wishlist).reverse().join(',');
-      if (games.length) {
-        $loading.show();
-        const wish = await fetch(gameXboxURL(games)).then(res => res.json());
-        wish.map((w) => {
-          gamesCache.set(w.id, w);
-          requestIdleCallback(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(w));
+      if ($currentPageContent.innerHTML === '' || history.state.referer !== 'game') {
+        if ($prevPage) {
+          $prevPage.setAttribute('hidden', true);
+          $prevPage.classList.remove('page-on');
+        }
+
+        $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
+        const games = Array.from(wishlist).reverse().join(',');
+        if (games.length) {
+          $loading.show();
+          const wish = await fetch(gameXboxURL(games)).then(res => res.json());
+          wish.map((w) => {
+            gamesCache.set(w.id, w);
+            requestIdleCallback(() => {
+              $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(w, true, true));
+            });
           });
-        });
-        $loading.hide();
-        document.dispatchEvent(new CustomEvent('wishlistdone'));
+          $loading.hide();
+          document.dispatchEvent(new CustomEvent('wishlistdone'));
+        } else {
+          requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', emptyWishlist());
+          });
+        }
       } else {
-        requestIdleCallback(() => {
-          $currentPageContent.insertAdjacentHTML('beforeend', emptyWishlist());
-        });
+        const games = Array.from(wishlist).reverse().join(',');
+        const removed = Array.from($currentPageContent.querySelectorAll(`[id*=detail-]`))
+          .filter((g => !games.includes(g.id.split('-')[1])));
+        if (removed.length === 1) {
+          yieldToMain(() => {
+            removed[0].parentNode.parentNode.parentNode.remove();
+          });
+        }
+        if (games.length === 0) {
+          yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', emptyWishlist());
+          });
+        }
       }
     }
 
@@ -906,7 +924,7 @@ async function bootApp() {
       $canonical.href = window.location.origin + window.location.pathname;
 
     } else {
-      if ($prevPage && history.state?.referer !== history.state?.page && !['wishlist', 'news'].includes(eve.state.page)) {
+      if ($prevPage && history.state?.referer !== history.state?.page && !['news'].includes(eve.state.page)) {
         $prevPage.classList.remove('page-on');
         setTimeout(() => {
           requestIdleCallback(() => {

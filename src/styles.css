@@ -282,7 +282,7 @@ h2 img {
 
 .game-platform-tag {
   background-color: var(--bg-box-light-color);
-  margin: 15px 5px 10px 0;
+  margin: 15px 5px 5px 0;
 }
 
 .game-important-tag {
@@ -704,11 +704,6 @@ h2 img {
   font-size: 26px;
   line-height: 1em;
   width: 100%;
-}
-
-.detail .detail-content > .game-preview .game-price-taxes {
-  position: absolute;
-  right: 20px;
 }
 
 .detail .detail-content > .game-preview .game-pass {
