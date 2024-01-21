@@ -27,6 +27,8 @@ import {
   marketplaceItemsTemplate,
   filtersTemplate,
   settingsTemplate,
+  collectionHeaderTemplate,
+  finanzasARGSection,
 } from './templates.js';
 
 let controller;
@@ -85,6 +87,20 @@ const sections = [
     skipitems: 0,
   },
 ];
+
+const gamepassTitles = {
+  'gamepass-new': 'Recién agregados a Game Pass',
+  'gamepass-coming': 'Se están por sumar a Game Pass',
+  'gamepass-leaving': 'Los que se van de Game Pass',
+  'gamepass-ea-play': 'Con EA Play en Game Pass',
+  'gamepass-gp-deals': 'Ofertas exclusivas con Game Pass',
+  'gamepass-all': 'Todos los juegos de Game Pass',
+  'gamepass-new-pc': 'Recién agregados a PC Game Pass',
+  'gamepass-coming-pc': 'Se están por sumar a PC Game Pass',
+  'gamepass-leaving-pc': 'Los que se van de PC Game Pass',
+  'gamepass-ea-play-pc': 'Con EA Play en Game Pass',
+  'gamepass-all-pc': 'Todos los juegos de PC Game Pass',
+};
 
 async function bootApp() {
   const $loading = document.querySelector('x-loader');
@@ -198,7 +214,11 @@ async function bootApp() {
           $prevPage.classList.remove('page-on');
         }
 
-        $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/heart.svg" width="24" height="24" /> Favoritos</h2>';
+        $currentPageContent.innerHTML = collectionHeaderTemplate({
+          icon: '<img alt="" src="/src/assets/icons/heart.svg" width="24" height="24" />',
+          title: ' Favoritos',
+          filter: false,
+        });
         const games = Array.from(wishlist).reverse().join(',');
         if (games.length) {
           $loading.show();
@@ -250,7 +270,11 @@ async function bootApp() {
 
       $currentPage = $news;
       $currentPageContent = $newsContent;
-      $currentPageContent.innerHTML = '<h2><img alt="" src="/src/assets/icons/news.svg" width="24" height="24" /> Noticias recientes</h2>';
+      $currentPageContent.innerHTML = collectionHeaderTemplate({
+        icon: '<img alt="" src="/src/assets/icons/news.svg" width="24" height="24" />',
+        title: 'Noticias recientes',
+        filter: false,
+      });
 
       $loading.show();
       const news = await fetch(getXboxNewsURL())
@@ -422,12 +446,12 @@ async function bootApp() {
       if (!sort && ($prev === null || $currentPageContent.innerHTML === '')) {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
-        $currentPageContent.insertAdjacentHTML('beforeend', `
-          <h2>${section.icon}${section.title}</h2>
-          <button id="sort-btn" class="sort-btn header-btn" aria-label="Ordenar">
-            <svg aria-hidden="true" fill="none" width="22" height="22" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M14.84 16.72a.76.76 0 0 1-.59.28.73.73 0 0 1-.53-.22l-3-3a.75.75 0 0 1 1.06-1.07l1.72 1.73V3.75a.75.75 0 0 1 1.5 0v10.68l1.72-1.71a.75.75 0 1 1 1.06 1.06l-2.94 2.94ZM6.34 3.28A.76.76 0 0 0 5.75 3c-.2 0-.38.07-.53.22l-3 3A.75.75 0 0 0 3.28 7.3L5 5.56v10.69a.75.75 0 0 0 1.5 0V5.57l1.72 1.71a.75.75 0 1 0 1.06-1.06L6.34 3.28Z" fill="#9AA495"/></svg>
-          </button>
-        `);
+
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          icon: section.icon,
+          title: section.title,
+          filter: true,
+        }));
 
         if (section.list.length === 0) {
           section.skipitems -= LIMIT;
@@ -475,12 +499,11 @@ async function bootApp() {
 
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
-        $currentPageContent.insertAdjacentHTML('beforeend', `
-          <h2>${section.icon}${section.title}</h2>
-          <button id="sort-btn" class="sort-btn header-btn" aria-label="Ordenar">
-            <svg aria-hidden="true" fill="none" width="22" height="22" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M14.84 16.72a.76.76 0 0 1-.59.28.73.73 0 0 1-.53-.22l-3-3a.75.75 0 0 1 1.06-1.07l1.72 1.73V3.75a.75.75 0 0 1 1.5 0v10.68l1.72-1.71a.75.75 0 1 1 1.06 1.06l-2.94 2.94ZM6.34 3.28A.76.76 0 0 0 5.75 3c-.2 0-.38.07-.53.22l-3 3A.75.75 0 0 0 3.28 7.3L5 5.56v10.69a.75.75 0 0 0 1.5 0V5.57l1.72 1.71a.75.75 0 1 0 1.06-1.06L6.34 3.28Z" fill="#9AA495"/></svg>
-          </button>
-        `);
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          icon: section.icon,
+          title: section.title,
+          filter: true,
+        }));
 
         // TODO: Improve API repsonse to avoid this
         const allGames = allGamesCache.get(id) || await Promise.all([
@@ -500,7 +523,8 @@ async function bootApp() {
         });
 
         broadcast.addEventListener('message', eve => {
-          eve.data.sorted.map((game, i) => yieldToMain(() => {
+          console.log(eve.data.games.length);
+          eve.data.games.map((game, i) => yieldToMain(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
             requestIdleCallback(() => {
               gamesCache.set(game.id, game);
@@ -537,7 +561,11 @@ async function bootApp() {
 
         const ids = searchParams.get('ids').split(',');
         const customGames = await fetch(gameXboxURL(ids)).then(res => res.json());
-        $currentPageContent.insertAdjacentHTML('beforeend', `<h2><img alt="" src="/src/assets/icons/pad.svg" width="24" height="24" /> Juegos</h2>`);
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          icon: '<img alt="" src="/src/assets/icons/pad.svg" width="24" height="24" />',
+          title: 'Juegos',
+        }));
+
         customGames.map((game) => requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
           gamesCache.set(game.id, game);
@@ -599,6 +627,9 @@ async function bootApp() {
     }
 
     if (page === 'gamepass') {
+      const { searchParams, page } = getPageFromURL(window.location.href);
+      const sort = searchParams.get('sort');
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
@@ -617,20 +648,58 @@ async function bootApp() {
         $loading.show();
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          title: gamepassTitles[`${page}-${id}`],
+          filter: true,
+        }));
 
         const url = id === 'gp-deals' ? getXboxURL(id) : getGamePassURL(id);
-        const gamepassGames = await fetch(url).then(res => res.json());
+        const gamepassGames = allGamesCache.get(`${page}-${id}`) || await fetch(url).then(res => res.json());
         if (gamepassGames.length) {
           gamepassGames.map((game, i) => requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
             gamesCache.set(game.id, game);
           }));
+          allGamesCache.set(`${page}-${id}`, gamepassGames);
         } else {
           $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
         }
 
         $loading.hide();
       }
+
+      if (sort && sort !== sorted) {
+        sorted = sort;
+        $loading.show();
+
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          title: gamepassTitles[`${page}-${id}`],
+          filter: true,
+        }));
+
+        const allGames = allGamesCache.get(`${page}-${id}`);
+
+        broadcast.postMessage({
+          sort,
+          games: allGames,
+        });
+
+        broadcast.addEventListener('message', eve => {
+          eve.data.games.map((game, i) => yieldToMain(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
+            requestIdleCallback(() => {
+              gamesCache.set(game.id, game);
+            });
+          }));
+          $loading.hide();
+        }, { once: true });
+      }
+
+      requestIdleCallback(() => {
+        $modal.querySelector('.modal-content').innerHTML = filtersTemplate();
+      });
     }
 
     $currentPage.removeAttribute('hidden');
@@ -737,6 +806,9 @@ async function bootApp() {
             const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
+            });
+            await yieldToMain(() => {
+              $home.insertAdjacentHTML('beforeend', finanzasARGSection());
             });
           }
         });

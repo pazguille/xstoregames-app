@@ -64,6 +64,13 @@ body {
   line-height: 1.1em;
 }
 
+hr {
+  width: 90%;
+  height: 1px;
+  border: none;
+  background: var(--bg-box-light-color);
+}
+
 input {
   font-size: inherit;
 }
@@ -282,7 +289,11 @@ h2 img {
 
 .game-platform-tag {
   background-color: var(--bg-box-light-color);
-  margin: 15px 5px 5px 0;
+  margin: 5px 5px 5px 0;
+}
+
+.game-preview-info .game-platform-tag {
+  margin-top: 15px;
 }
 
 .game-important-tag {
@@ -1293,6 +1304,10 @@ header .cart-btn {
   cursor: pointer;
 }
 
+.modal ul {
+  margin-bottom: 20px;
+}
+
 .modal li {
   margin: 10px 8px 10px 0;
   display: inline-grid;
@@ -1334,6 +1349,15 @@ header .cart-btn {
   border: 1px solid var(--txt-color);
   color: var(--txt-color-dark);
   padding: 0.4em 0.7em;
+}
+
+.finanzas-arg h2 {
+  font-size: 14px;
+}
+
+.finanzas-arg a {
+  display: inline-block;
+  margin: 0 15px;
 }
 
 @media (min-width: 54em) {

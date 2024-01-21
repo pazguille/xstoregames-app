@@ -135,13 +135,12 @@ export function gameDetailTemplate(game) {
       ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play" loading="lazy" decoding="async" />` : ''}
 
       ${gamePriceTemplate(game)}
+      ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
 
       <a href="${storeUrl}" class="game-buy-now btn" rel="nofollow noopener">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" width="1em" height="1em" fill="#ffffff" aria-hidden="true"><path d="M492 158q-4 0-5-1v-2l2-3Q614 77 746 39t278-39q143 0 277 38t256 113l3 2q-3 5-6 5-8 0-17-2t-17-4q-9-1-18-1t-18 0q-47 0-95 9t-96 24-92 34-88 39q-22 11-44 21t-43 25h-5q-43-27-100-54t-120-49-123-36-113-14q-19 0-39 4t-34 4zm251 412q-44 53-101 128T525 862t-117 184-102 189-72 180-28 156q0 17 2 37t8 36l-1 2-2 1-4-2q-103-139-156-293T0 1024q0-98 20-199t60-196 96-180 130-153q5-4 15-5t15-2q30 0 66 14t75 38 76 53 74 60 65 59 51 50l1 4-1 3zm968-281q7 0 16 1t15 6q73 71 130 155t96 178 59 194 21 201q0 173-53 328t-156 293l-6 1-2-3q3-4 5-14t3-21 2-22 1-16q0-69-27-155t-72-180-102-190-117-184-117-163-102-129l-1-3 1-3q21-21 50-49t65-58 73-61 77-53 75-38 66-15zm-687 533q29 18 56 42t54 47q42 37 102 94t127 128 131 149 117 155 84 149 32 129q0 23-6 43t-23 37q-31 31-69 57t-76 49q-120 72-254 109t-275 38q-141 0-274-37t-255-110q-17-10-43-26t-51-37-47-40-27-39q-7-20-7-45 0-54 30-122t78-142 110-149 123-142 118-123 97-92q34-30 72-64t76-58z"></path></svg>
         ${new Date(game.release_date) > new Date() ? 'Precompar' : game.price.amount > 0 ? 'Comprar' : 'Descargar'}
       </a>
-
-      ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
 
       ${game.release_date ? `
       <h4>Fecha de lanzamiento:</h4>
@@ -150,21 +149,38 @@ export function gameDetailTemplate(game) {
     </div>
 
     ${Array.isArray(game.images.screenshot) ? `
-      <h4 class="visually-hidden">Imágenes</h4>
+      <h4>Imágenes</h4>
       <div class="carousel game-preview-images">
         <img width="345" height="194" loading="lazy" decoding="async" src="${img}?w=1160&q=70" alt="" />
         ${game.images.screenshot.map((img) => `<img width="345" height="194" loading="lazy" decoding="async" src="${img.url.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=1160&q=70" alt="" />`).join('')}
       </div>
     ` : ''}
 
-    <h4 class="visually-hidden">Videos</h4>
+    <h4>Videos</h4>
     <div class="carousel game-preview-playlist">
       <a href="https://www.youtube.com/results?search_query=${game.title}+xbox+trailer" target="_blank" rel="noreferrer noopener" class="game-preview-video" aria-label="Ver trailers en YouTube">
         <img width="25" height="32" loading="lazy" decoding="async" src="/src/assets/icons/play.svg" alt="" />
       </a>
     </div>
 
-    <h4 class="visually-hidden">Descripción</h4>
+    <h4>Pueden jugar</h4>
+    <span class="game-platform-tag">Un jugador</span>
+    ${game.coop.length || game.multi.length ? `
+      ${game.coop.map(c => `<span class="game-platform-tag">Co-op ${c.name} (${c.min} - ${c.max})</span>`).join('')}
+      ${game.multi.map(c => `<span class="game-platform-tag">Multi ${c.name} (${c.min} - ${c.max})</span>`).join('')}
+    ` : ''}
+
+    ${game.averageRating ? `
+      <h4>Valoración</h4>
+      <span class="game-platform-tag">${game.averageRating} / 5</span>
+    ` : ''}
+
+    ${game.size ? `
+      <h4>Espacio en disco</h4>
+      <span class="game-platform-tag">${game.size}</span>
+    ` : ''}
+
+    <h4>Descripción</h4>
     <p class="game-description">${game.description}</p>
   </div>
 </article>
@@ -467,7 +483,7 @@ export function marketplaceItemsTemplate(items) {
 export function filtersTemplate() {
   const { pathname } = window.location;
   return (`
-<h2>Ordenar por</h2>
+<h2>Ordenar</h2>
 <ul>
   <li>
     <a href="${pathname}?sort=lowest-price" class="link" rel="nofollow">Menor precio</a>
@@ -491,7 +507,16 @@ export function filtersTemplate() {
     <a href="${pathname}?sort=release-oldest" class="link" rel="nofollow">Fecha de lanzamiento más antigua</a>
   </li>
   <li>
+    <a href="${pathname}?sort=rating" class="link" rel="nofollow">Valoración</a>
+  </li>
+</ul>
+<h2>Filtrar</h2>
+<ul>
+  <li>
     <a href="${pathname}?sort=pc" class="link" rel="nofollow">Disponibles en PC</a>
+  </li>
+  <li>
+    <a href="${pathname}?sort=coop-multi" class="link" rel="nofollow">Jugar con amigos</a>
   </li>
 </ul>
   `);
@@ -522,4 +547,33 @@ export function settingsTemplate() {
   <small>Elegí tu provincia para que el precio final sea más exacto.</small>
 </section>
 `);
+}
+
+export function collectionHeaderTemplate({ icon = '', title, filter = true }) {
+  return (`
+  <h2>${icon}${title}</h2>
+  ${filter ?
+  `<button id="sort-btn" class="sort-btn header-btn" aria-label="Ordenar y Filtrar">
+    <svg aria-hidden="true" width="24" height="24" viewBox="0 1 24 24" stroke-width="2.3" fill="none" xmlns="http://www.w3.org/2000/svg" color="#FFF"><path d="M3 6h18M7 12h10M11 18h2" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>`
+  : ''}`);
+}
+
+export function finanzasARGSection() {
+  return (`
+<hr>
+<section class="finanzas-arg">
+  <h2>Más aplicaciones para tus finanzas</h2>
+  <a href="https://www.finanzasarg.com/" rel="nofollow noopener" target="_blank">
+    <img
+      src="/src/assets/finanzas-arg.webp"
+      alt=""
+      width="150"
+      heigth="26"
+      decoding="async"
+      loading="lazy"
+    />
+  </a>
+</section>
+  `);
 }
