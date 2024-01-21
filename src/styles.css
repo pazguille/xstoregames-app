@@ -1242,6 +1242,11 @@ header .cart-btn {
   top: 2px;
 }
 
+.cart .share-btn {
+  right: 0;
+  top: 12px;
+}
+
 .cart-disclaimer {
   margin: 0 15px 15px;
   color: var(--txt-color-secondary);
