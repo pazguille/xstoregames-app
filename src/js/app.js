@@ -598,7 +598,7 @@ async function bootApp() {
         $loading.show();
         const scart = await fetch(gameXboxURL(games)).then(res => res.json());
         scart.map((c) => {
-          total += Number(convertDollar(c.price.deal || c.price.amount));
+          total += Number(convertDollar(c.price.gold_deal || c.price.deal || c.price.amount));
           gamesCache.set(c.id, c);
           requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(c));
