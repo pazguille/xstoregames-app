@@ -622,7 +622,7 @@ async function bootApp() {
             <small class="cart-disclaimer">El carrito funciona como calculadora y no es posible avanzar con la compra.</small>
             <button
               is="share-button"
-              id="share-btn"
+              id="cart-share-btn"
               class="share-btn header-btn"
               aria-label="Compartir"
             >
@@ -631,11 +631,9 @@ async function bootApp() {
             `
           );
 
-          yieldToMain(() => {
-            document.querySelector('#share-btn').show({
-              title: `Mirá este carrito con ${pluralGames(games.length)} en XStore`,
-              url: `${window.location.origin}${window.location.pathname}?ids=${games.join(',')}`,
-            });
+          document.querySelector('#cart-share-btn').show({
+            title: `Mirá este carrito con ${pluralGames(games.length)} en XStore`,
+            url: `${window.location.origin}${window.location.pathname}?ids=${games.join(',')}`,
           });
         });
       }
