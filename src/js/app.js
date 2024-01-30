@@ -630,10 +630,11 @@ async function bootApp() {
             </button>
             `
           );
-
-          document.querySelector('#cart-share-btn').show({
-            title: `Mirá este carrito con ${pluralGames(games.length)} en XStore`,
-            url: `${window.location.origin}${window.location.pathname}?ids=${games.join(',')}`,
+          requestIdleCallback(() => {
+            document.querySelector('#cart-share-btn').show({
+              title: `Mirá este carrito con ${pluralGames(games.length)} en XStore`,
+              url: `${window.location.origin}${window.location.pathname}?ids=${games.join(',')}`,
+            });
           });
         });
       }
