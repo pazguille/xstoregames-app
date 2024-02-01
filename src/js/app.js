@@ -378,48 +378,56 @@ async function bootApp() {
       });
 
       requestIdleCallback(async () => {
-        controller = new AbortController();
-        const signal = controller.signal;
-        const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
+        const o = new IntersectionObserver(async (entries) => {
+          const first = entries[0];
+          if (first.isIntersecting) {
+            o.unobserve(o.current);
+            controller = new AbortController();
+            const signal = controller.signal;
+            const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
 
-        if (related.CompareEditions) {
-          yieldToMain(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
-              icon: '',
-              title: 'Todas las ediciones',
-              type: 'editions',
-              list: related.CompareEditions,
-              more: false,
-            }));
-            related.CompareEditions.forEach((game) => gamesCache.set(game.id, game));
-          });
-        }
+            if (related.CompareEditions) {
+              yieldToMain(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+                  icon: '',
+                  title: 'Todas las ediciones',
+                  type: 'editions',
+                  list: related.CompareEditions,
+                  more: false,
+                }));
+                related.CompareEditions.forEach((game) => gamesCache.set(game.id, game));
+              });
+            }
 
-        if (related.AddOnsByParentWithDetails) {
-          yieldToMain(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
-              icon: '',
-              title: 'Complementos',
-              type: 'addons',
-              list: related.AddOnsByParentWithDetails,
-              more: false,
-            }));
-            related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
-          });
-        }
+            if (related.AddOnsByParentWithDetails) {
+              yieldToMain(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+                  icon: '',
+                  title: 'Complementos',
+                  type: 'addons',
+                  list: related.AddOnsByParentWithDetails,
+                  more: false,
+                }));
+                related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
+              });
+            }
 
-        if (related.PAL) {
-          yieldToMain(() => {
-            $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
-              icon: '',
-              title: 'Te pueden gustar',
-              type: 'related',
-              list: related.PAL,
-              more: false,
-            }));
-            related.PAL.forEach((game) => gamesCache.set(game.id, game));
-          });
-        }
+            if (related.PAL) {
+              yieldToMain(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
+                  icon: '',
+                  title: 'Te pueden gustar',
+                  type: 'related',
+                  list: related.PAL,
+                  more: false,
+                }));
+                related.PAL.forEach((game) => gamesCache.set(game.id, game));
+              });
+            }
+          }
+        });
+        o.current = document.querySelector('.game-description');
+        o.observe(o.current);
       });
     }
 
@@ -858,7 +866,8 @@ async function bootApp() {
       $loading.show();
       const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
       if (searchResults.length) {
-        searchResults.map((game) => {
+        const gameResults = await fetch(gameXboxURL(searchResults.join(','))).then(res => res.json());
+        gameResults.map((game) => {
           gamesCache.set(game.id, game);
           requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
