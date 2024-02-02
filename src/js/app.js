@@ -387,7 +387,7 @@ async function bootApp() {
             controller = new AbortController();
             const signal = controller.signal;
             const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
-            o.current.remove();
+
             if (related.CompareEditions) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
@@ -397,6 +397,7 @@ async function bootApp() {
                   list: related.CompareEditions,
                   more: false,
                 }));
+                o.current.remove();
                 related.CompareEditions.forEach((game) => gamesCache.set(game.id, game));
               });
             }
@@ -410,6 +411,7 @@ async function bootApp() {
                   list: related.AddOnsByParentWithDetails,
                   more: false,
                 }));
+                o.current.remove();
                 related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
               });
             }
@@ -423,6 +425,7 @@ async function bootApp() {
                   list: related.PAL,
                   more: false,
                 }));
+                o.current.remove();
                 related.PAL.forEach((game) => gamesCache.set(game.id, game));
               });
             }
@@ -533,7 +536,6 @@ async function bootApp() {
         });
 
         broadcast.addEventListener('message', eve => {
-          console.log(eve.data.games.length);
           eve.data.games.map((game, i) => yieldToMain(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
             requestIdleCallback(() => {
