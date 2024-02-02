@@ -377,6 +377,8 @@ async function bootApp() {
         }
       });
 
+
+
       requestIdleCallback(async () => {
         const o = new IntersectionObserver(async (entries) => {
           const first = entries[0];
@@ -385,7 +387,7 @@ async function bootApp() {
             controller = new AbortController();
             const signal = controller.signal;
             const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
-
+            o.current.remove();
             if (related.CompareEditions) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
@@ -426,7 +428,7 @@ async function bootApp() {
             }
           }
         });
-        o.current = document.querySelector('.game-description');
+        o.current = document.querySelector('.section-skeleton');
         o.observe(o.current);
       });
     }

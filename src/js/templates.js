@@ -184,6 +184,7 @@ export function gameDetailTemplate(game) {
     <p class="game-description">${game.description}</p>
   </div>
 </article>
+${gameSkeletonTemplate()}
 `);
 }
 
@@ -576,4 +577,44 @@ export function finanzasARGSection() {
   </a>
 </section>
   `);
+}
+
+export function gameSkeletonTemplate() {
+  return (`
+<section class="section-skeleton">
+  <div class="section-title skeleton"></div>
+  <ul class="carousel">
+    <li>
+      <article class="game-preview game-preview-skeleton">
+        <div>
+          <div class="game-title skeleton"></div>
+          <div class="game-by skeleton"></div>
+          <div class="game-price skeleton"></div>
+        </div>
+        <span class="game-img skeleton" width="165px" height="165px"></span>
+      </article>
+    </li>
+    <li>
+      <article class="game-preview game-preview-skeleton">
+        <div>
+          <div class="game-title skeleton"></div>
+          <div class="game-by skeleton"></div>
+          <div class="game-price skeleton"></div>
+        </div>
+        <span class="game-img skeleton" width="165px" height="165px"></span>
+      </article>
+    </li>
+    <li>
+      <article class="game-preview game-preview-skeleton">
+        <div>
+          <div class="game-title skeleton"></div>
+          <div class="game-by skeleton"></div>
+          <div class="game-price skeleton"></div>
+        </div>
+        <span class="game-img skeleton" width="165px" height="165px"></span>
+      </article>
+    </li>
+  </ul>
+</section>
+`);
 }

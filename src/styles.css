@@ -1365,6 +1365,48 @@ header .cart-btn {
   margin: 0 15px;
 }
 
+.skeleton {
+  animation: skeleton-loading 1.5s linear infinite alternate;
+}
+
+.section-title.skeleton {
+  height: 20px;
+  width: 250px;
+  margin: 20px 15px 15px;
+}
+
+.game-preview-skeleton {
+  height: 320px;
+}
+
+.game-title.skeleton {
+  height: 20px;
+}
+
+.game-img.skeleton {
+  height: 165px;
+  width: 165px;
+}
+
+.game-by.skeleton {
+  height: 10px;
+  width: 125px;
+}
+
+.game-price.skeleton {
+  height: 30px;
+  width: 120px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: var(--bg-box-light-color);
+  }
+  100% {
+    background-color: #33333570;
+  }
+}
+
 @media (min-width: 54em) {
 
   .page {
