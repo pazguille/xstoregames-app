@@ -36,7 +36,8 @@ export function slugify(str) {
     .trim()
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-');
+    .replace(/--+/g, '-')
+    .replace(/_+/g, '-');
 }
 
 const IIBBs = {
