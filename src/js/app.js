@@ -1,6 +1,7 @@
 import {
   getXboxURL,
   gameXboxURL,
+  gameXboxFlyURL,
   gameXboxRelatedURL,
   searchXboxURL,
   getXboxNewsURL,
@@ -870,7 +871,7 @@ async function bootApp() {
       $loading.show();
       const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
       if (searchResults.length) {
-        const gameResults = await fetch(gameXboxURL(searchResults.join(','))).then(res => res.json());
+        const gameResults = await fetch(gameXboxFlyURL(searchResults.join(','))).then(res => res.json());
         gameResults.map((game) => {
           gamesCache.set(game.id, game);
           requestIdleCallback(() => {

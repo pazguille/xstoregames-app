@@ -1,11 +1,13 @@
 const API_DOMAIN = 'https://api.xstoregames.com';
+const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
-export const searchXboxURL = (query) => `${API_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
+export const searchXboxURL = (query) => `${API_FLY_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
 export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
-export const gameXboxRelatedURL = (id) => `${API_DOMAIN}/api/games?related=${id}&lang=${lang}&store=${store}`;
-export const getXboxNewsURL = () => `${API_DOMAIN}/api/news`;
+export const gameXboxFlyURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
+export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=${id}&lang=${lang}&store=${store}`;
+export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
 export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
-export const getVideoURL = (slug) => `${API_DOMAIN}/api/videos?game=${slug}`;
+export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
 
 const mlId = { ar: 'MLA', mx: 'MLM', };
 export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
