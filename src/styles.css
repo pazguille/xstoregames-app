@@ -810,7 +810,7 @@ h2 img {
 }
 
 .search-btn {
-  right: 0px;
+  right: 40px;
 }
 
 .fav-btn.switch-on path {
@@ -844,12 +844,28 @@ h2 img {
   margin: 5px 0;
 }
 
-header .cart-btn {
+header .cart-btn,
+header .gamer-btn {
   top: 0;
-  right: 50px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+header .cart-btn {
+  right: 80px;
+}
+
+header .gamer-btn {
+  right: 0;
+}
+
+header .gamer-btn img {
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  border-radius: 100%;
+  pointer-events: none;
 }
 
 .cart-quantity {
@@ -1398,6 +1414,119 @@ header .cart-btn {
   width: 120px;
 }
 
+.gamer-search {
+  display: grid;
+  grid-column: 1;
+  justify-items: center;
+  margin: 10px;
+}
+
+.gamer-search input {
+  height: 45px;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  background: var(--bg-box-light-color);
+  color: var(--txt-color);
+}
+
+.gamer-card {
+  text-align: center;
+  padding: 30px 0;
+  grid-column: 1 / -1;
+  border-radius: 10px;
+  margin: 10px;
+  background-image: linear-gradient(120deg, var(--gamer-background-color) 0%, var(--gamer-foreground-color) 100%);
+}
+
+.gamer-stats {
+  grid-column: 1 / -1;
+}
+
+.gamer-achievements .game-preview-soon {
+  width: 245px;
+}
+
+.gamer-clips {
+  padding-bottom: 25px;
+}
+
+.gamer-clips .game-preview-soon {
+  width: 345px;
+}
+
+.gamer-clips h3 {
+  order: 2;
+  margin: 5px;
+}
+
+.gamer-card .gamer-display-pic {
+  border-radius: 10px;
+  border: 5px solid var(--gamer-foreground-color);
+}
+
+.gamer-games .game-preview-achievements {
+  margin: 0;
+}
+
+.game-preview-achievements .game-by {
+  margin: 0;
+}
+
+.game-preview-achievements p {
+  display: flex;
+  align-items: center;
+  margin: 10px 0 5px;
+  gap: 5px;
+}
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+}
+
+::-webkit-progress-bar {
+  background: var(--txt-color-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-progress-value {
+  background-color: var(--bg-xbox-color);
+  border-radius: 10px;
+}
+
+.game-preview-clips {
+  display: grid;
+  margin: 15px;
+  gap: 10px;
+}
+
+.carousel .game-preview-clips {
+  scroll-snap-align: center;
+  margin: 0;
+}
+
+.game-preview-soon.game-preview-achievements {
+  overflow: visible;
+  margin: 15px;
+  width: 365px;
+  filter: grayscale(var(--achievement-state));
+}
+
+
+.game-preview-soon.game-preview-achievements .game-img {
+  width: 100%;
+  height: auto;
+}
+
+.carousel .game-preview-soon.game-preview-achievements {
+  margin: 0;
+  width: 256px;
+}
+
 @keyframes skeleton-loading {
   0% {
     background-color: var(--bg-box-light-color);
@@ -1462,7 +1591,7 @@ header .cart-btn {
   .news .page-content,
   .detail .detail-content > .game-preview > div,
   .detail .detail-content > section {
-    max-width: 1100px;
+    max-width: 1150px;
     margin: 0 auto;
   }
 
@@ -1686,5 +1815,14 @@ header .cart-btn {
     bottom: 0;
     left: auto;
     right: 0;
+  }
+
+  .gamer-achievements .game-img {
+    width: 245px;
+    height: 138px;
+  }
+
+  .gamer-content .game-preview-soon {
+    margin: 20px;
   }
 }

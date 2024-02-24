@@ -7,6 +7,13 @@ import {
   getXboxNewsURL,
   getGamePassURL,
   getVideoURL,
+  loginURL,
+  getGamerURL,
+  getGamerById,
+  getGamerGamesById,
+  getGamerAchievementsById,
+  getGamerAchievementsByTitleId,
+  getGamerClipsById,
   slugify,
   getPageFromURL,
   getMarketplaceItemsURL,
@@ -30,6 +37,12 @@ import {
   settingsTemplate,
   collectionHeaderTemplate,
   finanzasARGSection,
+  gamerPageTemplate,
+  gamerGamesTemplate,
+  gamerAchievementsTemplate,
+  gamerClipsTemplate,
+  gamerPageStatsTemplate,
+  gamerPageNotFoundTemplate,
 } from './templates.js';
 
 let controller;
@@ -41,6 +54,7 @@ const LIMIT = 10;
 
 const gamesCache = new Map();
 const allGamesCache = new Map();
+const gamerCache = new Map();
 
 const broadcast = new BroadcastChannel('worker-channel');
 
@@ -115,6 +129,32 @@ async function bootApp() {
     JSON.parse(window.sessionStorage.getItem('cart'))
   );
 
+  let loggedGamer = document.cookie.includes('nickname');
+  let gamer = JSON.parse(window.localStorage.getItem('gamer'));
+  if (loggedGamer) {
+    fetch(getGamerURL(), {
+      credentials: 'include',
+    })
+    .then(res => res.json())
+    .then(u => {
+      if (u.code) {
+        loggedGamer = false;
+        gamer = null;
+        window.localStorage.removeItem('gamer');
+      } else {
+        gamer = u;
+        document.querySelector('#gamer img').src = gamer.displayPicRaw;
+        document.querySelector('#gamer').href = '/gamer/' + gamer.gamertag;
+        window.localStorage.setItem('gamer', JSON.stringify(u));
+      }
+    });
+  }
+
+  if (gamer) {
+    document.querySelector('#gamer img').src = gamer.displayPicRaw;
+    document.querySelector('#gamer').href = '/gamer/' + gamer.gamertag;
+  }
+
   let sorted = null;
 
   if (cart.size) {
@@ -161,6 +201,9 @@ async function bootApp() {
   const $wish = document.querySelector('.wish');
   const $wishContent = document.querySelector('.wish-content');
 
+  const $gamer = document.querySelector('.gamer');
+  const $gamerContent = document.querySelector('.gamer-content');
+
   const $modal = document.querySelector('.modal');
 
   let $currentPage = null;
@@ -168,16 +211,48 @@ async function bootApp() {
   let $currentPageContent = null;
   let $prevFocus = null;
 
-  let db = null;
-  const iddb = window.indexedDB.open('wishlist', 1);
-  iddb.onupgradeneeded = eve => {
-    eve.currentTarget.result
-      .createObjectStore(
-        'wishlist', { keyPath: 'id', autoIncrement: true }
-      )
-      .createIndex('game', 'game', { unique: true });
-  };
-  iddb.onsuccess = eve => { db = eve.target.result; };
+  const db = await new Promise((resolve) => {
+    const iddb = window.indexedDB.open('xstoregames', 1);
+    iddb.onupgradeneeded = async (eve) => {
+      eve.currentTarget.result
+          .createObjectStore('wishlist', { keyPath: 'gameId' })
+          .createIndex('gameId', 'gameId', { unique: true });
+
+      // eve.currentTarget.result
+      //     .createObjectStore('played', { autoIncrement: true })
+      //     .createIndex('id', 'id', { unique: true });
+
+      if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
+        const iddbWishlist = window.indexedDB.open('wishlist', 1);
+        iddbWishlist.onsuccess = w => {
+          const ww = w.target.result;
+          ww.transaction('wishlist', 'readonly')
+            .objectStore('wishlist')
+            .getAll()
+            .onsuccess = async (e) => {
+              const filtered = e.target.result.filter((value, index, self) =>
+                index === self.findIndex(t => t.gameId === value.gameId)
+              );
+              const xStore = db
+                .transaction('wishlist', 'readwrite')
+                .objectStore('wishlist');
+              filtered.forEach((g) => { xStore.add(g); });
+
+              window.indexedDB.deleteDatabase('wishlist');
+            }
+        };
+      }
+    };
+    iddb.onsuccess = eve => { resolve(eve.target.result); };
+  });
+
+  // const gamerGames = window.gamerGames = await new Promise((resolve) => {
+  //   db
+  //     .transaction('played', 'readonly')
+  //     .objectStore('played')
+  //     .getAll()
+  //     .onsuccess = (e) => resolve(e.target.result);
+  // });
 
   async function showPage(page, id) {
     $prevPage = $currentPage;
@@ -377,8 +452,6 @@ async function bootApp() {
           }
         }
       });
-
-
 
       requestIdleCallback(async () => {
         const o = new IntersectionObserver(async (entries) => {
@@ -654,6 +727,211 @@ async function bootApp() {
 
     }
 
+    if (page ===  'gamer') {
+      if (!gamer || !loggedGamer) {
+        $loading.show();
+        return window.location.href = loginURL();
+      }
+
+      if (id === undefined) {
+        id = gamer.gamertag;
+      }
+
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $installBtn.hide();
+      });
+
+      if (!$prevPage) {
+        $home.classList.add('page-prev-on');
+      }
+
+      $currentPage = $gamer;
+      $currentPageContent = $gamerContent;
+      $currentPageContent.innerHTML = '';
+
+      let gamerPage;
+      if (gamer.gamertag !== id) {
+        $loading.show();
+        gamerPage = await fetch(getGamerById(id), {
+          credentials: 'include',
+        }).then(res => res.json()).catch(err => ({ code: 404 }));
+        $loading.hide();
+      } else {
+        gamerPage = gamer;
+      }
+
+      const { paths, searchParams } = getPageFromURL(window.location.href);
+      if (paths.length === 3 && ['games', 'achievements', 'clips'].includes(paths[2])) {
+        switch(paths[2]) {
+          case 'games':
+            $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+              title: `${id} estuvo jugando`,
+              filter: false,
+            }));
+            const games = gamerCache.has(`${id}-games`) ? Promise.resolve(gamerCache.get(`${id}-games`)) : fetch(getGamerGamesById(id), { credentials: 'include' })
+              .then(res => res.json())
+              .then(g => {
+                if (g.code) {
+                  return window.location.href = loginURL();
+                } else {
+                  return g;
+                }
+              })
+              .then(g => {
+                gamerCache.set(`${id}-games`, g);
+                return g;
+              });
+            games.then((gs) => {
+              gs.map((game, i) => yieldToMain(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', gamerGamesTemplate(game, id));
+              }));
+            });
+            break;
+
+          case 'achievements':
+            $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+              title: `${id} en ${searchParams.get('title')}`,
+              filter: false,
+            }));
+            const achievements = await fetch(getGamerAchievementsByTitleId(id, searchParams.get('titleId')), { credentials: 'include' })
+              .then(res => res.json())
+              .then(a => {
+                if (a.code) {
+                  $loading.show();
+                  return window.location.href = loginURL();
+                } else {
+                  return a;
+                }
+              });
+            achievements.map((achievement, i) => requestIdleCallback(() => {
+              $currentPageContent.insertAdjacentHTML('beforeend', gamerAchievementsTemplate(achievement));
+            }));
+            break;
+
+          case 'clips':
+            $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+              title: `Clips de ${id}`,
+              filter: false,
+            }));
+            const clips = await fetch(getGamerClipsById(id), { credentials: 'include' })
+              .then(res => res.json())
+              .then(c => {
+                if (c.code) {
+                  $loading.show();
+                  return window.location.href = loginURL();
+                } else {
+                  return c;
+                }
+              });
+            clips.map((clip, i) => requestIdleCallback(() => {
+              $currentPageContent.insertAdjacentHTML('beforeend', gamerClipsTemplate(clip));
+            }));
+            $currentPageContent.addEventListener('click', (eve) => {
+              if (eve.target.nodeName === 'VIDEO') {
+                eve.target.src = eve.target.dataset.src;
+                eve.target.controls = true;
+                eve.target.autoplay = true;
+              }
+            });
+            break;
+        }
+
+        // if (gamerGames.length === 0 || gamer.gamertag !== id) {
+        //   fetch(getGamerGamesById(id), { credentials: 'include' })
+        //     .then(res => res.json())
+        //     .then(games => {
+        //       games.map((game, i) => yieldToMain(() => {
+        //         $currentPageContent.querySelector('.gamer-games').insertAdjacentHTML('beforeend', gameAchievementTemplate(gamerPage, game));
+        //       }));
+        //       $loading.hide();
+        //       if (gamer.gamertag === id) {
+        //         games.forEach(game => {
+        //           db
+        //             .transaction('played', 'readwrite')
+        //             .objectStore('played')
+        //             .add(game);
+        //         });
+        //       }
+        //     });
+        // } else {
+        //   gamerGames.forEach((game, i) => yieldToMain(() => {
+        //     $currentPageContent.querySelector('.gamer-games').insertAdjacentHTML('beforeend', gameAchievementTemplate(gamerPage, game));
+        //   }));
+        //   $loading.hide();
+        // }
+
+      } else {
+        if (gamerPage.code) {
+          $currentPageContent.insertAdjacentHTML('beforeend', gamerPageNotFoundTemplate());
+        } else {
+          $currentPageContent.insertAdjacentHTML('beforeend', gamerPageTemplate(gamerPage));
+
+          const stats = gamerCache.has(id) ? Promise.resolve(gamerCache.get(id)) : Promise.all([
+            fetch(getGamerGamesById(id, 10), { credentials: 'include' }).then(res => res.json()),
+            fetch(getGamerAchievementsById(id, 10), { credentials: 'include' }).then(res => res.json()),
+            fetch(getGamerClipsById(id, 10), { credentials: 'include' }).then(res => res.json()),
+          ]).then(([games, achievements, clips])  => {
+            const s = { games, achievements, clips };
+            gamerCache.set(id, s);
+            return s;
+          });
+
+          stats.then(({ games, achievements, clips }) => {
+            $currentPageContent.querySelector('.gamer-stats').innerHTML = gamerPageStatsTemplate(id);
+            const $games = $currentPageContent.querySelector('.gamer-games');
+            const $achievements = $currentPageContent.querySelector('.gamer-achievements');
+            const $clips = $currentPageContent.querySelector('.gamer-clips');
+
+            games.map((game, i) => yieldToMain(() => {
+              $games.insertAdjacentHTML('beforeend', `<li>${gamerGamesTemplate(game, id)}</li>`);
+            }));
+
+            achievements.map((achievement, i) => requestIdleCallback(() => {
+              $achievements.insertAdjacentHTML('beforeend', `<li>${gamerAchievementsTemplate(achievement)}</li>`);
+            }));
+
+            clips.map((clip, i) => requestIdleCallback(() => {
+              $clips.insertAdjacentHTML('beforeend', `<li>${gamerClipsTemplate(clip)}</li>`);
+            }));
+
+            $clips.addEventListener('click', (eve) => {
+              if (eve.target.nodeName === 'VIDEO') {
+                eve.target.src = eve.target.dataset.src;
+                eve.target.controls = true;
+                eve.target.autoplay = true;
+              }
+            });
+          });
+        }
+      }
+      // $loading.hide();
+
+      // if (gamerGames.length === 0 || gamer.gamertag !== id) {
+      //   fetch(getGamerGamesById(id), { credentials: 'include' })
+      //     .then(res => res.json())
+      //     .then(games => {
+      //       games.map((game, i) => yieldToMain(() => {
+      //         $currentPageContent.querySelector('.gamer-games').insertAdjacentHTML('beforeend', gameAchievementTemplate(gamerPage, game));
+      //       }));
+      //       $loading.hide();
+      //       if (gamer.gamertag === id) {
+      //         games.forEach(game => {
+      //           db
+      //             .transaction('played', 'readwrite')
+      //             .objectStore('played')
+      //             .add(game);
+      //         });
+      //       }
+      //     });
+      // } else {
+      //   gamerGames.forEach((game, i) => yieldToMain(() => {
+      //     $currentPageContent.querySelector('.gamer-games').insertAdjacentHTML('beforeend', gameAchievementTemplate(gamerPage, game));
+      //   }));
+      //   $loading.hide();
+      // }
+    }
+
     if (page === 'gamepass') {
       const { searchParams, page } = getPageFromURL(window.location.href);
       const sort = searchParams.get('sort');
@@ -915,6 +1193,7 @@ async function bootApp() {
   }
 
   const { page, id, searchParams } = getPageFromURL(window.location.href);
+
   switch (page) {
     case 'home':
       loadHomePage();
@@ -959,6 +1238,7 @@ async function bootApp() {
     case 'cart':
     case 'collection':
     case 'gamepass':
+    case 'gamer':
       history.replaceState({ page, id }, document.title, window.location.href);
       showPage(page, id);
       break;
@@ -1123,6 +1403,18 @@ async function bootApp() {
       }
 
       loadSearchPage(q);
+    });
+
+
+    $gamer.addEventListener('submit', async (eve) => {
+      eve.preventDefault();
+      const id = eve.target.elements[0].value;
+      if (id === '') {
+        return;
+      }
+      history.pushState({ page:'gamer', id }, document.title, `${basePath}/gamer/${id}`);
+      await yieldToMain(() => { $currentPageContent.innerHTML = ''; });
+      showPage('gamer', id);
     });
   });
 

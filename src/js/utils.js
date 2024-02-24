@@ -1,5 +1,6 @@
 const API_DOMAIN = 'https://api.xstoregames.com';
 const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
+const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
 export const searchXboxURL = (query) => `${API_FLY_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
 export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
@@ -8,6 +9,14 @@ export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=$
 export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
 export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
 export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
+
+export const loginURL = () => `${AUTH_DOMAIN}/api/token?auth=true`;
+export const getGamerURL = () => `${AUTH_DOMAIN}/api/user`;
+export const getGamerById = (id) => `${AUTH_DOMAIN}/api/user?gamertag=${id}`;
+export const getGamerGamesById = (id, count = 0) => `${AUTH_DOMAIN}/api/games?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
+export const getGamerAchievementsById = (id, count = 0) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
+export const getGamerAchievementsByTitleId = (id, titleId) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&titleId=${titleId}&lang=${lang}&store=${store}`;
+export const getGamerClipsById = (id, count = 0) => `${AUTH_DOMAIN}/api/clips?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
 
 const mlId = { ar: 'MLA', mx: 'MLM', };
 export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
@@ -26,7 +35,7 @@ export function getPageFromURL(url) {
 
   store = store.length ? store[0].split('-store')[0] : 'ar';
 
-  return { id, gameId, page, searchParams, store, lang };
+  return { id, gameId, page, searchParams, store, lang, paths: pathSplit };
 }
 
 export function slugify(str) {

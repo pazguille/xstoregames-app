@@ -70,6 +70,86 @@ export function gameInfoTemplate(game) {
   `);
 }
 
+export function gamerPageTemplate(gamer) {
+  return (`
+<form method="GET" id="search-gamer" class="gamer-search">
+  <input type="search" name="gamer" id="gamer" placeholder="Buscar jugador..." />
+</form>
+<section class="gamer-card" style="--gamer-background-color:#${gamer.preferredColor?.tertiaryColor};--gamer-foreground-color:#${gamer.preferredColor?.primaryColor};">
+  <img src="${gamer.displayPicRaw}" width="155" height="155" decoding="async" loading="lazy" class="gamer-display-pic"/>
+  <h2>${gamer.displayName}</h2>
+  <h2><img src="/src/assets/icons/gamerscore.svg" alt="GamerScore" width="22" height="22" decoding="async" loading="lazy" />${gamer.gamerScore}</h2>
+  <h3>${gamer.location}</h3>
+</section>
+<div class="gamer-stats">
+  ${gameSkeletonTemplate()}
+  ${gameSkeletonTemplate()}
+</div>
+  `);
+}
+
+export function gamerPageStatsTemplate(id) {
+  return (`
+<section>
+  <h2>Estuvo jugando</h2>
+  <ul class="carousel gamer-games"></ul>
+  <a class="see-all link" id="gamer-games" href="/gamer/${id}/games" aria-label="Ver el listado completo de Juegos">Ver todos</a>
+</section>
+
+<section>
+  <h2>Logros recientes</h2>
+  <ul class="carousel gamer-achievements"></ul>
+</section>
+
+<section>
+  <h2>Algunos clips</h2>
+  <ul class="carousel gamer-clips"></ul>
+  <a class="see-all link" id="gamer-clips" href="/gamer/${id}/clips" aria-label="Ver el listado completo de Clips">Ver todos</a>
+</section>
+  `)
+}
+
+export function gamerGamesTemplate(game, gamertag) {
+  return (`
+<article class="game-preview game-preview-achievements">
+  <div>
+    <h3 class="game-title"><a id="detail-${game.id}" href="${basePath}/gamer/${gamertag}/achievements?titleId=${game.titleId}&title=${game.title}" class="link">${game.title}</a></h3>
+    ${game.timePlayed ? `<p><img src="/src/assets/icons/timeplayed.svg" alt="Tiempo jugado" width="18" height="18" decoding="async" loading="lazy" /> ${game.timePlayed}</p>`: ''}
+    <p><img src="/src/assets/icons/trophy.svg" alt="Trofeos" width="18" height="18" decoding="async" loading="lazy" /> ${game.achievement.currentAchievements}</p>
+    <p><img src="/src/assets/icons/gamerscore.svg" alt="GamerScore" width="18" height="18" decoding="async" loading="lazy" /> ${game.achievement.currentGamerscore} / ${game.achievement.totalGamerscore}</p>
+    <progress value="${game.achievement.progressPercentage}" max="100">
+      ${game.achievement.progressPercentage}%
+    </progress>
+  </div>
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${game.images.boxart.url}&w=330&h=330">
+</article>
+  `);
+}
+
+export function gamerAchievementsTemplate(achievement) {
+  return (`
+<article class="game-preview-soon game-preview-achievements" style="--achievement-state: ${achievement.state === 'Achieved' ? '0' : '100%'}">
+  <div>
+    <p class="game-by">${achievement.title}</p>
+    <h3 class="game-title">${achievement.name} - <span class="game-platform-tag">${achievement.state === 'Achieved' ? 'Desbloqueado' : 'Bloqueado'}</span></h3>
+    <p>${achievement.description}</p>
+    <p><img src="/src/assets/icons/gamerscore.svg" alt="GamerScore" width="18" height="18" decoding="async" loading="lazy" /> ${achievement.rewards}</p>
+  </div>
+  <img class="game-img" width="245px" height="138px" alt="" decoding="async" loading="lazy" src="${achievement.image}&w=490&h=276">
+</article>
+  `);
+}
+
+export function gamerClipsTemplate(clip) {
+  return (`
+<article class="game-preview-clips">
+  <h3 class="game-title">${clip.title}</h3>
+  <video width="365px" height="205px" poster="${clip.poster}" data-src="${clip.url}"></video>
+</article>
+  `);
+}
+
+
 
 export function gameDetailTemplate(game) {
   const img = game.lcp;
@@ -85,10 +165,13 @@ export function gameDetailTemplate(game) {
   if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
     game.images.screenshot = null;
     storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
-  } else {
-    // storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
-    storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
   }
+  // else {
+  //   // storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
+  //   // storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
+  // }
+
+  // ${gamerGames.findIndex((g) => g.id === game.id) !== -1 ? '<span class="game-platform-tag">Ya lo jugaste</span>': '' }
 
   return (`
 <article class="game-preview">
@@ -131,6 +214,7 @@ export function gameDetailTemplate(game) {
         ${game.platforms.map(p => `<span class="game-platform-tag">${p}</span>`).join('')}
       </div>
 
+
       ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.svg" width="70px" height="13" alt="Disponible en Game Pass" loading="lazy" decoding="async" />` : ''}
       ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play" loading="lazy" decoding="async" />` : ''}
 
@@ -152,7 +236,7 @@ export function gameDetailTemplate(game) {
       <h4>Imágenes</h4>
       <div class="carousel game-preview-images">
         <img width="345" height="194" loading="lazy" decoding="async" src="${img}?w=1160&q=70" alt="" />
-        ${game.images.screenshot.map((img) => `<img width="345" height="194" loading="lazy" decoding="async" src="${img.url.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=1160&q=70" alt="" />`).join('')}
+        ${game.images.screenshot.map((img) => `<img width="345" height="194" loading="lazy" decoding="async" src="${img.url}?w=1160&q=70" alt="" />`).join('')}
       </div>
     ` : ''}
 
@@ -243,7 +327,7 @@ export function gameCardTemplate(game, lazy = true) {
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
-  <img class="game-img" width="165px" height="165px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${img?.replace('xbox-games-api.vercel.app', 'api.xstoregames.com')}?w=330">
+  <img class="game-img" width="165px" height="165px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${img}?w=330">
 </article>
 `);
 }
@@ -268,6 +352,10 @@ export function emptyWishlist() {
 
 export function emptyList() {
   return '<p class="empty-list">No se encontraron juegos.</p>';
+}
+
+export function gamerPageNotFoundTemplate() {
+  return '<p class="empty-list">No se encontró al jugador.</p>';
 }
 
 export function gamepassSection() {

@@ -5,14 +5,15 @@
     <meta name="HandheldFriendly" content="True" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
 
-    <!-- <base href="http://localhost:3030/" /> -->
-    <!-- <base href="http://192.168.0.148:3030/" /> -->
+    <!-- <base href="https://dev.xstoregames.com:3030/" /> -->
+    <!-- <base href="https://192.168.0.148:3030/" /> -->
     <base href="https://xstoregames.com/" />
 
     <link rel="stylesheet" href="/src/styles.css" />
 
     <link rel="preconnect" href="https://api.xstoregames.com" />
     <link rel="preconnect" href="https://fly.xstoregames.com" />
+    <link rel="preconnect" href="https://images.weserv.nl/" />
     <link rel="preconnect" href="https://media.rawg.io/" />
 
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
@@ -129,9 +130,13 @@
         </form>
       </x-toggle-collapse>
 
-      <a id="cart" href="/cart" class="link cart-btn header-btn" aria-label="Carrito">
+      <a id="cart" href="/cart" class="link cart-btn header-btn" aria-label="Carrito" rel="nofollow">
         <span class="cart-quantity"></span>
         <svg width="22" height="22" viewBox="0 0 768 768" aria-hidden="true"><path d="M352 672a64 64 0 1 0-128 0 64 64 0 0 0 128 0zm352 0a64 64 0 1 0-128 0 64 64 0 0 0 128 0zM231 224h466l-44 230a32 32 0 0 1-32 26H309c-7 0-14-2-20-6-6-5-10-12-12-20zM32 64h102l27 136c3 14 16 24 31 24h39l-13-64h-26a32 32 0 0 0-31 40l53 267a96 96 0 0 0 96 77h311c24 0 46-8 64-23 15-14 27-33 31-54l51-269a32 32 0 0 0-31-38H218L191 26c-3-15-16-26-31-26H32a32 32 0 0 0 0 64z" fill="#9AA495" /></svg>
+      </a>
+
+      <a id="gamer" href="/gamer" class="link gamer-btn header-btn" aria-label="Mi Cuenta" rel="nofollow">
+        <img src="/src/assets/icons/user.svg" alt="" width="28" height="28" decoding="async" loading="lazy" />
       </a>
     </header>
 
@@ -184,6 +189,10 @@
 
       <div class="cart list page" hidden>
         <div class="cart-content page-content"></div>
+      </div>
+
+      <div class="gamer list page" hidden>
+        <div class="gamer-content page-content"></div>
       </div>
 
       <div class="modal" hidden>
