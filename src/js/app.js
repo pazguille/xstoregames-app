@@ -156,6 +156,7 @@ async function bootApp() {
   }
 
   let sorted = null;
+  let filtered = null;
 
   if (cart.size) {
     requestIdleCallback(() => {
@@ -513,6 +514,7 @@ async function bootApp() {
     if (page === 'collection') {
       const { searchParams } = getPageFromURL(window.location.href);
       const sort = searchParams.get('sort');
+      const filter = searchParams.get('filter');
 
       requestIdleCallback(() => {
         $pageBack.show();
@@ -580,8 +582,9 @@ async function bootApp() {
         });
       }
 
-      if (sort && sort !== sorted) {
+      if ((sort && sort !== sorted) || (filter && filter !== filtered)) {
         sorted = sort;
+        filtered = filter;
         $loading.show();
 
         $currentPage.scrollTo(0, 0);
@@ -606,6 +609,7 @@ async function bootApp() {
 
         broadcast.postMessage({
           sort,
+          filter,
           games: allGames,
         });
 
@@ -974,8 +978,9 @@ async function bootApp() {
         $loading.hide();
       }
 
-      if (sort && sort !== sorted) {
+      if ((sort && sort !== sorted) || (filter && filter !== filtered)) {
         sorted = sort;
+        filtered = filter;
         $loading.show();
 
         $currentPage.scrollTo(0, 0);
@@ -989,6 +994,7 @@ async function bootApp() {
 
         broadcast.postMessage({
           sort,
+          filter,
           games: allGames,
         });
 
@@ -1299,6 +1305,7 @@ async function bootApp() {
       $currentPageContent = null;
 
       sorted = null;
+      filtered = null;
 
       document.title = documentTitle;
       $metaDescription.content = documentDescription;

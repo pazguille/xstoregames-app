@@ -290,6 +290,7 @@ h2 img {
 .game-platform-tag {
   background-color: var(--bg-box-light-color);
   margin: 5px 5px 5px 0;
+  width: max-content;
 }
 
 .game-preview-info .game-platform-tag {
@@ -721,6 +722,11 @@ h2 img {
   position: initial;
   display: block;
   margin: 15px 0 0;
+}
+
+.detail .supported-languages {
+ gap: 5px;
+ padding: 0;
 }
 
 .detail .game-description {

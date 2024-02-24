@@ -89,11 +89,15 @@ const sorting = {
 };
 broadcast.addEventListener('message', eve => {
   const sort = eve.data.sort;
-  let games;
-  if (['pc', 'coop-multi'].includes(sort)) {
-    games = eve.data.games.filter((g) => sorting[sort](g, g) === 1);
-  } else {
-    games = eve.data.games.toSorted(sorting[sort]);
+  const filter = eve.data.filter;
+  let games = eve.data.games;
+
+  if (filter) {
+    games = games.filter((g) => sorting[filter](g, g) === 1);
+  }
+
+  if (sort) {
+    games = games.toSorted(sorting[sort]);
   }
   broadcast.postMessage({ games });
 });

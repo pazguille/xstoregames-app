@@ -1,6 +1,7 @@
 import {
   convertDollar,
   slugify,
+  getPageFromURL,
 } from './utils.js';
 
 export function sectionTemplate(section) {
@@ -262,6 +263,14 @@ export function gameDetailTemplate(game) {
     ${game.size ? `
       <h4>Espacio en disco</h4>
       <span class="game-platform-tag">${game.size}</span>
+    ` : ''}
+
+    ${game.languages?.length ? `
+      <h4>Idiomas disponibles</h4>
+      <ul class="carousel supported-languages">
+        ${game.languages.map(l => `<li><span class="game-platform-tag">${new Intl.DisplayNames(['es-AR'], { type: 'language' }).of(l)}</span></li>`).join('')}
+      </ul>
+
     ` : ''}
 
     <h4>Descripción</h4>
@@ -571,41 +580,45 @@ export function marketplaceItemsTemplate(items) {
 
 export function filtersTemplate() {
   const { pathname } = window.location;
+  const { searchParams } = getPageFromURL(window.location.href);
+  const filter = searchParams.get('filter');
+  const sort = searchParams.get('sort');
+
   return (`
 <h2>Ordenar</h2>
 <ul>
   <li>
-    <a href="${pathname}?sort=lowest-price" class="link" rel="nofollow">Menor precio</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=lowest-price" class="link" rel="nofollow">Menor precio</a>
   </li>
   <li>
-    <a href="${pathname}?sort=highest-price" class="link" rel="nofollow">Mayor precio</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=highest-price" class="link" rel="nofollow">Mayor precio</a>
   </li>
   <li>
-    <a href="${pathname}?sort=discount" class="link" rel="nofollow">Descuento</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=discount" class="link" rel="nofollow">Descuento</a>
   </li>
   <li>
-    <a href="${pathname}?sort=az" class="link" rel="nofollow">A-Z</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=az" class="link" rel="nofollow">A-Z</a>
   </li>
   <li>
-    <a href="${pathname}?sort=za" class="link" rel="nofollow">Z-A</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=za" class="link" rel="nofollow">Z-A</a>
   </li>
   <li>
-    <a href="${pathname}?sort=release-newest" class="link" rel="nofollow">Fecha de lanzamiento más nueva</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=release-newest" class="link" rel="nofollow">Fecha de lanzamiento más nueva</a>
   </li>
   <li>
-    <a href="${pathname}?sort=release-oldest" class="link" rel="nofollow">Fecha de lanzamiento más antigua</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=release-oldest" class="link" rel="nofollow">Fecha de lanzamiento más antigua</a>
   </li>
   <li>
-    <a href="${pathname}?sort=rating" class="link" rel="nofollow">Valoración</a>
+    <a href="${pathname}?${filter ? `filter=${filter}&` : ''}sort=rating" class="link" rel="nofollow">Valoración</a>
   </li>
 </ul>
 <h2>Filtrar</h2>
 <ul>
   <li>
-    <a href="${pathname}?sort=pc" class="link" rel="nofollow">Disponibles en PC</a>
+    <a href="${pathname}?${sort ? `sort=${sort}&` : ''}filter=pc" class="link" rel="nofollow">Disponibles en PC</a>
   </li>
   <li>
-    <a href="${pathname}?sort=coop-multi" class="link" rel="nofollow">Jugar con amigos</a>
+    <a href="${pathname}?${sort ? `sort=${sort}&` : ''}filter=coop-multi" class="link" rel="nofollow">Jugar con amigos</a>
   </li>
 </ul>
   `);
