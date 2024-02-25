@@ -873,7 +873,7 @@ async function bootApp() {
 
           const stats = gamerCache.has(id) ? Promise.resolve(gamerCache.get(id)) : Promise.all([
             fetch(getGamerGamesById(id, 10), { credentials: 'include' }).then(res => res.json()),
-            fetch(getGamerAchievementsById(id, 10), { credentials: 'include' }).then(res => res.json()),
+            fetch(getGamerAchievementsById(id, 20), { credentials: 'include' }).then(res => res.json()),
             fetch(getGamerClipsById(id, 10), { credentials: 'include' }).then(res => res.json()),
           ]).then(([games, achievements, clips])  => {
             const s = { games, achievements, clips };
@@ -891,7 +891,7 @@ async function bootApp() {
               $games.insertAdjacentHTML('beforeend', `<li>${gamerGamesTemplate(game, id)}</li>`);
             }));
 
-            achievements.map((achievement, i) => requestIdleCallback(() => {
+            achievements.filter(a => a.state === 'Achieved').map((achievement, i) => requestIdleCallback(() => {
               $achievements.insertAdjacentHTML('beforeend', `<li>${gamerAchievementsTemplate(achievement)}</li>`);
             }));
 
