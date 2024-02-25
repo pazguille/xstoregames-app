@@ -939,6 +939,7 @@ async function bootApp() {
     if (page === 'gamepass') {
       const { searchParams, page } = getPageFromURL(window.location.href);
       const sort = searchParams.get('sort');
+      const filter = searchParams.get('filter');
 
       requestIdleCallback(() => {
         $pageBack.show();
