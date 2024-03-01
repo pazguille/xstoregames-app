@@ -9,6 +9,8 @@ export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=$
 export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
 export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
 export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
+export const getXboxCatalogURL = (list, ct) => `${API_DOMAIN}/api/catalog?list=${list}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
+export const getGameReviewsURL = (id) => `${API_FLY_DOMAIN}/api/games?reviews=${id}`;
 
 export const loginURL = () => `${AUTH_DOMAIN}/api/token?auth=true`;
 export const getGamerURL = () => `${AUTH_DOMAIN}/api/user`;

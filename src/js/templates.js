@@ -719,3 +719,46 @@ export function gameSkeletonTemplate() {
 </section>
 `);
 }
+
+export function catalogSection() {
+  return (`
+<section class="catalog">
+  <h2>¡Explorá todo el catálogo de juegos!</h2>
+  <ul>
+    <li><a href="${basePath}/catalog/all" id="all" class="link">Todos</a></li>
+    <li><a href="${basePath}/catalog/pc" id="pc" class="link">Solo en PC</a></li>
+    <li><a href="${basePath}/catalog/shooter" id="shooter" class="link">Shooters</a></li>
+    <li><a href="${basePath}/catalog/action_adventure" id="action_adventure" class="link">Acción y Aventura</a></li>
+    <li><a href="${basePath}/catalog/role_playing" id="role_playing" class="link">Juegos de rol</a></li>
+    <li><a href="${basePath}/catalog/platformer" id="platformer" class="link">Plataformeros</a></li>
+    <li><a href="${basePath}/catalog/sports" id="sports" class="link">Deportes</a></li>
+    <li><a href="${basePath}/catalog/racing_flying" id="racing_flying" class="link">Carreras</a></li>
+    <li><a href="${basePath}/catalog/fighting" id="fighting" class="link">Pelea</a></li>
+    <li><a href="${basePath}/catalog/strategy" id="strategy" class="link">Estrategia</a></li>
+    <li><a href="${basePath}/catalog/simulation" id="simulation" class="link">Simuladores</a></li>
+    <li><a href="${basePath}/catalog/puzzle_trivia" id="puzzle_trivia" class="link">Puzzles</a></li>
+    <li><a href="${basePath}/catalog/family_kids" id="family_kids" class="link">Para la familia</a></li>
+    <li><a href="${basePath}/catalog/classics" id="classics" class="link">Clásicos</a></li>
+    <li><a href="${basePath}/catalog/music" id="music" class="link">Música</a></li>
+    <li><a href="${basePath}/catalog/card_board" id="card_board" class="link">Juegos de mesa</a></li>
+    <li><a href="${basePath}/catalog/word" id="word" class="link">Palabras</a></li>
+    <li><a href="${basePath}/catalog/tools" id="tools" class="link">Herramientas</a></li>
+    <li><a href="${basePath}/catalog/other" id="other" class="link">Otros</a></li>
+  </ul>
+</section>
+  `);
+}
+
+export function reviewsTemplate(section) {
+  return (`
+<section>
+  <h2>${section.icon}${section.title}</h2>
+  <ul class="carousel reviews" aria-roledescription="Carrusel" aria-label="${section.title}">
+    ${section.list.map(review => `<li>
+      <p><a class="link" href="/gamer/${review.userName}">${review.userName}</a> dijo:</p>
+      <p>${review.title}<br/>${review.reviewText}</p>
+    </li>`).join('')}
+  </ul>
+</section>
+`);
+}

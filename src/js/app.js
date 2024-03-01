@@ -6,6 +6,8 @@ import {
   searchXboxURL,
   getXboxNewsURL,
   getGamePassURL,
+  getXboxCatalogURL,
+  getGameReviewsURL,
   getVideoURL,
   loginURL,
   getGamerURL,
@@ -32,6 +34,7 @@ import {
   emptyCart,
   gamepassSection,
   supportSection,
+  catalogSection,
   marketplaceItemsTemplate,
   filtersTemplate,
   settingsTemplate,
@@ -43,6 +46,7 @@ import {
   gamerClipsTemplate,
   gamerPageStatsTemplate,
   gamerPageNotFoundTemplate,
+  reviewsTemplate,
 } from './templates.js';
 
 let controller;
@@ -115,6 +119,29 @@ const gamepassTitles = {
   'gamepass-leaving-pc': 'Los que se van de PC Game Pass',
   'gamepass-ea-play-pc': 'Con EA Play en Game Pass',
   'gamepass-all-pc': 'Todos los juegos de PC Game Pass',
+};
+
+const catalogTitles = {
+  all: 'Todos los juegos',
+  pc: 'Juegos disponibles en PC',
+  shooter: 'Shooters',
+  action_adventure: 'Acción y aventura',
+  racing_flying: 'Carreras',
+  card_board: 'Juegos de mesa',
+  classics: 'Clásicos',
+  educational: 'Educativos',
+  family_kids: 'Para toda la familia',
+  fighting: 'Pelea... piñas van, piñas vienen!',
+  music: 'Música',
+  other: 'Otros juegos',
+  platformer: 'Plataformeros',
+  puzzle_trivia: 'Puzzles',
+  role_playing: 'Juegos de rol',
+  simulation: 'Simuladores',
+  sports: 'Deportes',
+  strategy: 'Estrategia',
+  word: 'Palabras',
+  tools: 'Herramientas',
 };
 
 async function bootApp() {
@@ -361,7 +388,7 @@ async function bootApp() {
           return n;
         }));
 
-      $preloadLCP.href = news[0].image.replace('xbox-games-api.vercel.app', 'api.xstoregames.com');
+      $preloadLCP.href = news[0].image;
 
       news.map((n, i) => requestIdleCallback(() => {
         $currentPageContent.insertAdjacentHTML('beforeend', newsTemplate(n, i !== 0));
@@ -416,7 +443,7 @@ async function bootApp() {
         : game.images.screenshot ? game.images.screenshot[0].url
         : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
-      $preloadLCP.href = game.lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=1160&q=70';
+      $preloadLCP.href = game.lcp + '?w=1160&q=70';
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -462,6 +489,7 @@ async function bootApp() {
             controller = new AbortController();
             const signal = controller.signal;
             const related = await fetch(gameXboxRelatedURL(game.id), { signal }).then(res => res.json());
+            const { reviews } = await fetch(getGameReviewsURL(game.id), { signal }).then(res => res.json());
 
             if (related.CompareEditions) {
               yieldToMain(() => {
@@ -488,6 +516,18 @@ async function bootApp() {
                 }));
                 o.current.remove();
                 related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
+              });
+            }
+
+            if (reviews.length) {
+              yieldToMain(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', reviewsTemplate({
+                  icon: '',
+                  title: 'Opiniones',
+                  type: 'reviews',
+                  list: reviews,
+                }));
+                o.current.remove();
               });
             }
 
@@ -562,7 +602,7 @@ async function bootApp() {
               if (section.list.length === 0) {
                 const game = moreGames[0];
                 const lcp = game.images.boxart ? game.images.boxart.url : game.images.poster?.url;
-                $preloadLCP.href = lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=330';
+                $preloadLCP.href = lcp + '?w=330';
               }
 
               moreGames.map((game,i) => requestIdleCallback(() => {
@@ -1015,6 +1055,81 @@ async function bootApp() {
       });
     }
 
+    if (page === 'catalog') {
+      const { id } = getPageFromURL(window.location.href);
+
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $installBtn.hide();
+      });
+
+      if (!$prevPage) {
+        $home.classList.add('page-prev-on');
+      }
+
+      const $prev = $currentPageContent;
+
+      $currentPage = $list;
+      $currentPageContent = $listContent;
+
+      if ($prev === null || $currentPageContent.innerHTML === '') {
+        $loading.show();
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+        $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
+          title: catalogTitles[id],
+          filter: false,
+        }));
+
+        let ct;
+        let pc = [];
+        const catalogGames = await fetch(getXboxCatalogURL(id)).then(res => res.json());
+        if (catalogGames.games.length) {
+          catalogGames.games.map((game, i) => requestIdleCallback(() => {
+            $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
+            gamesCache.set(game.id, game);
+          }));
+          ct = catalogGames.encodedCT;
+
+          pc.push(catalogGames.encodedCT);
+
+        } else {
+          $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
+        }
+
+        requestIdleCallback(() => {
+          const o = new IntersectionObserver(async (entries) => {
+            const first = entries[0];
+            if (first.isIntersecting) {
+              o.unobserve(o.current);
+              const moreGames = await fetch(getXboxCatalogURL(id, ct)).then(res => res.json());
+              if (moreGames.games.length === 0) { return; }
+
+              moreGames.games.map((game,i) => requestIdleCallback(() => {
+                $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
+                gamesCache.set(game.id, game);
+              }));
+              ct = moreGames.encodedCT;
+
+              pc.push(moreGames.encodedCT);
+
+              if (ct) {
+                requestIdleCallback(() => {
+                  o.current = $currentPageContent.lastElementChild;
+                  o.observe(o.current);
+                  $currentPageContent.insertAdjacentHTML('beforeend', `<br/>`);
+                });
+              }
+            }
+          });
+          o.current = $currentPageContent.lastElementChild;
+          o.observe(o.current);
+        });
+
+        $loading.hide();
+      }
+    }
+
     $currentPage.removeAttribute('hidden');
 
     if (window.swipeToBack) {
@@ -1063,7 +1178,7 @@ async function bootApp() {
     });
     const lcp = hotSale.images.featurepromotionalsquareart ?
       hotSale.images.featurepromotionalsquareart.url : hotSale.images.boxart?.url;
-      $preloadLCP.href = lcp.replace('xbox-games-api.vercel.app', 'api.xstoregames.com') + '?w=720&q=70';
+      $preloadLCP.href = lcp + '?w=720&q=70';
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
@@ -1117,6 +1232,9 @@ async function bootApp() {
           if (first.isIntersecting) {
             o.unobserve(o.current);
             const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
+            await yieldToMain(() => {
+              $home.insertAdjacentHTML('beforeend', catalogSection());
+            });
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
             });
@@ -1245,6 +1363,7 @@ async function bootApp() {
     case 'cart':
     case 'collection':
     case 'gamepass':
+    case 'catalog':
     case 'gamer':
       history.replaceState({ page, id }, document.title, window.location.href);
       showPage(page, id);

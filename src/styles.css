@@ -750,6 +750,19 @@ h2 img {
   z-index: 1;
 }
 
+.reviews li {
+  width: 300px;
+  background: var(--bg-box-light-color);
+  display: inline-block;
+  flex: none;
+  padding: 5px 20px;
+  border-radius: 10px;
+}
+
+.reviews a {
+  color: var(--txt-color);
+}
+
 .list .game-pass {
   left: 92px;
 }
@@ -1043,19 +1056,22 @@ header .gamer-btn img {
 }
 
 .gamepass,
-.cafecito {
+.cafecito,
+.catalog {
   padding: 10px 0px;
   margin: 0 15px;
   border-radius: 10px 10px 0 0;
   background: linear-gradient(180deg, #3B844D 0%, var(--bg-xbox-dark-color) 60%, var(--bg-color) 100%);
 }
 
-.cafecito {
+.cafecito,
+.catalog {
   background: linear-gradient(180deg, var(--bg-box-color) 0%, var(--bg-color) 100%);
 }
 
 .gamepass-collections ul,
-.cafecito ul {
+.cafecito ul,
+.catalog ul {
   display: flex;
   list-style: none;
   padding: 0 15px;
@@ -1064,7 +1080,8 @@ header .gamer-btn img {
 }
 
 .gamepass-collections ul li,
-.cafecito li {
+.cafecito li,
+.catalog li {
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -1102,7 +1119,8 @@ header .gamer-btn img {
 }
 
 .gamepass-collections ul li a,
-.cafecito li a {
+.cafecito li a,
+.catalog li a {
   color: var(--txt-color);
   text-decoration: none;
   font-size: 18px;
@@ -1119,12 +1137,22 @@ header .gamer-btn img {
   background-color: #000000;
 }
 
+.catalog ul li {
+  background-color: var(--bg-box-light-color);
+  flex: calc(50% - 10px);
+}
+
+.catalog ul li:first-child {
+  flex: 100%;
+}
+
 .cafecito li a {
   font-size: 16px;
 }
 
 .gamepass-collections ul li a:before,
-.cafecito li a:before {
+.cafecito li a:before,
+.catalog li a:before {
   content: '';
   text-decoration: none;
   cursor: pointer;
@@ -1793,9 +1821,18 @@ progress {
   }
 
   .gamepass-collections ul li,
-  .cafecito li {
+  .cafecito li,
+  .catalog li {
     flex: 1;
     height: 65px;
+  }
+
+  .gamepass-collections ul li {
+    flex: calc(25% - 10px);
+  }
+
+  .catalog ul li {
+    flex: calc(15% - 10px);
   }
 
   .gamepass-collections {
