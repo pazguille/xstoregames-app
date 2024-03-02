@@ -127,21 +127,18 @@ const catalogTitles = {
   shooter: 'Shooters',
   action_adventure: 'Acción y aventura',
   racing_flying: 'Carreras',
-  card_board: 'Juegos de mesa',
+  card_board: 'Cartas',
   classics: 'Clásicos',
   educational: 'Educativos',
   family_kids: 'Para toda la familia',
   fighting: 'Pelea... piñas van, piñas vienen!',
   music: 'Música',
-  other: 'Otros juegos',
   platformer: 'Plataformeros',
   puzzle_trivia: 'Puzzles',
   role_playing: 'Juegos de rol',
   simulation: 'Simuladores',
   sports: 'Deportes',
   strategy: 'Estrategia',
-  word: 'Palabras',
-  tools: 'Herramientas',
 };
 
 async function bootApp() {

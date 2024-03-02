@@ -757,6 +757,7 @@ h2 img {
   flex: none;
   padding: 5px 20px;
   border-radius: 10px;
+  scroll-snap-align: center;
 }
 
 .reviews a {
@@ -1142,7 +1143,8 @@ header .gamer-btn img {
   flex: calc(50% - 10px);
 }
 
-.catalog ul li:first-child {
+.catalog ul li:first-child,
+.catalog ul li:nth-child(2) {
   flex: 100%;
 }
 
@@ -1827,12 +1829,23 @@ progress {
     height: 65px;
   }
 
+  .gamepass-collections ul li a,
+  .cafecito li a,
+  .catalog li a {
+    font-size: 16px;
+  }
+
   .gamepass-collections ul li {
     flex: calc(25% - 10px);
   }
 
   .catalog ul li {
-    flex: calc(15% - 10px);
+    flex: 12%;
+  }
+
+  .catalog ul li:first-child,
+  .catalog ul li:nth-child(2) {
+    flex: calc(50% - 10px);
   }
 
   .gamepass-collections {

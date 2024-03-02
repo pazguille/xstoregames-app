@@ -740,23 +740,25 @@ export function catalogSection() {
     <li><a href="${basePath}/catalog/family_kids" id="family_kids" class="link">Para la familia</a></li>
     <li><a href="${basePath}/catalog/classics" id="classics" class="link">Clásicos</a></li>
     <li><a href="${basePath}/catalog/music" id="music" class="link">Música</a></li>
-    <li><a href="${basePath}/catalog/card_board" id="card_board" class="link">Juegos de mesa</a></li>
-    <li><a href="${basePath}/catalog/word" id="word" class="link">Palabras</a></li>
-    <li><a href="${basePath}/catalog/tools" id="tools" class="link">Herramientas</a></li>
-    <li><a href="${basePath}/catalog/other" id="other" class="link">Otros</a></li>
+    <li><a href="${basePath}/catalog/card_board" id="card_board" class="link">Cartas</a></li>
   </ul>
 </section>
   `);
 }
 
 export function reviewsTemplate(section) {
+  const stars = ['☆', '☆', '☆', '☆', '☆'];
   return (`
 <section>
   <h2>${section.icon}${section.title}</h2>
   <ul class="carousel reviews" aria-roledescription="Carrusel" aria-label="${section.title}">
     ${section.list.map(review => `<li>
-      <p><a class="link" href="/gamer/${review.userName}">${review.userName}</a> dijo:</p>
+      <p><a class="link" href="/gamer/${review.userName}">${review.userName}</a> opinó:</p>
       <p>${review.title}<br/>${review.reviewText}</p>
+      <p>
+        <span class="visually-hidden">Lo valoró con ${review.rating}.</span>
+        <span aria-hidden="true">${[...stars].fill('★', '0', review.rating).join('')}</span>
+      </p>
     </li>`).join('')}
   </ul>
 </section>
