@@ -37,6 +37,7 @@ import {
   catalogSection,
   marketplaceItemsTemplate,
   filtersTemplate,
+  filtersCatalogTemplate,
   settingsTemplate,
   collectionHeaderTemplate,
   finanzasARGSection,
@@ -1053,7 +1054,7 @@ async function bootApp() {
     }
 
     if (page === 'catalog') {
-      const { id } = getPageFromURL(window.location.href);
+      const { id, searchParams } = getPageFromURL(window.location.href);
 
       requestIdleCallback(() => {
         $pageBack.show();
@@ -1065,6 +1066,12 @@ async function bootApp() {
       }
 
       const $prev = $currentPageContent;
+      const sort = searchParams.get('sort');
+
+      if (sort !== sorted) {
+        console.log('UPARTE');
+        sorted = sort;
+      }
 
       $currentPage = $list;
       $currentPageContent = $listContent;
@@ -1075,7 +1082,7 @@ async function bootApp() {
         $currentPageContent.innerHTML = '';
         $currentPageContent.insertAdjacentHTML('beforeend', collectionHeaderTemplate({
           title: catalogTitles[id],
-          filter: false,
+          filter: true,
         }));
 
         let ct;
@@ -1093,6 +1100,10 @@ async function bootApp() {
         } else {
           $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
         }
+
+        requestIdleCallback(() => {
+          $modal.querySelector('.modal-content').innerHTML = filtersCatalogTemplate();
+        });
 
         requestIdleCallback(() => {
           const o = new IntersectionObserver(async (entries) => {
@@ -1228,10 +1239,10 @@ async function bootApp() {
           const first = entries[0];
           if (first.isIntersecting) {
             o.unobserve(o.current);
-            const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', catalogSection());
             });
+            const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
             });
