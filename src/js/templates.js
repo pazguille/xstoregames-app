@@ -624,6 +624,24 @@ export function filtersTemplate() {
   `);
 }
 
+export function filtersCatalogTemplate() {
+  const { pathname } = window.location;
+  return (`
+<h2>Ordenar</h2>
+<ul>
+  <li>
+    <a href="${pathname}" class="link" rel="nofollow">Relevancia</a>
+  </li>
+  <li>
+    <a href="${pathname}?sort=az" class="link" rel="nofollow">A-Z</a>
+  </li>
+  <li>
+    <a href="${pathname}?sort=za" class="link" rel="nofollow">Z-A</a>
+  </li>
+</ul>
+  `);
+}
+
 export function settingsTemplate() {
   const IIBB = window.localStorage.getItem('state');
   return (`
@@ -749,7 +767,7 @@ export function catalogSection() {
 export function reviewsTemplate(section) {
   const stars = ['☆', '☆', '☆', '☆', '☆'];
   return (`
-<section>
+<section style="overflow:hidden;">
   <h2>${section.icon}${section.title}</h2>
   <ul class="carousel reviews" aria-roledescription="Carrusel" aria-label="${section.title}">
     ${section.list.map(review => `<li>
