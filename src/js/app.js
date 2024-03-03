@@ -1067,11 +1067,9 @@ async function bootApp() {
 
       const $prev = $currentPageContent;
       const sort = searchParams.get('sort');
-
-      if (sort !== sorted) {
-        console.log('UPARTE');
-        sorted = sort;
-      }
+      const list = id + (sort || '');
+      let ct;
+      let pc = [];
 
       $currentPage = $list;
       $currentPageContent = $listContent;
@@ -1085,9 +1083,7 @@ async function bootApp() {
           filter: true,
         }));
 
-        let ct;
-        let pc = [];
-        const catalogGames = await fetch(getXboxCatalogURL(id)).then(res => res.json());
+        const catalogGames = await fetch(getXboxCatalogURL(list)).then(res => res.json());
         if (catalogGames.games.length) {
           catalogGames.games.map((game, i) => requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
@@ -1097,44 +1093,55 @@ async function bootApp() {
 
           pc.push(catalogGames.encodedCT);
 
+          requestIdleCallback(() => {
+            $modal.querySelector('.modal-content').innerHTML = filtersCatalogTemplate();
+          });
+
+          requestIdleCallback(() => {
+            const o = new IntersectionObserver(async (entries) => {
+              const first = entries[0];
+              if (first.isIntersecting) {
+                o.unobserve(o.current);
+                const moreGames = await fetch(getXboxCatalogURL(list, ct)).then(res => res.json());
+                if (moreGames.games.length === 0) { return; }
+
+                moreGames.games.map((game,i) => requestIdleCallback(() => {
+                  $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
+                  gamesCache.set(game.id, game);
+                }));
+                ct = moreGames.encodedCT;
+
+                pc.push(moreGames.encodedCT);
+
+                if (ct) {
+                  requestIdleCallback(() => {
+                    o.current = $currentPageContent.lastElementChild;
+                    o.observe(o.current);
+                    $currentPageContent.insertAdjacentHTML('beforeend', `<br/>`);
+                  });
+                }
+              }
+            });
+            o.current = $currentPageContent.lastElementChild;
+            o.observe(o.current);
+          });
+
         } else {
           $currentPageContent.insertAdjacentHTML('beforeend', emptyList());
         }
 
-        requestIdleCallback(() => {
-          $modal.querySelector('.modal-content').innerHTML = filtersCatalogTemplate();
-        });
-
-        requestIdleCallback(() => {
-          const o = new IntersectionObserver(async (entries) => {
-            const first = entries[0];
-            if (first.isIntersecting) {
-              o.unobserve(o.current);
-              const moreGames = await fetch(getXboxCatalogURL(id, ct)).then(res => res.json());
-              if (moreGames.games.length === 0) { return; }
-
-              moreGames.games.map((game,i) => requestIdleCallback(() => {
-                $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game, i !== 0));
-                gamesCache.set(game.id, game);
-              }));
-              ct = moreGames.encodedCT;
-
-              pc.push(moreGames.encodedCT);
-
-              if (ct) {
-                requestIdleCallback(() => {
-                  o.current = $currentPageContent.lastElementChild;
-                  o.observe(o.current);
-                  $currentPageContent.insertAdjacentHTML('beforeend', `<br/>`);
-                });
-              }
-            }
-          });
-          o.current = $currentPageContent.lastElementChild;
-          o.observe(o.current);
-        });
-
+        sorted = sort;
         $loading.hide();
+      }
+
+      if (sort !== sorted) {
+        sorted = sort;
+        $loading.show();
+
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = '';
+
+        showPage('catalog', id);
       }
     }
 
