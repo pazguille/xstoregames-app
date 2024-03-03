@@ -13,6 +13,7 @@ export const getXboxCatalogURL = (list, ct) => `${API_DOMAIN}/api/catalog?list=$
 export const getGameReviewsURL = (id) => `${API_FLY_DOMAIN}/api/games?reviews=${id}`;
 
 export const loginURL = () => `${AUTH_DOMAIN}/api/token?auth=true`;
+export const logoutURL = () => `${AUTH_DOMAIN}/api/logout`;
 export const getGamerURL = () => `${AUTH_DOMAIN}/api/user`;
 export const getGamerById = (id) => `${AUTH_DOMAIN}/api/user?gamertag=${id}`;
 export const getGamerGamesById = (id, count = 0) => `${AUTH_DOMAIN}/api/games?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;

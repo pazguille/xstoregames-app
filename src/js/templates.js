@@ -2,6 +2,7 @@ import {
   convertDollar,
   slugify,
   getPageFromURL,
+  logoutURL,
 } from './utils.js';
 
 export function sectionTemplate(section) {
@@ -72,6 +73,7 @@ export function gameInfoTemplate(game) {
 }
 
 export function gamerPageTemplate(gamer) {
+  const loggedGamer = JSON.parse(window.localStorage.getItem('gamer'));
   return (`
 <form method="GET" id="search-gamer" class="gamer-search">
   <input type="search" name="gamer" id="gamer" placeholder="Buscar jugador..." />
@@ -81,6 +83,7 @@ export function gamerPageTemplate(gamer) {
   <h2>${gamer.displayName}</h2>
   <h2><img src="/src/assets/icons/gamerscore.svg" alt="GamerScore" width="22" height="22" decoding="async" loading="lazy" />${gamer.gamerScore}</h2>
   <h3>${gamer.location}</h3>
+  ${loggedGamer.gamertag === gamer.gamertag ? `<p><a href="/logout" class="link">Salir</a></p>` : ''}
 </section>
 <div class="gamer-stats">
   ${gameSkeletonTemplate()}

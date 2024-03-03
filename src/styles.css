@@ -1477,6 +1477,10 @@ header .gamer-btn img {
   background-image: linear-gradient(120deg, var(--gamer-background-color) 0%, var(--gamer-foreground-color) 100%);
 }
 
+.gamer-card a {
+  color: var(--txt-color);
+}
+
 .gamer-stats {
   grid-column: 1 / -1;
 }

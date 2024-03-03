@@ -21,6 +21,7 @@ import {
   getMarketplaceItemsURL,
   convertDollar,
   pluralGames,
+  logoutURL,
 } from './utils.js';
 
 import {
@@ -281,6 +282,11 @@ async function bootApp() {
   // });
 
   async function showPage(page, id) {
+    if (page === 'logout') {
+      logoutPage();
+      return;
+    }
+
     $prevPage = $currentPage;
 
     document.title = documentTitle;
@@ -1265,6 +1271,11 @@ async function bootApp() {
     });
   }
 
+  function logoutPage() {
+    window.localStorage.removeItem('gamer');
+    window.location.href = logoutURL();
+  }
+
   async function loadSearchPage(q) {
     $prevPage = $currentPage;
 
@@ -1383,8 +1394,11 @@ async function bootApp() {
       history.replaceState({ page, id }, document.title, window.location.href);
       showPage(page, id);
       break;
-  }
 
+    case 'logout':
+      logoutPage();
+      break;
+  }
 
   window.addEventListener('popstate', (eve) => {
     if (controller && !controller.aborted) {
