@@ -4,6 +4,7 @@ const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
 export const searchXboxURL = (query) => `${API_FLY_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
 export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
+export const gameXboxUSURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=us`;
 export const gameXboxFlyURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
 export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=${id}&lang=${lang}&store=${store}`;
 export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
@@ -11,6 +12,7 @@ export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}
 export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
 export const getXboxCatalogURL = (list, ct) => `${API_DOMAIN}/api/catalog?list=${list}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
 export const getGameReviewsURL = (id) => `${API_FLY_DOMAIN}/api/games?reviews=${id}`;
+export const getDollar = () => 'https://dolarapi.com/v1/dolares/tarjeta';
 
 export const loginURL = () => `${AUTH_DOMAIN}/api/token?auth=true`;
 export const logoutURL = () => `${AUTH_DOMAIN}/api/logout`;

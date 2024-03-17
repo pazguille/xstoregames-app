@@ -1,6 +1,7 @@
 import {
   getXboxURL,
   gameXboxURL,
+  gameXboxUSURL,
   gameXboxFlyURL,
   gameXboxRelatedURL,
   searchXboxURL,
@@ -22,6 +23,7 @@ import {
   convertDollar,
   pluralGames,
   logoutURL,
+  getDollar,
 } from './utils.js';
 
 import {
@@ -483,6 +485,16 @@ async function bootApp() {
             )
           }
         }
+      });
+
+      Promise.all([
+        fetch(getDollar()).then(res => res.json()).then(d => d.venta),
+        fetch(gameXboxUSURL(game.id)).then(res => res.json()).then(game => game[0])
+      ]).then(([d, g]) => {
+        requestIdleCallback(() => {
+          document.querySelector('.game-us-price').innerHTML =
+            g.price.amount ? `<x-price amount="${g.price.amount*d}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
+        });
       });
 
       requestIdleCallback(async () => {

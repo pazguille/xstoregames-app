@@ -639,6 +639,7 @@ h2 img {
 .detail .game-preview-info {
   background: var(--bg-color);
   position: relative;
+  margin-bottom: 25px;
 }
 
 .detail .game-preview-info h4 {
@@ -698,6 +699,18 @@ h2 img {
   gap: 8px;
   flex-flow: wrap;
   margin-bottom: 5px;
+}
+
+.detail .game-us-price {
+  display: inline-flex;
+  margin-bottom: 15px;
+  height: 20px;
+  gap: 5px;
+}
+
+.detail .game-us-price .game-price-amount {
+  font-size: 16px;
+  color: var(--bg-xbox-light-color);
 }
 
 .detail .detail-content > .game-preview .game-price div:nth-child(3) {
@@ -1419,6 +1432,9 @@ header .gamer-btn img {
 
 .skeleton {
   animation: skeleton-loading 1.5s linear infinite alternate;
+  display: inline-block;
+  height: 20px;
+  width: 150px;
 }
 
 .section-title.skeleton {
