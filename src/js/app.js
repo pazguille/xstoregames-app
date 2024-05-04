@@ -1308,18 +1308,50 @@ async function bootApp() {
     $currentPage = $results
     $currentPageContent = $resultsContent;
 
+    let ct;
     if ($currentPageContent.innerHTML === '') {
       $loading.show();
       const searchResults = await fetch(searchXboxURL(q)).then(res => res.json());
-      if (searchResults.length) {
-        const gameResults = await fetch(gameXboxFlyURL(searchResults.join(','))).then(res => res.json());
+      if (searchResults.ids.length) {
+        const gameResults = await fetch(gameXboxFlyURL(searchResults.ids.join(','))).then(res => res.json());
         gameResults.map((game) => {
           gamesCache.set(game.id, game);
           requestIdleCallback(() => {
             $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
           })
         });
+        ct = searchResults.encodedCT;
         $loading.hide();
+
+        requestIdleCallback(() => {
+          const o = new IntersectionObserver(async (entries) => {
+            const first = entries[0];
+            if (first.isIntersecting) {
+              o.unobserve(o.current);
+              const moreGames = await fetch(searchXboxURL(q, ct)).then(res => res.json());
+              if (moreGames.ids.length === 0) { return; }
+
+              const gameResults = await fetch(gameXboxFlyURL(moreGames.ids.join(','))).then(res => res.json());
+              gameResults.map((game) => {
+                gamesCache.set(game.id, game);
+                requestIdleCallback(() => {
+                  $currentPageContent.insertAdjacentHTML('beforeend', gameCardTemplate(game));
+                })
+              });
+              ct = gameResults.encodedCT;
+
+              if (ct) {
+                requestIdleCallback(() => {
+                  o.current = $currentPageContent.lastElementChild;
+                  o.observe(o.current);
+                  $currentPageContent.insertAdjacentHTML('beforeend', `<br/>`);
+                });
+              }
+            }
+          });
+          o.current = $currentPageContent.lastElementChild;
+          o.observe(o.current);
+        });
       } else {
         requestIdleCallback(() => {
           $currentPageContent.insertAdjacentHTML('beforeend', emptyList());

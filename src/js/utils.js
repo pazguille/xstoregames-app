@@ -2,7 +2,7 @@ const API_DOMAIN = 'https://api.xstoregames.com';
 const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
 const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
-export const searchXboxURL = (query) => `${API_FLY_DOMAIN}/api/search?q=${query}&lang=${lang}&store=${store}`;
+export const searchXboxURL = (query, ct) => `${API_FLY_DOMAIN}/api/search?q=${query}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
 export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
 export const gameXboxUSURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=us`;
 export const gameXboxFlyURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
