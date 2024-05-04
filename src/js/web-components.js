@@ -121,7 +121,11 @@ class BackButton extends HTMLButtonElement {
   }
 
   _onClick() {
-    window.history.back();
+    if (window.sessionStorage.getItem('page')) {
+      window.history.back();
+    } else {
+      window.location.href = window.location.origin;
+    }
   }
 }
 window.customElements.define('back-button', BackButton, { extends: 'button' });

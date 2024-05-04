@@ -1,6 +1,9 @@
 this.addEventListener('install', async (eve) => { this.skipWaiting(); });
 
 this.addEventListener('fetch', eve => {
+  if (eve.request.headers.has('range')) {
+    return;
+  }
   eve.respondWith(fetch(eve.request));
 });
 
@@ -79,9 +82,22 @@ const sorting = {
   za: (a, b) => b.title > a.title ? 1 : -1,
   'release-oldest': (a, b) => a.release_date > b.release_date ? 1 : -1,
   'release-newest': (a, b) => b.release_date > a.release_date ? 1 : -1,
+  rating: (a, b) => b.averageRating > a.averageRating ? 1 : -1,
+
+  pc: (a, b) => b.platforms.includes('PC') ? 1 : -1,
+  'coop-multi': (a, b) => b.coop.length || b.multi.length ? 1 : -1,
 };
 broadcast.addEventListener('message', eve => {
   const sort = eve.data.sort;
-  const sorted = eve.data.games.toSorted(sorting[sort]);
-  broadcast.postMessage({ sorted });
+  const filter = eve.data.filter;
+  let games = eve.data.games;
+
+  if (filter) {
+    games = games.filter((g) => sorting[filter](g, g) === 1);
+  }
+
+  if (sort) {
+    games = games.toSorted(sorting[sort]);
+  }
+  broadcast.postMessage({ games });
 });

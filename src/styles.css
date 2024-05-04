@@ -14,7 +14,6 @@
 }
 
 :root {
-  /* color-scheme: dark light; */
   --bg-color: #1B201F;
   --bg-highlight-color: #85006c;
 
@@ -63,6 +62,13 @@ body {
   color: var(--txt-color);
   font-size: 16px;
   line-height: 1.1em;
+}
+
+hr {
+  width: 90%;
+  height: 1px;
+  border: none;
+  background: var(--bg-box-light-color);
 }
 
 input {
@@ -270,15 +276,29 @@ h2 img {
   z-index: 2;
 }
 
+.game-platform-tag,
 .game-important-tag {
   display: inline-block;
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  background-color: var(--bg-highlight-color);
   color: var(--txt-color);
   padding: 5px 8px;
   border-radius: 5px;
+}
+
+.game-platform-tag {
+  background-color: var(--bg-box-light-color);
+  margin: 5px 5px 5px 0;
+  width: max-content;
+}
+
+.game-preview-info .game-platform-tag {
+  margin-top: 15px;
+}
+
+.game-important-tag {
+  background-color: var(--bg-highlight-color);
   margin-left: 15px;
 }
 
@@ -574,11 +594,13 @@ h2 img {
   z-index: 2 !important;
 }
 
-.detail .game-preview {
+.detail .detail-content > .game-preview {
   box-shadow: none;
   width: 100%;
+  height: auto;
   border-radius: 0;
-  overflow: visible;
+  padding-bottom: 50%;
+
   /* background-color: transparent;
   background-image: linear-gradient(transparent, var(--bg-color)), var(--game-preview-url);
   background-repeat: no-repeat;
@@ -586,14 +608,22 @@ h2 img {
   background-position: center top; */
 }
 
-.detail .game-preview > .game-img {
+.detail .detail-content > section:first-of-type {
+  margin-top: 0px;
+}
+
+.detail .detail-content > section:last-child .carousel {
+  padding-bottom: 15px;
+}
+
+.detail .detail-content > .game-preview > .game-img {
   width: 100vw;
   aspect-ratio: 16/9;
   position: absolute;
   z-index: 1;
 }
 
-.detail .game-preview > div {
+.detail .detail-content > .game-preview > div {
   position: relative;
   z-index: 2;
   top: 232px;
@@ -609,6 +639,7 @@ h2 img {
 .detail .game-preview-info {
   background: var(--bg-color);
   position: relative;
+  margin-bottom: 25px;
 }
 
 .detail .game-preview-info h4 {
@@ -655,14 +686,14 @@ h2 img {
   position: relative;
 }
 
-.detail .game-title {
+.detail .detail-content > .game-preview .game-title {
   font-size: 30px;
   line-height: 1.2em;
   margin: 5px 0;
   width: 245px;
 }
 
-.detail .game-price {
+.detail .detail-content > .game-preview .game-price {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -670,33 +701,45 @@ h2 img {
   margin-bottom: 5px;
 }
 
-.detail .game-price div:nth-child(3) {
+.detail .game-us-price {
+  display: inline-flex;
+  margin-bottom: 15px;
+  height: 20px;
+  gap: 5px;
+}
+
+.detail .game-us-price .game-price-amount {
+  font-size: 16px;
+  color: var(--bg-xbox-light-color);
+}
+
+.detail .detail-content > .game-preview .game-price div:nth-child(3) {
   flex: none;
   margin: 5px 0;
   font-size: 22px;
   color: var(--bg-xbox-light-color);
 }
 
-.detail .game-price-off {
+.detail .detail-content > .game-preview .game-price-off {
   position: static;
   border-radius: 5px;
 }
 
-.detail .game-price-amount {
+.detail .detail-content > .game-preview .game-price-amount {
   font-size: 26px;
   line-height: 1em;
   width: 100%;
 }
 
-.detail .game-price-taxes {
-  position: absolute;
-  right: 20px;
-}
-
-.detail .game-pass {
+.detail .detail-content > .game-preview .game-pass {
   position: initial;
   display: block;
   margin: 15px 0 0;
+}
+
+.detail .supported-languages {
+ gap: 5px;
+ padding: 0;
 }
 
 .detail .game-description {
@@ -709,12 +752,29 @@ h2 img {
   letter-spacing: 0.5px;
 
   overflow: auto;
+
+  margin: 0;
+  padding-bottom: 15px;
 }
 
 .detail .hero {
   width: 100vw;
   position: absolute;
   z-index: 1;
+}
+
+.reviews li {
+  width: 300px;
+  background: var(--bg-box-light-color);
+  display: inline-block;
+  flex: none;
+  padding: 5px 20px;
+  border-radius: 10px;
+  scroll-snap-align: center;
+}
+
+.reviews a {
+  color: var(--txt-color);
 }
 
 .list .game-pass {
@@ -783,7 +843,7 @@ h2 img {
 }
 
 .search-btn {
-  right: 0px;
+  right: 40px;
 }
 
 .fav-btn.switch-on path {
@@ -814,15 +874,31 @@ h2 img {
 
 .sort-btn {
   right: 0;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
-header .cart-btn {
+header .cart-btn,
+header .gamer-btn {
   top: 0;
-  right: 50px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+header .cart-btn {
+  right: 80px;
+}
+
+header .gamer-btn {
+  right: 0;
+}
+
+header .gamer-btn img {
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  border-radius: 100%;
+  pointer-events: none;
 }
 
 .cart-quantity {
@@ -845,7 +921,7 @@ header .cart-btn {
   width: 55px;
   transform: translateZ(0);
   display: inline-block;
-  padding: 3px 35px;
+  padding: 3px 25px;
   text-align: center;
   text-decoration: none;
 }
@@ -994,22 +1070,22 @@ header .cart-btn {
 }
 
 .gamepass,
-.gold,
-.cafecito {
+.cafecito,
+.catalog {
   padding: 10px 0px;
   margin: 0 15px;
   border-radius: 10px 10px 0 0;
   background: linear-gradient(180deg, #3B844D 0%, var(--bg-xbox-dark-color) 60%, var(--bg-color) 100%);
 }
 
-.gold,
-.cafecito {
+.cafecito,
+.catalog {
   background: linear-gradient(180deg, var(--bg-box-color) 0%, var(--bg-color) 100%);
 }
 
-.gamepass > ul,
-.gold ul,
-.cafecito ul {
+.gamepass-collections ul,
+.cafecito ul,
+.catalog ul {
   display: flex;
   list-style: none;
   padding: 0 15px;
@@ -1017,9 +1093,9 @@ header .cart-btn {
   gap: 15px;
 }
 
-.gamepass > ul li,
-.gold li,
-.cafecito li {
+.gamepass-collections ul li,
+.cafecito li,
+.catalog li {
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -1031,13 +1107,34 @@ header .cart-btn {
   height: 50px;
 }
 
-.gold li {
+.gamepass-collections ul {
+  padding: 0
+}
+
+.gamepass-collections article {
+  flex: 1;
+  min-width: 345px;
+  scroll-snap-align: center;
+}
+.gamepass-collections h2 {
+  margin-left: 0;
+}
+
+.gamepass-collections h2 img {
+  top: 0;
+}
+
+.gamepass ul:nth-of-type(3) li {
   background-color: var(--bg-box-light-color);
 }
 
-.gamepass > ul li a,
-.gold li a,
-.cafecito li a {
+.cafecito li {
+  background-color: #7c64bf;
+}
+
+.gamepass-collections ul li a,
+.cafecito li a,
+.catalog li a {
   color: var(--txt-color);
   text-decoration: none;
   font-size: 18px;
@@ -1051,16 +1148,26 @@ header .cart-btn {
 }
 
 .cafecito li:nth-child(2) {
-  background-color: #1d9bf0;
+  background-color: #000000;
+}
+
+.catalog ul li {
+  background-color: var(--bg-box-light-color);
+  flex: calc(50% - 10px);
+}
+
+.catalog ul li:first-child,
+.catalog ul li:nth-child(2) {
+  flex: 100%;
 }
 
 .cafecito li a {
   font-size: 16px;
 }
 
-.gamepass > ul li a:before,
-.gold li a:before,
-.cafecito li a:before {
+.gamepass-collections ul li a:before,
+.cafecito li a:before,
+.catalog li a:before {
   content: '';
   text-decoration: none;
   cursor: pointer;
@@ -1200,6 +1307,11 @@ header .cart-btn {
   top: 2px;
 }
 
+.cart .share-btn {
+  right: 0;
+  top: 12px;
+}
+
 .cart-disclaimer {
   margin: 0 15px 15px;
   color: var(--txt-color-secondary);
@@ -1262,12 +1374,17 @@ header .cart-btn {
   cursor: pointer;
 }
 
+.modal ul {
+  margin-bottom: 20px;
+}
+
 .modal li {
   margin: 10px 8px 10px 0;
   display: inline-grid;
 }
 
-.modal h2 {
+.modal h2,
+.modal h3 {
   margin: 0 0 15px;
 }
 
@@ -1281,6 +1398,198 @@ header .cart-btn {
 
 .modal a:active {
   background-color: var(--bg-box-color);
+}
+
+.modal select {
+  font-size: .9em;
+  line-height: 1.5em;
+  background-color: transparent;
+  border: 1px solid var(--txt-color);
+  padding: 0.5em 0.7em;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: var(--txt-color);
+  width: 60%;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+
+.modal .btn {
+  background-color: var(--txt-color);
+  border: 1px solid var(--txt-color);
+  color: var(--txt-color-dark);
+  padding: 0.4em 0.7em;
+}
+
+.finanzas-arg h2 {
+  font-size: 14px;
+}
+
+.finanzas-arg a {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+.skeleton {
+  animation: skeleton-loading 1.5s linear infinite alternate;
+  display: inline-block;
+  height: 20px;
+  width: 150px;
+}
+
+.section-title.skeleton {
+  height: 20px;
+  width: 250px;
+  margin: 20px 15px 15px;
+}
+
+.game-preview-skeleton {
+  height: 320px;
+}
+
+.game-title.skeleton {
+  height: 20px;
+}
+
+.game-img.skeleton {
+  height: 165px;
+  width: 165px;
+}
+
+.game-by.skeleton {
+  height: 10px;
+  width: 125px;
+}
+
+.game-price.skeleton {
+  height: 30px;
+  width: 120px;
+}
+
+.gamer-search {
+  display: grid;
+  grid-column: 1;
+  justify-items: center;
+  margin: 10px;
+}
+
+.gamer-search input {
+  height: 45px;
+  padding: 10px;
+  border-radius: 5px;
+  display: block;
+  width: 100%;
+  border: none;
+  background: var(--bg-box-light-color);
+  color: var(--txt-color);
+}
+
+.gamer-card {
+  text-align: center;
+  padding: 30px 0;
+  grid-column: 1 / -1;
+  border-radius: 10px;
+  margin: 10px;
+  background-image: linear-gradient(120deg, var(--gamer-background-color) 0%, var(--gamer-foreground-color) 100%);
+}
+
+.gamer-card a {
+  color: var(--txt-color);
+}
+
+.gamer-stats {
+  grid-column: 1 / -1;
+}
+
+.gamer-achievements .game-preview-soon {
+  width: 245px;
+}
+
+.gamer-clips {
+  padding-bottom: 25px;
+}
+
+.gamer-clips .game-preview-soon {
+  width: 345px;
+}
+
+.gamer-clips h3 {
+  order: 2;
+  margin: 5px;
+}
+
+.gamer-card .gamer-display-pic {
+  border-radius: 10px;
+  border: 5px solid var(--gamer-foreground-color);
+}
+
+.gamer-games .game-preview-achievements {
+  margin: 0;
+}
+
+.game-preview-achievements .game-by {
+  margin: 0;
+}
+
+.game-preview-achievements p {
+  display: flex;
+  align-items: center;
+  margin: 10px 0 5px;
+  gap: 5px;
+}
+
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+}
+
+::-webkit-progress-bar {
+  background: var(--txt-color-secondary);
+  border-radius: 10px;
+}
+
+::-webkit-progress-value {
+  background-color: var(--bg-xbox-color);
+  border-radius: 10px;
+}
+
+.game-preview-clips {
+  display: grid;
+  margin: 15px;
+  gap: 10px;
+}
+
+.carousel .game-preview-clips {
+  scroll-snap-align: center;
+  margin: 0;
+}
+
+.game-preview-soon.game-preview-achievements {
+  overflow: visible;
+  margin: 15px;
+  width: 365px;
+  filter: grayscale(var(--achievement-state));
+}
+
+
+.game-preview-soon.game-preview-achievements .game-img {
+  width: 100%;
+  height: auto;
+}
+
+.carousel .game-preview-soon.game-preview-achievements {
+  margin: 0;
+  width: 256px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: var(--bg-box-light-color);
+  }
+  100% {
+    background-color: #33333570;
+  }
 }
 
 @media (min-width: 54em) {
@@ -1336,8 +1645,9 @@ header .cart-btn {
   .home,
   .list .page-content,
   .news .page-content,
-  .detail .game-preview > div {
-    max-width: 1100px;
+  .detail .detail-content > .game-preview > div,
+  .detail .detail-content > section {
+    max-width: 1150px;
     margin: 0 auto;
   }
 
@@ -1457,15 +1767,16 @@ header .cart-btn {
     margin: 15px;
   }
 
-  .detail .game-title {
+  .detail .detail-content > .game-preview .game-title {
     width: 418px;
   }
 
-  .detail .game-preview {
+  .detail .detail-content > .game-preview {
     background-size: cover;
+    padding-bottom: 0;
   }
 
-  .detail .game-preview:before {
+  .detail .detail-content > .game-preview:before {
     content: '';
     display: block;
     position: absolute;
@@ -1482,18 +1793,18 @@ header .cart-btn {
     height: 200vh;
   }
 
-  .detail .game-preview:before,
-  .detail .game-preview > .game-img {
+  .detail .detail-content > .game-preview:before,
+  .detail .detail-content > .game-preview > .game-img {
     width: calc(100vw - 80px);
   }
 
-  .detail .game-preview > div {
+  .detail .detail-content > .game-preview > div {
     top: 0;
     background-color: transparent;
     padding: 20px 30px;
   }
 
-  .detail .game-price-taxes {
+  .detail .detail-content > .game-preview .game-price-taxes {
     position: static;
   }
 
@@ -1531,11 +1842,34 @@ header .cart-btn {
     height: 326px;
   }
 
-  .gamepass > ul li,
-  .gold li,
-  .cafecito li {
+  .gamepass-collections ul li,
+  .cafecito li,
+  .catalog li {
     flex: 1;
-    height: 100px;
+    height: 65px;
+  }
+
+  .gamepass-collections ul li a,
+  .cafecito li a,
+  .catalog li a {
+    font-size: 16px;
+  }
+
+  .gamepass-collections ul li {
+    flex: calc(25% - 10px);
+  }
+
+  .catalog ul li {
+    flex: 12%;
+  }
+
+  .catalog ul li:first-child,
+  .catalog ul li:nth-child(2) {
+    flex: calc(50% - 10px);
+  }
+
+  .gamepass-collections {
+    flex-direction: column;
   }
 
   .footer-btn {
@@ -1557,5 +1891,14 @@ header .cart-btn {
     bottom: 0;
     left: auto;
     right: 0;
+  }
+
+  .gamer-achievements .game-img {
+    width: 245px;
+    height: 138px;
+  }
+
+  .gamer-content .game-preview-soon {
+    margin: 20px;
   }
 }
