@@ -354,7 +354,6 @@ export function newsTemplate(news, lazy = true) {
 <article class="news-preview">
   <h2><a href="${news.link}">${news.title}</a></h2>
   <img class="news-img" width="335px" height="190px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${news.image}">
-  <p>${news.description}</p>
 </article>
 `);
 }

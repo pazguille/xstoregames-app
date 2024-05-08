@@ -390,7 +390,7 @@ async function bootApp() {
       const news = await fetch(getXboxNewsURL())
         .then(res => res.json())
         .then(res => res.map(n => {
-          n.image = n.image.replace('1200%2C675', '670%2C380')
+          n.image = n.image.replace('1920%2C1080', '670%2C380')
           return n;
         }));
 
