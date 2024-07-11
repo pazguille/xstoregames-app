@@ -152,8 +152,6 @@ export function gamerClipsTemplate(clip) {
   `);
 }
 
-
-
 export function gameDetailTemplate(game) {
   const img = game.lcp;
   // const img = game.images.titledheroart ?
@@ -163,16 +161,11 @@ export function gameDetailTemplate(game) {
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   // <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
 
-  let storeUrl = `https://www.xbox.com/${lang}-${store}/games/store/${slugify(game.title)}/${game.id}`;
+  const storeUrl = `https://www.xbox.com/${lang}-${store}/games/store/${slugify(game.title)}/${game.id}`;
 
-  if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
+  if (['CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
     game.images.screenshot = null;
-    storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
   }
-  // else {
-  //   // storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
-  //   // storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
-  // }
 
   // ${gamerGames.findIndex((g) => g.id === game.id) !== -1 ? '<span class="game-platform-tag">Ya lo jugaste</span>': '' }
 
@@ -412,29 +405,13 @@ export function gamepassSection() {
         <strong class="game-important-tag">Plan destacado</strong>
       </h3>
       <ul>
-        <li>Acceso ilimitado a más de 100 juegos de alta calidad en PC, consola y dispositivos móviles</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas, descuentos y ventajas para miembros</li>
-        <li>Beneficios gratuitos que incluyen contenido del juego y ofertas de asociados</li>
-        <li>Juega en el teléfono y en la tableta desde la nube</li>
-        <li>Modo multijugador en línea en consola</li>
-        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros</li>
+        <li>Cientos de juegos de alta calidad en consola, PC y la nube</li>
+        <li>Nuevos juegos desde el mismo día de su lanzamiento</li>
+        <li>Ofertas, descuentos y Recompensas para miembros</li>
+        <li>Juegos multijugador online para consola</li>
+        <li>Suscripción a EA Play</li>
       </ul>
       <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0">Ver más</a>
-    </article>
-
-    <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass-console.png" alt="Game Pass para Consola" decoding="async" loading="lazy" width="174" height="20" />
-      </h3>
-      <ul>
-        <li>Acceso ilimitado a más de 100 juegos de consola de alta calidad</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas y descuentos para miembros</li>
-      </ul>
-      <a class="btn link" href="/game/xbox-game-pass-para-consola_CFQ7TTC0K6L8">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
@@ -442,11 +419,10 @@ export function gamepassSection() {
         <img src="/src/assets/gamepass-pc.png" alt="Game Pass para PC" decoding="async" loading="lazy" width="135" height="20" />
       </h3>
       <ul>
-        <li>Acceso ilimitado a más de 100 juegos de alta calidad para PC</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
+        <li>Cientos de juegos de alta calidad en PC</li>
+        <li>Nuevos juegos desde el mismo día de su lanzamiento</li>
         <li>Ofertas y descuentos para miembros</li>
-        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros en la PC</li>
+        <li>Suscripción a EA Play</li>
       </ul>
       <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
     </article>
@@ -788,4 +764,8 @@ export function reviewsTemplate(section) {
   </ul>
 </section>
 `);
+}
+
+export function chatMessageTemplate(message) {
+  return `<div class="chat-message chat-message-${message.role}"><strong class="visually-hidden">${message.role}:</strong>${message.text}</div>`;
 }
