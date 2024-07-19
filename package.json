@@ -23,7 +23,7 @@
   },
   "homepage": "https://xstoregames.com",
   "devDependencies": {
-    "@builder.io/partytown": "^0.7.3",
+    "@builder.io/partytown": "^0.10.2",
     "devcert": "^1.2.2",
     "html-inline": "^1.2.0",
     "html-minifier-terser": "^7.1.0",
