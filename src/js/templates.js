@@ -450,7 +450,7 @@ export function supportSection() {
   <ul>
     ${store === 'ar' ?
     `<li>
-      <a href="https://cafecito.app/pazguille" rel="noopener" target="_blank">
+      <a href="https://cafecito.app/xstoregames" rel="noopener" target="_blank">
         <img
           src="/src/assets/cafecito.svg"
           alt="Invitame un café en cafecito.app"
