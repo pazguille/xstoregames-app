@@ -495,27 +495,12 @@ async function bootApp() {
         const diffPriceP = Math.round((usPrice - game.price.amount) / usPrice * 100);
 
         requestIdleCallback(() => {
-          document.querySelector('.game-us-price').innerHTML =
-            g.price.amount ? `<x-price amount="${usPrice}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
-        });
-
-        requestIdleCallback(() => {
           if (diffPriceP > 60) {
             document.querySelector('.game-bug-price').removeAttribute('hidden');
-            emojiBlast({
-              emojis: ['🐛', '🪲', '🐞'],
-              position: {
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2,
-              },
-              physics: {
-                fontSize: {
-                  max: 54,
-                  min: 24,
-                },
-              },
-            });
           }
+
+          document.querySelector('.game-us-price').innerHTML =
+            g.price.amount ? `<x-price amount="${usPrice}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
         });
       });
 
@@ -1601,6 +1586,24 @@ async function bootApp() {
       $modal.classList.remove('modal-on');
       $modal.toggleAttribute('hidden');
       $currentPage?.classList.remove('page-scale');
+    });
+
+    document.body.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('game-bug-price')) {
+        emojiBlast({
+          emojis: ['🐛', '🪲', '🐞'],
+          position: {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+          },
+          physics: {
+            fontSize: {
+              max: 54,
+              min: 24,
+            },
+          },
+        });
+      }
     });
 
     $modal.addEventListener('submit', (eve) => {
