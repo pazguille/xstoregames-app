@@ -491,9 +491,31 @@ async function bootApp() {
         fetch(getDollar()).then(res => res.json()).then(d => d.venta),
         fetch(gameXboxUSURL(game.id)).then(res => res.json()).then(game => game[0])
       ]).then(([d, g]) => {
+        const usPrice = g.price.amount*d;
+        const diffPriceP = Math.round((usPrice - game.price.amount) / usPrice * 100);
+
         requestIdleCallback(() => {
           document.querySelector('.game-us-price').innerHTML =
-            g.price.amount ? `<x-price amount="${g.price.amount*d}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
+            g.price.amount ? `<x-price amount="${usPrice}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
+        });
+
+        requestIdleCallback(() => {
+          if (diffPriceP > 60) {
+            document.querySelector('.game-bug-price').removeAttribute('hidden');
+            emojiBlast({
+              emojis: ['🐛', '🪲', '🐞'],
+              position: {
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+              },
+              physics: {
+                fontSize: {
+                  max: 54,
+                  min: 24,
+                },
+              },
+            });
+          }
         });
       });
 
