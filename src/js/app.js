@@ -82,6 +82,13 @@ const sections = [
     skipitems: 0,
   },
   {
+    type: 'careful',
+    title: 'Precios cuidados',
+    icon: `<img alt="" src="/src/assets/icons/careful.svg" width="15" height="22" />`,
+    list: [],
+    skipitems: 0,
+  },
+  {
     type: 'coming',
     title: '¡Mirá lo que se viene!',
     icon: '',
