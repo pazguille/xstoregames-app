@@ -2,6 +2,7 @@ import {
   convertDollar,
   slugify,
   getPageFromURL,
+  shuffle,
 } from './utils.js';
 
 export function sectionTemplate(section) {
@@ -765,6 +766,58 @@ export function reviewsTemplate(section) {
     </li>`).join('')}
   </ul>
 </section>
+`);
+}
+
+export function gameGuessThePriceTemplate(game) {
+  const img = game.lcp;
+
+  if (['CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
+    game.images.screenshot = null;
+  }
+
+  const prices = shuffle([
+    convertDollar(game.price.amount),
+    (Math. random() * (game.price.amount*2 - game.price.amount/2) + game.price.amount/2).toFixed(2),
+    (Math. random() * (game.price.amount*2 - game.price.amount/2) + game.price.amount/2).toFixed(2),
+  ]);
+
+  const gameurl = `${window.location.origin}/game/${slugify(game.title)}_${game.id}`;
+
+  return (`
+<article class="game-preview">
+  <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
+  <div>
+    <div class="game-preview-info">
+      <small>¿Cuánto sale?</small>
+      <h3 class="game-title">${game.title}</h3>
+      <p class="game-by">by ${game.developer || game.publisher}</p>
+      <div>
+        <h4 class="visually-hidden">Se puede jugar en:</h4>
+        ${game.platforms.map(p => `<span class="game-platform-tag">${p}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="price-options">
+      ${
+        prices.map(price => `
+          <button class="btn price-btn" name="${game.id}" value="${price}">
+            <x-price amount="${price}"></x-price>
+          </button>
+        `).join('')
+      }
+    </div>
+
+    <div class="play-actions">
+      <a href="${gameurl}" class="btn view-game-btn link" rel="nofollow noopener">
+        Ver juego
+      </a>
+      <button class="next-game-btn btn">
+        Siguiente
+      </button>
+    </div>
+  </div>
+</article>
 `);
 }
 

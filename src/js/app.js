@@ -4,6 +4,7 @@ import {
   gameXboxUSURL,
   gameXboxFlyURL,
   gameXboxRelatedURL,
+  gameRandomURL,
   searchXboxURL,
   getXboxNewsURL,
   getGamePassURL,
@@ -24,6 +25,7 @@ import {
   pluralGames,
   logoutURL,
   getDollar,
+  getRandomItem,
 } from './utils.js';
 
 import {
@@ -51,6 +53,7 @@ import {
   gamerPageStatsTemplate,
   gamerPageNotFoundTemplate,
   reviewsTemplate,
+  gameGuessThePriceTemplate,
 } from './templates.js';
 
 let controller;
@@ -231,6 +234,9 @@ async function bootApp() {
   const $cartContent = document.querySelector('.cart-content');
   const $results = document.querySelector('.results');
   const $resultsContent = document.querySelector('.results-content');
+
+  const $play = document.querySelector('.play');
+  const $playContent = document.querySelector('.play-content');
 
   const $news = document.querySelector('.news');
   const $newsContent = document.querySelector('.news-content');
@@ -1177,6 +1183,37 @@ async function bootApp() {
       }
     }
 
+    if (page === 'play') {
+      $footer.dataset.active = page;
+
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $installBtn.hide();
+      });
+
+      $currentPage = $play;
+      $currentPageContent = $playContent;
+      $currentPageContent.innerHTML = '';
+
+      $loading.show();
+
+      const game = await fetch(gameRandomURL(1)).then(res => res.json()).then(g => g[0]);
+      gamesCache.set(game.id, game);
+      $loading.hide();
+
+      game.lcp = (game.images.titledheroart ?
+        (game.images.titledheroart.url || game.images.titledheroart[0].url)
+        : game.images.screenshot ? game.images.screenshot[0].url
+        : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
+
+      $preloadLCP.href = game.lcp + '?w=1160&q=70';
+
+      const html = gameGuessThePriceTemplate(game);
+      requestIdleCallback(() => {
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = html;
+      });
+    }
     $currentPage.removeAttribute('hidden');
 
     if (window.swipeToBack) {
@@ -1449,6 +1486,7 @@ async function bootApp() {
     case 'gamepass':
     case 'catalog':
     case 'gamer':
+    case 'play':
       history.replaceState({ page, id }, document.title, window.location.href);
       showPage(page, id);
       break;
@@ -1637,7 +1675,6 @@ async function bootApp() {
       loadSearchPage(q);
     });
 
-
     $gamer.addEventListener('submit', async (eve) => {
       eve.preventDefault();
       const id = eve.target.elements[0].value;
@@ -1741,6 +1778,22 @@ async function bootApp() {
         document.dispatchEvent(new CustomEvent('cartupdate', { detail: { games: cartArr.length } }));
       }
     });
+
+    $playContent.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('next-game-btn')) {
+        showPage('play', 'guess-the-game');
+      }
+
+      if (eve.target.classList.contains('price-btn')) {
+        const game = gamesCache.get(eve.target.name);
+        if (convertDollar(game.price.amount) ===  eve.target.value) {
+          eve.target.classList.add('bounce');
+        } else {
+          eve.target.classList.add('shakeX');
+        }
+      }
+    });
+
     window.addEventListener('appinstalled', (eve) => {
       gtag('event', 'app_installed');
     });

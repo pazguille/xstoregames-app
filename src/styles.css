@@ -562,6 +562,69 @@ h2 img {
   50% { border-width:0; opacity:0; transform: scale(1.3);  }
 }
 
+@keyframes shakeX {
+  from,
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shakeX {
+  animation: shakeX 200ms linear;
+  background-color: rgba(231, 41, 41, 0.6) !important;
+}
+
+@keyframes bounce {
+  from,
+  20%,
+  53%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+
+  40%,
+  43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -30px, 0) scaleY(1.1);
+  }
+
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0) scaleY(1.05);
+  }
+
+  80% {
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0) scaleY(0.95);
+  }
+
+  90% {
+    transform: translate3d(0, -4px, 0) scaleY(1.02);
+  }
+}
+
+.bounce {
+  animation: bounce 400ms linear;
+  transform-origin: center bottom;
+  background-color: rgba(155, 240, 11, 0.6) !important;
+}
+
 .page {
   position: fixed;
   top: 50px;
@@ -600,12 +663,6 @@ h2 img {
   height: auto;
   border-radius: 0;
   padding-bottom: 50%;
-
-  /* background-color: transparent;
-  background-image: linear-gradient(transparent, var(--bg-color)), var(--game-preview-url);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center top; */
 }
 
 .detail .detail-content > section:first-of-type {
@@ -795,6 +852,7 @@ h2 img {
   box-sizing: border-box;
   color: var(--txt-color);
   text-decoration: none;
+  font-family: "Bahnschrift", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .page-content {
@@ -921,7 +979,7 @@ header .gamer-btn img {
   width: 55px;
   transform: translateZ(0);
   display: inline-block;
-  padding: 3px 25px;
+  padding: 3px 10px;
   text-align: center;
   text-decoration: none;
 }
@@ -932,14 +990,20 @@ header .gamer-btn img {
 
 [data-active=""] .home-btn path,
 [data-active="wishlist"] .wish-btn path,
-[data-active="news"] .news-btn path {
+[data-active="news"] .news-btn path,
+[data-active="play"] .play-btn path {
   fill: var(--bg-xbox-light-color);
 }
 
 [data-active=""] .home-btn,
 [data-active="wishlist"] .wish-btn,
-[data-active="news"] .news-btn {
+[data-active="news"] .news-btn,
+[data-active="play"] .play-btn {
   color: var(--bg-xbox-light-color);
+}
+
+.play-btn svg {
+  margin: 3px 0 5px;
 }
 
 .search label {
@@ -1016,7 +1080,8 @@ header .gamer-btn img {
 }
 
 .wish,
-.news {
+.news,
+.play {
   z-index: 1;
   bottom: calc(50px + env(safe-area-inset-bottom));
   min-height: auto;
@@ -1592,6 +1657,233 @@ progress {
   }
 }
 
+.play.detail .detail-content > .game-preview .game-title {
+  font-size: 26px;
+}
+
+.play .price-options {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.play .price-btn {
+  font-size: 20px;
+  background: rgba(46, 49, 49, 0.6);
+  border-color: rgba(46, 49, 49, 0.6);
+  padding: 0.4em 1em;
+}
+
+.play .play-actions {
+  display: flex;
+  gap: 10px;
+  justify-content:space-around;
+  margin-top: 15px;
+}
+
+.play .game-preview-info {
+  margin-bottom: 10px;
+}
+
+.play-content {
+  height: auto;
+}
+
+.play.detail .play-content > .game-preview {
+  padding-bottom: 55%;
+}
+
+.play .price-btn x-price {
+  pointer-events: none;
+}
+
+.play .view-game-btn,
+.play .next-game-btn {
+  border-color: var(--bg-box-light-color);
+  background-color: var(--bg-box-light-color);
+}
+
+.chat {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin: 0;
+  height: calc(100vh - 50px);
+  overflow: hidden;
+}
+
+.chat header {
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 5px 10px;
+}
+
+.chat header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.chat-writing {
+  font-size: 13px;
+  color: var(--txt-color-secondary);
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 60px 15px 70px;
+  white-space: pre-line;
+  scroll-behavior: smooth;
+}
+
+.chat-message {
+  margin: 5px 0;
+  line-height: 1em;
+  padding: 10px;
+  width: fit-content !important;
+  max-width: 90% !important;
+  font-size: 14px;
+  line-height: 1.3em !important;
+}
+
+.chat img {
+  display: block;
+  width: 198px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.chat-message-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+}
+
+.chat-message-link_url::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.chat-message-link_img {
+  width: 72px;
+  border-radius: 5px 0px 0px 5px;
+  background-color: #cdcdcd;
+}
+
+.chat-message-link_preview {
+  margin: 0 !important;
+  border-radius: 5px;
+  background-color: rgba(142, 142, 142, .1);
+  width: 100%;
+  height: 72px;
+  overflow: hidden;
+  display: flex;
+}
+
+.chat-message-link_title {
+  margin: 5px !important;
+  font-weight: bold;
+  max-width: 172px;
+  font-size: 12px;
+}
+
+.chat-message-link_title,
+.chat-message-link_description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-width: 172px;
+  overflow: hidden;
+}
+
+.chat-message-link_description {
+  margin: 5px;
+  line-height: 1.2em;
+  color:#515151;
+}
+
+.chat-message-link_url {
+  display: block;
+  margin: 5px;
+}
+
+.chat-message-model {
+  align-self: start;
+  border-radius: 12px 12px 12px 0;
+  background: var(--bg-box-light-color);
+}
+
+.chat-message-user {
+  align-self: end;
+  border-radius: 12px 12px 0 12px;
+  background: var(--bg-xbox-color);
+}
+
+.chat-message img + span {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.chat footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  padding: 0 15px;
+  border: none;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.chat-form {
+  display: flex;
+  width: 100%;
+}
+
+.chat-input {
+  background-color: var(--txt-color);
+  border: 1px solid var(--txt-color);
+  border-radius: 5px;
+  padding: 3px 10px;
+  color: var(--bg-color);
+  height: 30px;
+  margin: 0 10px;
+  width: 78%;
+  font-size: 16px;
+}
+
+.chat-send {
+  border-radius: 5px;
+  background: var(--bg-xbox-color);
+  width: 40px;
+  height: 40px;
+}
+
+.chat-send svg {
+  position: relative;
+  left: 2px;
+  top: 1px;
+}
+
+.chat-message ul {
+  line-height: 14px;
+  list-style: unset;
+  padding: 7px 14px;
+}
+
+.chat-message a {
+  color: var(--txt-color);
+}
+
+
 @media (min-width: 54em) {
 
   .page {
@@ -1900,5 +2192,40 @@ progress {
 
   .gamer-content .game-preview-soon {
     margin: 20px;
+  }
+
+  .play.detail .detail-content > .game-preview {
+    display: flex;
+    flex-flow: row-reverse;
+  }
+
+  .play.detail .detail-content > .game-preview:before {
+    content: none;
+  }
+
+  .play.detail .detail-content > .game-preview > .game-img {
+    width: 700px;
+    height: 394px;
+    position: relative;
+    top: 20px;
+    left: -35px;
+    border-radius: 5px;
+  }
+
+  .play.detail .game-preview-info {
+    min-height: auto;
+  }
+
+  .chat {
+    max-width: 60%;
+    margin: 0 auto;
+  }
+
+  .chat footer {
+    bottom: 0;
+    top: auto;
+    width: 60%;
+    margin: 0 auto;
+    left: calc(50% - 30%)
   }
 }

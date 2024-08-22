@@ -7,6 +7,7 @@ export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang
 export const gameXboxUSURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=us`;
 export const gameXboxFlyURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
 export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=${id}&lang=${lang}&store=${store}`;
+export const gameRandomURL = (count) => `${API_FLY_DOMAIN}/api/games?list=random&lang=${lang}&store=${store}&count=${count}`;
 export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
 export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
 export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
@@ -98,3 +99,24 @@ export function pluralGames(n) {
   const suffix = suffixes.get(rule);
   return `${n} ${suffix}`;
 };
+
+export function shuffle(arr) {
+  let collection = arr;
+  let len = arr.length;
+  let random;
+  let temp;
+
+  while (len) {
+    random = Math.floor(Math.random() * len);
+    len -= 1;
+    temp = collection[len];
+    collection[len] = collection[random];
+    collection[random] = temp;
+  }
+
+  return collection;
+};
+
+export function getRandomItem(iterable) {
+  return iterable.get([...iterable.keys()][Math.floor(Math.random() * iterable.size)])
+}
