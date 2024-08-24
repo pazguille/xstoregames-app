@@ -257,12 +257,12 @@ async function bootApp() {
     const iddb = window.indexedDB.open('xstoregames', 1);
     iddb.onupgradeneeded = async (eve) => {
       eve.currentTarget.result
-          .createObjectStore('wishlist', { keyPath: 'gameId' })
-          .createIndex('gameId', 'gameId', { unique: true });
+        .createObjectStore('wishlist', { keyPath: 'gameId' })
+        .createIndex('gameId', 'gameId', { unique: true });
 
       // eve.currentTarget.result
-      //     .createObjectStore('played', { autoIncrement: true })
-      //     .createIndex('id', 'id', { unique: true });
+      //   .createObjectStore('played', { keyPath: 'gameId' })
+      //   .createIndex('lastTimePlayed', 'lastTimePlayed', { unique: true });
 
       if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
         const iddbWishlist = window.indexedDB.open('wishlist', 1);
@@ -288,14 +288,6 @@ async function bootApp() {
     iddb.onsuccess = eve => { resolve(eve.target.result); };
   });
 
-  // const gamerGames = window.gamerGames = await new Promise((resolve) => {
-  //   db
-  //     .transaction('played', 'readonly')
-  //     .objectStore('played')
-  //     .getAll()
-  //     .onsuccess = (e) => resolve(e.target.result);
-  // });
-
   async function showPage(page, id) {
     if (page === 'logout') {
       logoutPage();
@@ -317,6 +309,8 @@ async function bootApp() {
     }, 300);
 
     if (page === 'wishlist') {
+      document.title = `Favoritos | XStore`;
+
       $footer.dataset.active = page;
 
       requestIdleCallback(() => {
@@ -377,6 +371,8 @@ async function bootApp() {
     }
 
     if (page === 'news') {
+      document.title = `Noticias | XStore`;
+
       $footer.dataset.active = page;
 
       $home.setAttribute('hidden', true);
@@ -608,6 +604,8 @@ async function bootApp() {
 
       const section = sections.find(section => section.type === id);
 
+      document.title = `${section.title} | XStore`;
+
       if (!sort && ($prev === null || $currentPageContent.innerHTML === '')) {
         $currentPage.scrollTo(0, 0);
         $currentPageContent.innerHTML = '';
@@ -706,6 +704,8 @@ async function bootApp() {
     }
 
     if (page === 'games') {
+      document.title = `Listado de juegos | XStore`;
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
@@ -744,6 +744,8 @@ async function bootApp() {
       if ($prevPage && $prevPage.classList.contains('cart')) {
         return;
       }
+
+      document.title = `Carrito | XStore`;
 
       requestIdleCallback(() => {
         $pageBack.show();
@@ -841,6 +843,8 @@ async function bootApp() {
         gamerPage = gamer;
       }
 
+      document.title = `Perfil de ${gamerPage.gamertag} | XStore`;
+
       const { paths, searchParams } = getPageFromURL(window.location.href);
       if (paths.length === 3 && ['games', 'achievements', 'clips'].includes(paths[2])) {
         switch(paths[2]) {
@@ -862,6 +866,7 @@ async function bootApp() {
                 gamerCache.set(`${id}-games`, g);
                 return g;
               });
+
             games.then((gs) => {
               gs.map((game, i) => yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', gamerGamesTemplate(game, id));
@@ -1031,6 +1036,8 @@ async function bootApp() {
       $currentPage = $list;
       $currentPageContent = $listContent;
 
+      document.title = `${gamepassTitles[`${page}-${id}`]} | XStore`;
+
       if ($prev === null || $currentPageContent.innerHTML === '') {
         $loading.show();
         $currentPage.scrollTo(0, 0);
@@ -1093,6 +1100,8 @@ async function bootApp() {
 
     if (page === 'catalog') {
       const { id, searchParams } = getPageFromURL(window.location.href);
+
+      document.title = `${catalogTitles[id]} | XStore`;
 
       requestIdleCallback(() => {
         $pageBack.show();
@@ -1184,6 +1193,8 @@ async function bootApp() {
     }
 
     if (page === 'play') {
+      document.title = `Jugar: ¿Cuánto sale? | XStore`;
+
       $footer.dataset.active = page;
 
       requestIdleCallback(() => {
