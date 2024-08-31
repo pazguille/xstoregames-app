@@ -116,7 +116,3 @@ export function shuffle(arr) {
 
   return collection;
 };
-
-export function getRandomItem(iterable) {
-  return iterable.get([...iterable.keys()][Math.floor(Math.random() * iterable.size)])
-}

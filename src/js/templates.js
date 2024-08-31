@@ -336,7 +336,7 @@ export function gameImportantTemplate(game) {
 
 export function gameCardTemplate(game, lazy = true) {
   const img = game.images.boxart ?
-    game.images.boxart.url : game.images.poster?.url;
+    game.images.boxart.url : game.images.poster?.url || game.images.logo?.url;
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}

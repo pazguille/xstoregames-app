@@ -25,7 +25,6 @@ import {
   pluralGames,
   logoutURL,
   getDollar,
-  getRandomItem,
 } from './utils.js';
 
 import {
@@ -115,6 +114,20 @@ const sections = [
   {
     type: 'free',
     title: 'Gratarola',
+    icon: '',
+    list: [],
+    skipitems: 0,
+  },
+  {
+    type: 'new-pc',
+    title: 'Novedades para PC',
+    icon: '',
+    list: [],
+    skipitems: 0,
+  },
+  {
+    type: 'deals-pc',
+    title: 'Ofertas para PC',
     icon: '',
     list: [],
     skipitems: 0,
@@ -671,14 +684,21 @@ async function bootApp() {
 
         // TODO: Improve API repsonse to avoid this
         const allGames = allGamesCache.get(id) || await Promise.all([
-          fetch(getXboxURL(id, 0, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 200, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 400, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 600, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 800, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1000, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1200, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1400, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 0, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 100, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 200, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 300, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 400, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 500, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 600, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 700, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 800, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 900, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1000, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1100, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1200, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1300, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1400, 100)).then(res => res.json()),
         ]).then(a => a.flat()).then(a => { allGamesCache.set(id, a); return a; });
 
         broadcast.postMessage({
