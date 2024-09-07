@@ -21,9 +21,9 @@ export function gameListTemplate(section) {
   <button class="prev arrow" aria-hidden="true">
     <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
   </button>
-  ${section.type === 'new' ?
+  ${['new', 'new-pc'].includes(section.type) ?
       section.list.map(game => `<li>${gameCardNewTemplate(game)}</li>`).join('')
-    : section.type === 'coming' ?
+    : ['deals', 'deals-pc', 'coming'].includes(section.type) ?
         section.list.map(game => `<li>${gameCardSoonTemplate(game)}</li>`).join('')
     : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
