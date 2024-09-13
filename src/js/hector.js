@@ -154,6 +154,28 @@ document.body.addEventListener('keydown', (eve) => {
 
 const isIphone = navigator.userAgent.includes('iPhone');
 if (isIphone) {
+  let h = window.visualViewport.height;
+
+  visualViewport.addEventListener('resize', (eve) => {
+    if (h < window.visualViewport.height) {
+      h = window.visualViewport.height
+
+      // $chatModal.removeAttribute('style');
+      $chatModal.style.height = '80vh';
+      $chat.removeAttribute('style');
+      return;
+    }
+
+    h = window.visualViewport.height
+
+    $chatModal.style.height = `calc(${h}px - 65px)`;
+    $chat.style.height = '100%';
+
+    requestIdleCallback(() => {
+      $chatMessages.scrollTop = $chatMessages.scrollHeight;
+    });
+  });
+
   // $chatInput.addEventListener('focus', (eve) => {
   //   setTimeout(() => {
   //     window.scrollTo(0, 0);
@@ -167,18 +189,6 @@ if (isIphone) {
   //     });
   //   }, 1000);
   // });
-
-  visualViewport.addEventListener('resize', (eve) => {
-    window.scrollTo(0, 0);
-    $chatModal.style.height = `calc(${window.visualViewport.height}px - 65px)`;
-    $chatModal.style.bottom = 'auo';
-    $chatModal.style.top = '50px';
-
-    $chat.style.height = '100%';
-    requestIdleCallback(() => {
-      $chatMessages.scrollTop = $chatMessages.scrollHeight;
-    });
-  });
 
   // $chat.addEventListener('click', (eve) => {
   //   if (eve.target.classList.contains('chat-send')) {

@@ -1735,6 +1735,8 @@ progress {
 
 .modal-chat-content {
   overflow: hidden;
+  height: 80vh;
+  transition: height 300ms ease-out, transform 300ms ease-out;
 }
 
 .chat {
