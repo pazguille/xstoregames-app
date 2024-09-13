@@ -412,7 +412,9 @@ async function bootApp() {
       const news = await fetch(getXboxNewsURL())
         .then(res => res.json())
         .then(res => res.map(n => {
-          n.image = n.image.replace('1920%2C1080', '670%2C380')
+          if (n.image) {
+            n.image = n.image.replace('1920%2C1080', '670%2C380');
+          }
           return n;
         }));
 
@@ -1245,7 +1247,7 @@ async function bootApp() {
         $currentPageContent.innerHTML = html;
       });
     }
-    $currentPage.removeAttribute('hidden');
+    $currentPage?.removeAttribute('hidden');
 
     if (window.swipeToBack) {
       $currentPage.classList.add('page-on');
@@ -1263,8 +1265,8 @@ async function bootApp() {
 
       requestIdleCallback(() => {
         $loading.hide();
-        $currentPage.classList.add('page-on');
-        $currentPage.classList.remove('page-prev-on');
+        $currentPage?.classList.add('page-on');
+        $currentPage?.classList.remove('page-prev-on');
       });
     }
   }
@@ -1549,7 +1551,7 @@ async function bootApp() {
         return;
       }
 
-      $prevPage.classList.remove('page-on');
+      $prevPage?.classList.remove('page-on');
       setTimeout(() => {
         requestIdleCallback(() => {
           $prevPage.setAttribute('hidden', true);
@@ -1833,5 +1835,11 @@ async function bootApp() {
   requestIdleCallback(() => {
     import('./swipes.js');
   });
+
+  if (gamer?.gamertag === 'pazguillexx') {
+    requestIdleCallback(() => {
+      import('./hector.js');
+    });
+  }
 }
 bootApp();

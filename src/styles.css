@@ -1002,7 +1002,8 @@ header .gamer-btn img {
   color: var(--bg-xbox-light-color);
 }
 
-.play-btn svg {
+.play-btn svg,
+.hector-btn svg {
   margin: 3px 0 5px;
 }
 
@@ -1010,6 +1011,31 @@ header .gamer-btn img {
   visibility: hidden;
   position: absolute;
   z-index: -1;
+}
+
+.hector-btn {
+  position: absolute;
+  top: -70px;
+  right: 10px;
+  border-radius: 100%;
+  background-color: var(--bg-xbox-dark-color);
+  height: 55px;
+  width: 41px;
+  line-height: 55px;
+}
+
+.hector-btn:before {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: var(--bg-box-deal-color);
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.hector-btn.notification:before {
+  content: '';
 }
 
 .search input[type="search"] {
@@ -1387,7 +1413,8 @@ header .gamer-btn img {
   transform: scale(.96);
 }
 
-.modal {
+.modal,
+.modal-chat {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -1402,11 +1429,13 @@ header .gamer-btn img {
   opacity: 1;
 }
 
-.modal-on .modal-content {
+.modal-on .modal-content,
+.modal-on .modal-chat-content {
   transform: translateY(0);
 }
 
-.modal-content {
+.modal-content,
+.modal-chat-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -1422,7 +1451,8 @@ header .gamer-btn img {
   transition-delay: 50ms;
 }
 
-.modal-content:before {
+.modal-content:before,
+.modal-chat-content:before {
   content: '✕';
   display: inline-block;
   width: 25px;
@@ -1708,7 +1738,7 @@ progress {
   position: relative;
   flex-direction: column;
   margin: 0;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 150px);
   overflow: hidden;
 }
 
@@ -1717,7 +1747,14 @@ progress {
   gap: 2px;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5px 10px;
+  padding: 0;
+  padding-bottom: 25px;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-align: left;
+  position: relative;
+  z-index: 0;
 }
 
 .chat header h2 {
@@ -1728,15 +1765,17 @@ progress {
 .chat-writing {
   font-size: 13px;
   color: var(--txt-color-secondary);
+  position: absolute;
+  bottom: 5px;
 }
 
 .chat-messages {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  padding: 60px 15px 70px;
+  padding: 0 0 70px;
   white-space: pre-line;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 }
 
 .chat-message {
@@ -1819,13 +1858,13 @@ progress {
 .chat-message-model {
   align-self: start;
   border-radius: 12px 12px 12px 0;
-  background: var(--bg-box-light-color);
+  background: var(--bg-box-color);
 }
 
 .chat-message-user {
   align-self: end;
   border-radius: 12px 12px 0 12px;
-  background: var(--bg-xbox-color);
+  background: var(--bg-box-highlight-color);
 }
 
 .chat-message img + span {
@@ -1838,9 +1877,11 @@ progress {
   align-items: center;
   justify-content: center;
   height: 70px;
-  padding: 0 15px;
+  padding: 0;
   border: none;
   padding-bottom: env(safe-area-inset-bottom);
+  background-color: var(--bg-box-light-color);
+  left: 0;
 }
 
 .chat-form {
@@ -1857,32 +1898,34 @@ progress {
   height: 30px;
   margin: 0 10px;
   width: 78%;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .chat-send {
   border-radius: 5px;
-  background: var(--bg-xbox-color);
-  width: 40px;
-  height: 40px;
+  border: 1px solid var(--txt-color-secondary);
+  width: 38px;
+  height: 38px;
 }
 
 .chat-send svg {
   position: relative;
-  left: 2px;
+  left: 1px;
   top: 1px;
 }
 
 .chat-message ul {
-  line-height: 14px;
   list-style: unset;
-  padding: 7px 14px;
+  padding: 0px 15px;
+}
+
+.chat-message ul li {
+  line-height: 1.6em;
 }
 
 .chat-message a {
   color: var(--txt-color);
 }
-
 
 @media (min-width: 54em) {
 
@@ -2168,17 +2211,20 @@ progress {
     padding: 12px;
   }
 
-  .modal-content {
+  .modal-content,
+  .modal-chat-content {
     transform: translateX(280px);
     width: 25vw;
     border-radius: 15px 0px 0 0;
   }
 
-  .modal-on .modal-content {
+  .modal-on .modal-content,
+  .modal-on .modal-chat-content {
     transform: translateX(0);
   }
 
-  .modal-content {
+  .modal-content,
+  .modal-chat-content {
     top: 0;
     bottom: 0;
     left: auto;
@@ -2216,16 +2262,25 @@ progress {
     min-height: auto;
   }
 
-  .chat {
-    max-width: 60%;
-    margin: 0 auto;
+  .chat header {
+    left: 0;
   }
 
   .chat footer {
     bottom: 0;
     top: auto;
-    width: 60%;
-    margin: 0 auto;
-    left: calc(50% - 30%)
+    right: 0;
+    width: 98%;
+  }
+
+  .hector-btn {
+    position: relative;
+    background: none;
+    top: auto;
+    right: auto;
+  }
+
+  .hector-btn:before {
+    top: 22px;
   }
 }
