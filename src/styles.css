@@ -1733,6 +1733,10 @@ progress {
   background-color: var(--bg-box-light-color);
 }
 
+.modal-chat-content {
+  overflow: hidden;
+}
+
 .chat {
   display: flex;
   position: relative;
@@ -1776,6 +1780,8 @@ progress {
   padding: 0 0 70px;
   white-space: pre-line;
   /* scroll-behavior: smooth; */
+
+  /* height: 100%; */
 }
 
 .chat-message {

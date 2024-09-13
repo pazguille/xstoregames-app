@@ -3,6 +3,7 @@ import {
 } from './templates.js';
 
 const $hector = document.querySelector('.hector');
+const $chat = document.querySelector('.chat');
 const $chatForm = document.querySelector('.chat-form');
 const $chatMessages = document.querySelector('.chat-messages');
 const $chatWriting = document.querySelector('.chat-writing');
@@ -64,14 +65,21 @@ $hector.addEventListener('click', (eve) => {
   }
 });
 
+let submiting = false
+
 $chatForm.addEventListener('submit', async (eve) => {
   eve.preventDefault();
   eve.stopPropagation();
+
+  submiting = true;
+
+  $chatInput.focus();
 
   const message = eve.target.elements[0].value;
   $chatForm.reset();
 
   if (message === '') {
+    submiting = false;
     return;
   }
 
@@ -134,6 +142,8 @@ $chatForm.addEventListener('submit', async (eve) => {
   if (!$hector.classList.contains('modal-on')) {
     $hectorBtn.classList.add('notification');
   }
+
+  submiting = false;
 });
 
 document.body.addEventListener('keydown', (eve) => {
@@ -147,16 +157,26 @@ if (isIphone) {
   $chatInput.addEventListener('focus', (eve) => {
     setTimeout(() => {
       window.scrollTo(0, 0);
-      $chatModal.style.height = `calc(100% - ${window.visualViewport.height + 30}px)`;
+      $chatModal.style.height = `calc(${window.visualViewport.height}px - 65px)`;
       $chatModal.style.bottom = 'auto';
       $chatModal.style.top = '50px';
-    }, 500);
+
+      $chat.style.height = '100%';
+      requestIdleCallback(() => {
+        $chatMessages.scrollTop = $chatMessages.scrollHeight;
+      });
+    }, 1000);
   });
 
-  $chatInput.addEventListener('blur', (eve) => {
-    setTimeout(() => {
+  $chat.addEventListener('click', (eve) => {
+    if (eve.target.classList.contains('chat-send')) {
+      return;
+    }
+
+    yieldToMain(() => {
       $chatModal.removeAttribute('style');
-    }, 250);
+      $chat.removeAttribute('style');
+    });
   });
 }
 
