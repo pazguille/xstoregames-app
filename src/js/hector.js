@@ -154,30 +154,42 @@ document.body.addEventListener('keydown', (eve) => {
 
 const isIphone = navigator.userAgent.includes('iPhone');
 if (isIphone) {
-  $chatInput.addEventListener('focus', (eve) => {
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      $chatModal.style.height = `calc(${window.visualViewport.height}px - 65px)`;
-      $chatModal.style.bottom = 'auto';
-      $chatModal.style.top = '50px';
+  // $chatInput.addEventListener('focus', (eve) => {
+  //   setTimeout(() => {
+  //     window.scrollTo(0, 0);
+  //     $chatModal.style.height = `calc(${window.visualViewport.height}px - 70px)`;
+  //     $chatModal.style.bottom = 'auo';
+  //     $chatModal.style.top = '50px';
 
-      $chat.style.height = '100%';
-      requestIdleCallback(() => {
-        $chatMessages.scrollTop = $chatMessages.scrollHeight;
-      });
-    }, 1000);
-  });
+  //     $chat.style.height = '100%';
+  //     requestIdleCallback(() => {
+  //       $chatMessages.scrollTop = $chatMessages.scrollHeight;
+  //     });
+  //   }, 1000);
+  // });
 
-  $chat.addEventListener('click', (eve) => {
-    if (eve.target.classList.contains('chat-send')) {
-      return;
-    }
+  visualViewport.addEventListener('resize', (eve) => {
+    window.scrollTo(0, 0);
+    $chatModal.style.height = `calc(${window.visualViewport.height}px - 65px)`;
+    $chatModal.style.bottom = 'auo';
+    $chatModal.style.top = '50px';
 
-    yieldToMain(() => {
-      $chatModal.removeAttribute('style');
-      $chat.removeAttribute('style');
+    $chat.style.height = '100%';
+    requestIdleCallback(() => {
+      $chatMessages.scrollTop = $chatMessages.scrollHeight;
     });
   });
+
+  // $chat.addEventListener('click', (eve) => {
+  //   if (eve.target.classList.contains('chat-send')) {
+  //     return;
+  //   }
+
+  //   yieldToMain(() => {
+  //     $chatModal.removeAttribute('style');
+  //     $chat.removeAttribute('style');
+  //   });
+  // });
 }
 
 
