@@ -85,7 +85,7 @@ const sections = [
   },
   {
     type: 'careful',
-    title: 'Precios cuidados',
+    title: 'Juegos Cuidados',
     icon: `<img alt="" src="/src/assets/icons/careful.svg" width="15" height="22" />`,
     list: [],
     skipitems: 0,

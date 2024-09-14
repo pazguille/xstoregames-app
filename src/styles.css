@@ -1798,9 +1798,11 @@ progress {
 
 .chat img {
   display: block;
-  width: 198px;
+  width: 198px !important;
+  height: auto !important;
   object-fit: cover;
   border-radius: 8px;
+  margin: 15px;
 }
 
 .chat-message-link {
@@ -2233,10 +2235,11 @@ progress {
 
   .modal-content,
   .modal-chat-content {
-    top: 0;
     bottom: 0;
     left: auto;
     right: 0;
+    top: auto;
+    height: calc(100vh - 100px);
   }
 
   .gamer-achievements .game-img {

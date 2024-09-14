@@ -65,13 +65,9 @@ $hector.addEventListener('click', (eve) => {
   }
 });
 
-let submiting = false
-
 $chatForm.addEventListener('submit', async (eve) => {
   eve.preventDefault();
   eve.stopPropagation();
-
-  submiting = true;
 
   $chatInput.focus();
 
@@ -79,7 +75,6 @@ $chatForm.addEventListener('submit', async (eve) => {
   $chatForm.reset();
 
   if (message === '') {
-    submiting = false;
     return;
   }
 
@@ -142,8 +137,6 @@ $chatForm.addEventListener('submit', async (eve) => {
   if (!$hector.classList.contains('modal-on')) {
     $hectorBtn.classList.add('notification');
   }
-
-  submiting = false;
 });
 
 document.body.addEventListener('keydown', (eve) => {
@@ -175,31 +168,6 @@ if (isIphone) {
       $chatMessages.scrollTop = $chatMessages.scrollHeight;
     });
   });
-
-  // $chatInput.addEventListener('focus', (eve) => {
-  //   setTimeout(() => {
-  //     window.scrollTo(0, 0);
-  //     $chatModal.style.height = `calc(${window.visualViewport.height}px - 70px)`;
-  //     $chatModal.style.bottom = 'auo';
-  //     $chatModal.style.top = '50px';
-
-  //     $chat.style.height = '100%';
-  //     requestIdleCallback(() => {
-  //       $chatMessages.scrollTop = $chatMessages.scrollHeight;
-  //     });
-  //   }, 1000);
-  // });
-
-  // $chat.addEventListener('click', (eve) => {
-  //   if (eve.target.classList.contains('chat-send')) {
-  //     return;
-  //   }
-
-  //   yieldToMain(() => {
-  //     $chatModal.removeAttribute('style');
-  //     $chat.removeAttribute('style');
-  //   });
-  // });
 }
 
 
