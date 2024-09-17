@@ -228,7 +228,7 @@ async function bootApp() {
   const $canonical = document.querySelector('#canonical');
   const $preloadLCP = document.querySelector('#preloadLCP');
 
-  const $footer = document.querySelector('footer');
+  const $footer = document.querySelector('main+footer');
 
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
