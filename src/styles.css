@@ -1798,7 +1798,7 @@ progress {
 
 .chat img {
   display: block;
-  width: 198px !important;
+  width: 100% !important;
   height: auto !important;
   object-fit: cover;
   border-radius: 8px;

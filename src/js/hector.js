@@ -11,32 +11,30 @@ const $chatInput = document.querySelector('.chat-input');
 const $chatModal = document.querySelector('.modal-chat-content');
 const $hectorBtn = document.querySelector('.hector-btn');
 
+let modalShowed = false;
 let chatLoaded = false;
 const chatHistory = new Set(
   JSON.parse(window.localStorage.getItem('chat'))
 );
 
+const gamer = JSON.parse(window.localStorage.getItem('gamer'));
+
 function showModal() {
   $hector.removeAttribute('hidden');
   yieldToMain(() => $hector.classList.add('modal-on'));
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
+  $hectorBtn.classList.remove('notification');
 }
 
 function closeModal() {
   $hector.toggleAttribute('hidden');
-  $hector.classList.remove('modal-on')
+  $hector.classList.remove('modal-on');
 }
 
 $hectorBtn.addEventListener('click', (eve) => {
   eve.preventDefault();
 
-  $hector.removeAttribute('hidden');
-
-  yieldToMain(() => $hector.classList.add('modal-on'));
-
-  $hectorBtn.classList.remove('notification');
-
-  $chatMessages.scrollTop = $chatMessages.scrollHeight;
+  showModal();
 
   if (chatLoaded) {
     return;
@@ -49,12 +47,14 @@ $hectorBtn.addEventListener('click', (eve) => {
         chatMessageTemplate({
           role: message.role,
           text: message.parts.map(part => part.text).join(' '),
-        })
+        }),
       );
     });
   });
 
-  $chatMessages.scrollTop = $chatMessages.scrollHeight;
+  requestIdleCallback(() => {
+    $chatMessages.scrollTop = $chatMessages.scrollHeight;
+  });
 
   chatLoaded = true;
 });
@@ -62,6 +62,14 @@ $hectorBtn.addEventListener('click', (eve) => {
 $hector.addEventListener('click', (eve) => {
   if (eve.target.classList.contains('link') || eve.target.nodeName === 'HEADER') {
     closeModal();
+  }
+
+  if (eve.target.nodeName === 'HEADER') {
+    modalShowed = false;
+  }
+
+  if (eve.target.classList.contains('link')) {
+    modalShowed = true;
   }
 });
 
@@ -105,6 +113,7 @@ $chatForm.addEventListener('submit', async (eve) => {
     body: JSON.stringify({
       message,
       history: Array.from(chatHistory),
+      gamer: gamer.gamertag,
     }),
     mode: 'cors',
   }).then(res => res.json());
@@ -145,6 +154,12 @@ document.body.addEventListener('keydown', (eve) => {
   }
 });
 
+window.addEventListener('popstate', (eve) => {
+  if (eve.state === null && modalShowed) {
+    showModal();
+  }
+});
+
 const isIphone = navigator.userAgent.includes('iPhone');
 if (isIphone) {
   let h = window.visualViewport.height;
@@ -169,6 +184,5 @@ if (isIphone) {
     });
   });
 }
-
 
 $hectorBtn.removeAttribute('hidden');
