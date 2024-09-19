@@ -157,6 +157,8 @@ document.body.addEventListener('keydown', (eve) => {
 window.addEventListener('popstate', (eve) => {
   if (eve.state === null && modalShowed) {
     showModal();
+  } else if (modalShowed) {
+    closeModal();
   }
 });
 
