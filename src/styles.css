@@ -1802,7 +1802,7 @@ progress {
   height: auto !important;
   object-fit: cover;
   border-radius: 8px;
-  margin: 15px;
+  margin: 0;
 }
 
 .chat-message-link {

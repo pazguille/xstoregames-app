@@ -1836,7 +1836,8 @@ async function bootApp() {
     import('./swipes.js');
   });
 
-  if (gamer && ['pazguillexx', 'lukevz6440'].includes(gamer.gamertag.toLowerCase())) {
+  const gamertags = ['pazguillexx', 'lukevz6440', 'Darkness4381', 'massiRP91218', 'OneCTwo1074', 'Tomi4298543'];
+  if (gamer && gamertags.includes(gamer.gamertag.toLowerCase())) {
     requestIdleCallback(() => {
       import('./hector.js');
     });
