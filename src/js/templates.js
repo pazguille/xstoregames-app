@@ -23,7 +23,7 @@ export function gameListTemplate(section) {
   </button>
   ${['new', 'new-pc'].includes(section.type) ?
       section.list.map(game => `<li>${gameCardNewTemplate(game)}</li>`).join('')
-    : ['deals', 'deals-pc', 'coming'].includes(section.type) ?
+    : ['deals-pc', 'coming'].includes(section.type) ?
         section.list.map(game => `<li>${gameCardSoonTemplate(game)}</li>`).join('')
     : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
