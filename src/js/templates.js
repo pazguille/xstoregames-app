@@ -23,7 +23,7 @@ export function gameListTemplate(section) {
   </button>
   ${['new', 'new-pc'].includes(section.type) ?
       section.list.map(game => `<li>${gameCardNewTemplate(game)}</li>`).join('')
-    : ['deals-pc', 'coming'].includes(section.type) ?
+    : ['deals', 'deals-pc', 'coming'].includes(section.type) ?
         section.list.map(game => `<li>${gameCardSoonTemplate(game)}</li>`).join('')
     : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
@@ -298,7 +298,7 @@ export function gameCardNewTemplate(game) {
 export function gameCardSoonTemplate(game) {
   const img = game.images.titledheroart ?
     (game.images.titledheroart.url || game.images.titledheroart[0].url)
-    : game.images.screenshot[0].url;
+    : (game.images.screenshot && game.images.screenshot[0].url) || game.images.poster?.url;
   return (`
 <article class="game-preview-soon">
   ${gameInfoTemplate(game)}
