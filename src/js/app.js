@@ -470,7 +470,7 @@ async function bootApp() {
 
       game.lcp = (game.images.titledheroart ?
         (game.images.titledheroart.url || game.images.titledheroart[0].url)
-        : game.images.screenshot ? game.images.screenshot[0].url
+        : game.images.screenshot ? (game.images.screenshot[0]?.url || game.images.screenshot?.url)
         : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
       $preloadLCP.href = game.lcp + '?w=1160&q=70';
