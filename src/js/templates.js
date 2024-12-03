@@ -296,9 +296,10 @@ export function gameCardNewTemplate(game) {
 }
 
 export function gameCardSoonTemplate(game) {
+  console.log(game);
   const img = game.images.titledheroart ?
     (game.images.titledheroart.url || game.images.titledheroart[0].url)
-    : (game.images.screenshot && game.images.screenshot[0].url) || game.images.poster?.url;
+    : (game.images.screenshot && (game.images.screenshot.length ? game.images.screenshot[0].url : game.images.screenshot.url)) || game.images.poster?.url;
   return (`
 <article class="game-preview-soon">
   ${gameInfoTemplate(game)}
