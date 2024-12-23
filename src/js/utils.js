@@ -73,14 +73,13 @@ const IIBBs = {
 const IVA = 0.21;
 const IIBB = IIBBs[window.localStorage.getItem('state') || 'CABA'];
 const AFIP = 0.30;
-const PAISA = 0.08;
 
 export function convertDollar(price) {
   if (store !== 'ar') {
     return price.toFixed(2);
   }
 
-  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
+  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP);
   return final.toFixed(2);
 }
 
