@@ -333,6 +333,7 @@ h2 img {
   flex-direction: row;
   position: relative;
   scroll-snap-align: center;
+  content-visibility: auto;
 }
 
 .game-preview-new .game-pass {
@@ -385,6 +386,7 @@ h2 img {
   flex-direction: column;
   position: relative;
   scroll-snap-align: center;
+  content-visibility: auto;
 }
 
 .game-preview-soon > div {
@@ -425,6 +427,7 @@ h2 img {
   display: flex;
   flex-direction: column;
   position: relative;
+  content-visibility: auto;
 }
 
 .game-preview > div {
