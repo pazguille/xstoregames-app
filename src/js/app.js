@@ -1351,10 +1351,10 @@ async function bootApp() {
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', catalogSection());
             });
-            const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
-            await yieldToMain(() => {
-              $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
-            });
+            // const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
+            // await yieldToMain(() => {
+            //   $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
+            // });
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', finanzasARGSection());
             });
