@@ -24,8 +24,8 @@ export const getGamerAchievementsById = (id, count = 0) => `${AUTH_DOMAIN}/api/a
 export const getGamerAchievementsByTitleId = (id, titleId) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&titleId=${titleId}&lang=${lang}&store=${store}`;
 export const getGamerClipsById = (id, count = 0) => `${AUTH_DOMAIN}/api/clips?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
 
-const mlId = { ar: 'MLA', mx: 'MLM', };
-export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
+// const mlId = { ar: 'MLA', mx: 'MLM', };
+// export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
 
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);

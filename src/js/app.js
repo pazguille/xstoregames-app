@@ -20,7 +20,7 @@ import {
   getGamerClipsById,
   slugify,
   getPageFromURL,
-  getMarketplaceItemsURL,
+  // getMarketplaceItemsURL,
   convertDollar,
   pluralGames,
   logoutURL,
@@ -39,7 +39,7 @@ import {
   gamepassSection,
   supportSection,
   catalogSection,
-  marketplaceItemsTemplate,
+  // marketplaceItemsTemplate,
   filtersTemplate,
   filtersCatalogTemplate,
   settingsTemplate,
@@ -1727,13 +1727,13 @@ async function bootApp() {
       });
     });
 
-    $home.addEventListener('click', (eve) => {
-      if (eve.target.classList.contains('marketplace_item')) {
-        gtag('event', 'marketplace_item', {
-          page_location: eve.target.href,
-        });
-      }
-    });
+    // $home.addEventListener('click', (eve) => {
+    //   if (eve.target.classList.contains('marketplace_item')) {
+    //     gtag('event', 'marketplace_item', {
+    //       page_location: eve.target.href,
+    //     });
+    //   }
+    // });
 
     $detailContent.addEventListener('click', (eve) => {
       if (eve.target.classList.contains('game-buy-now')) {
