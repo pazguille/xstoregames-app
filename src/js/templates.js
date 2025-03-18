@@ -675,7 +675,7 @@ export function finanzasARGSection() {
       src="/src/assets/finanzas-arg.webp"
       alt=""
       width="150"
-      heigth="26"
+      height="26"
       decoding="async"
       loading="lazy"
     />
@@ -696,7 +696,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
     <li>
@@ -706,7 +706,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
     <li>
@@ -716,7 +716,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
   </ul>

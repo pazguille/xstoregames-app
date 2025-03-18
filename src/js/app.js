@@ -138,13 +138,13 @@ const gamepassTitles = {
   'gamepass-new': 'Recién agregados a Game Pass',
   'gamepass-coming': 'Se están por sumar a Game Pass',
   'gamepass-leaving': 'Los que se van de Game Pass',
-  'gamepass-ea-play': 'Con EA Play en Game Pass',
+  'gamepass-ea': 'Con EA Play en Game Pass',
   'gamepass-gp-deals': 'Ofertas exclusivas con Game Pass',
   'gamepass-all': 'Todos los juegos de Game Pass',
   'gamepass-new-pc': 'Recién agregados a PC Game Pass',
   'gamepass-coming-pc': 'Se están por sumar a PC Game Pass',
   'gamepass-leaving-pc': 'Los que se van de PC Game Pass',
-  'gamepass-ea-play-pc': 'Con EA Play en Game Pass',
+  'gamepass-ea-pc': 'Con EA Play en Game Pass',
   'gamepass-all-pc': 'Todos los juegos de PC Game Pass',
 };
 
@@ -552,17 +552,17 @@ async function bootApp() {
               });
             }
 
-            if (related.AddOnsByParentWithDetails) {
+            if (related.ProductAddOns) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
                   icon: '',
                   title: 'Complementos',
                   type: 'addons',
-                  list: related.AddOnsByParentWithDetails,
+                  list: related.ProductAddOns,
                   more: false,
                 }));
                 o.current.remove();
-                related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
+                related.ProductAddOns.forEach((game) => gamesCache.set(game.id, game));
               });
             }
 
@@ -578,17 +578,17 @@ async function bootApp() {
               });
             }
 
-            if (related.PAL) {
+            if (related.MoreLike) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
                   icon: '',
                   title: 'Te pueden gustar',
                   type: 'related',
-                  list: related.PAL,
+                  list: related.MoreLike,
                   more: false,
                 }));
                 o.current.remove();
-                related.PAL.forEach((game) => gamesCache.set(game.id, game));
+                related.MoreLike.forEach((game) => gamesCache.set(game.id, game));
               });
             }
           }
