@@ -1782,13 +1782,6 @@ progress {
   font-size: 12px;
 }
 
-.chat-writing {
-  font-size: 13px;
-  color: var(--txt-color-secondary);
-  position: absolute;
-  bottom: 5px;
-}
-
 .chat-messages {
   display: flex;
   flex-direction: column;
@@ -1879,10 +1872,28 @@ progress {
   margin: 5px;
 }
 
+.chat-message-skeleton,
 .chat-message-model {
   align-self: start;
   border-radius: 12px 12px 12px 0;
   background: var(--bg-box-color);
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: .8;
+  }
+  50% {
+    opacity: .4;
+  }
+  100% {
+    opacity: .8;
+  }
+}
+
+.chat-message-skeleton {
+  width: 50% !important;
+  animation: fadeInOut 2.5s infinite;
 }
 
 .chat-message-user {

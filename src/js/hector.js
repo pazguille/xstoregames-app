@@ -6,7 +6,6 @@ const $hector = document.querySelector('.hector');
 const $chat = document.querySelector('.chat');
 const $chatForm = document.querySelector('.chat-form');
 const $chatMessages = document.querySelector('.chat-messages');
-const $chatWriting = document.querySelector('.chat-writing');
 const $chatInput = document.querySelector('.chat-input');
 const $chatModal = document.querySelector('.modal-chat-content');
 const $hectorBtn = document.querySelector('.hector-btn');
@@ -101,9 +100,16 @@ $chatForm.addEventListener('submit', async (eve) => {
     })
   );
 
+  $chatMessages.insertAdjacentHTML(
+    'beforeend',
+    chatMessageTemplate({
+      role: 'skeleton',
+      text: '•••',
+    })
+  );
+
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
 
-  $chatWriting.removeAttribute('hidden');
   // const response = await fetch('http://localhost:3031/api/hector', {
   const response = await fetch('https://fly.xstoregames.com/api/hector', {
     method: 'POST',
@@ -117,7 +123,7 @@ $chatForm.addEventListener('submit', async (eve) => {
     }),
     mode: 'cors',
   }).then(res => res.json());
-  $chatWriting.setAttribute('hidden', true);
+
   chatHistory.add(
     {
       role: 'user',
@@ -130,6 +136,8 @@ $chatForm.addEventListener('submit', async (eve) => {
       parts: [{ text: response.message }],
     }
   );
+
+  $chatMessages.querySelector('.chat-message-skeleton').remove();
 
   $chatMessages.insertAdjacentHTML(
     'beforeend',
