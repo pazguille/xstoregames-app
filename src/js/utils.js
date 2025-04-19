@@ -57,6 +57,7 @@ export function slugify(str) {
     .replace(/_+/g, '-');
 }
 
+const IVA = 0.21;
 const IIBBs = {
   NONE: 0,
   PAMP: 0.01,
@@ -69,16 +70,28 @@ const IIBBs = {
   RNEGRO: 0.05,
   CHACO: 0.055,
 };
+const PAYMETHODS = {
+  ASTROPAY: (price) => toFixed(price) + toFixed(price * IIBB),
+  TC: (price) => toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB),
 
-const IVA = 0.21;
+  // MP: (price) => {
+  //   const dprice = Number((price / window.dof.compra).toFixed(2)) * window.dccl.compra;
+  //   return toFixed(dprice) + toFixed(price * IVA) + toFixed(price * IIBB);
+  // },
+  // NONE: (price) => price,
+  // DOLLAR: (price) => Number((price / window.dof.compra).toFixed(2)),
+};
+
 const IIBB = IIBBs[window.localStorage.getItem('state') || 'CABA'];
+const PAYMETHOD = PAYMETHODS[window.localStorage.getItem('paymethod') || 'TC'];
 
 export function convertDollar(price) {
   if (store !== 'ar') {
     return price.toFixed(2);
   }
 
-  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB);
+  const final = PAYMETHOD(price);
+
   return final.toFixed(2);
 }
 
@@ -114,3 +127,27 @@ export function shuffle(arr) {
 
   return collection;
 };
+
+// export async function getDollars() {
+//   return new Promise(async (resolve) => {
+//     window.dof = JSON.parse(window.localStorage.getItem('dof'));
+//     window.dccl = JSON.parse(window.localStorage.getItem('dccl'));
+//     const useMP = window.localStorage.getItem('paymethod') === 'MP';
+
+//     if (useMP) {
+//       if (dof && dccl && new Date(window.dccl.fechaActualizacion) > Date.now() - 7200000) { // 2 hours = 7200000 ms
+//         resolve();
+//       }
+
+//       const dollars = await fetch('https://dolarapi.com/v1/dolares').then(res => res.json());
+
+//       window.dof = dollars.find(d => d.casa === 'oficial');
+//       window.dccl = dollars.find(d => d.casa === 'contadoconliqui');
+
+//       window.localStorage.setItem('dof', JSON.stringify(window.dof));
+//       window.localStorage.setItem('dccl', JSON.stringify(window.dccl));
+//     }
+
+//     resolve();
+//   });
+// }

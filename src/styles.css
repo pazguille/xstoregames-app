@@ -1502,6 +1502,15 @@ header .gamer-btn img {
   background-color: var(--bg-box-color);
 }
 
+.modal a.links {
+  display: inline-block;
+  margin: 0;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  text-decoration: underline;
+}
+
 .modal select {
   font-size: .9em;
   line-height: 1.5em;
@@ -1511,9 +1520,9 @@ header .gamer-btn img {
   border-radius: 5px;
   box-sizing: border-box;
   color: var(--txt-color);
-  width: 60%;
   margin-right: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  display: block;
 }
 
 .modal .btn {
@@ -1521,6 +1530,8 @@ header .gamer-btn img {
   border: 1px solid var(--txt-color);
   color: var(--txt-color-dark);
   padding: 0.4em 0.7em;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .finanzas-arg h2 {
@@ -1962,6 +1973,19 @@ progress {
   color: var(--txt-color);
 }
 
+.paymentmethod-banner {
+  margin: 15px;
+}
+
+.paymentmethod-banner a {
+  display: block;
+}
+
+.paymentmethod-banner img {
+  border-radius: 15px;
+  max-width: 100%;
+}
+
 @media (min-width: 54em) {
 
   .page {
@@ -2322,5 +2346,9 @@ progress {
 
   .hector-btn:before {
     top: 22px;
+  }
+
+  .paymentmethod-banner {
+    width: 40%;
   }
 }

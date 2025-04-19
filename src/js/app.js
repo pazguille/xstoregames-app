@@ -25,6 +25,7 @@ import {
   pluralGames,
   logoutURL,
   getDollar,
+  // getDollars,
 } from './utils.js';
 
 import {
@@ -53,6 +54,7 @@ import {
   gamerPageNotFoundTemplate,
   reviewsTemplate,
   gameGuessThePriceTemplate,
+  // paymentMethodBanner,
 } from './templates.js';
 
 let controller;
@@ -169,6 +171,8 @@ const catalogTitles = {
 };
 
 async function bootApp() {
+  // const currentDollars = getDollars();
+
   const $loading = document.querySelector('x-loader');
   const $splash = document.querySelector('.splash-loading');
 
@@ -1356,6 +1360,7 @@ async function bootApp() {
             //   $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
             // });
             await yieldToMain(() => {
+              // $home.insertAdjacentHTML('beforeend', paymentMethodBanner());
               $home.insertAdjacentHTML('beforeend', finanzasARGSection());
             });
           }
@@ -1472,6 +1477,8 @@ async function bootApp() {
   }
 
   const { page, id, searchParams } = getPageFromURL(window.location.href);
+
+  // await currentDollars;
 
   switch (page) {
     case 'home':
@@ -1686,8 +1693,8 @@ async function bootApp() {
 
     $modal.addEventListener('submit', (eve) => {
       eve.preventDefault();
-      const state = eve.target.elements[0].value;
-      window.localStorage.setItem('state', state);
+      window.localStorage.setItem('state', eve.target.elements[0].value);
+      window.localStorage.setItem('paymethod', eve.target.elements[1].value);
       window.location.reload();
     });
 

@@ -474,7 +474,7 @@ export function supportSection() {
           decoding="async"
           loading="lazy"
         />
-        <span>Seguime en Twitter</span>
+        <span>Seguime en 𝕏</span>
       </a>
     </li>`
     :
@@ -630,11 +630,13 @@ export function filtersCatalogTemplate() {
 
 export function settingsTemplate() {
   const IIBB = window.localStorage.getItem('state');
+  const PAYMETHOD = window.localStorage.getItem('paymethod');
+
   return (`
 <h2>Ajustes</h2>
 <section>
-  <h3>Impuestos Provinciales</h3>
-  <form id="state-tax" >
+  <form id="payment">
+    <h3>Impuestos Provinciales</h3>
     <select name="state">
       <option value="">Seleccioná tu provincia...</option>
       <option value="CABA" ${IIBB === 'CABA' && 'selected'}>CABA</option>
@@ -648,9 +650,21 @@ export function settingsTemplate() {
       <option value="TFUE" ${IIBB === 'TFUE' && 'selected'}>Tierra del Fuego</option>
       <option value="NONE" ${IIBB === 'NONE' && 'selected'}>Otra</option>
     </select>
+    <small>Elegí tu provincia para que el precio final sea más exacto.</small>
+
+    <br /><br />
+
+    <h3>¿Cómo vas a pagar?</h3>
+    <select name="paymethod">
+      <option value="">Voy a pagar con...</option>
+      <option value="ASTROPAY" ${PAYMETHOD === 'ASTROPAY' && 'selected'}>AstroPay (El mejor precio)</option>
+      <option value="TC" ${PAYMETHOD === 'TC' && 'selected'}>Tarjeta de Crédito / Débito</option>
+      <option value="MP" ${PAYMETHOD === 'MP' && 'selected'} disabled>Mercado Pago (Próximamente)</option>
+    </select>
+    <small>IMPORTANTE: <a class="links" href="https://app.astropay.com/invite/DnpQTSK0W2" rel="noopener" target="_blank">AstroPay</a> tiene el mejor precio.</small>
+
     <button class="btn btn-small" type="submit">Guardar</button>
   </form>
-  <small>Elegí tu provincia para que el precio final sea más exacto.</small>
 </section>
 `);
 }
@@ -823,4 +837,20 @@ export function gameGuessThePriceTemplate(game) {
 
 export function chatMessageTemplate(message) {
   return `<div class="chat-message chat-message-${message.role}"><strong class="visually-hidden">${message.role}:</strong>${message.text}</div>`;
+}
+
+export function paymentMethodBanner() {
+  return (`
+<section class="paymentmethod-banner">
+  <h2>Usá la mejor forma para pagar</h2>
+  <a href="https://app.astropay.com/invite/DnpQTSK0W2" rel="nofollow noopener" target="_blank">
+    <img
+      src="/src/assets/astro-banner.png"
+      alt=""
+      decoding="async"
+      loading="lazy"
+    />
+  </a>
+</section>
+  `);
 }
