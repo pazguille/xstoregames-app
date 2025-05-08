@@ -1640,6 +1640,10 @@ header .gamer-btn img {
   margin: 0;
 }
 
+.gamer-content .game-preview-soon {
+  content-visibility: unset;
+}
+
 .game-preview-achievements .game-by {
   margin: 0;
 }
@@ -2349,6 +2353,18 @@ progress {
   }
 
   .paymentmethod-banner {
-    width: 40%;
+    width: 100%;
+  }
+
+  .paymentmethod-banner a {
+    display: block;
+    background: #eaede7;
+    width: 100%;
+    border-radius: 15px;
+    text-align: center;
+  }
+
+  .paymentmethod-banner img {
+    max-width: 50%;
   }
 }
