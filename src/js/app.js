@@ -20,7 +20,6 @@ import {
   getGamerClipsById,
   slugify,
   getPageFromURL,
-  // getMarketplaceItemsURL,
   convertDollar,
   pluralGames,
   logoutURL,
@@ -76,7 +75,7 @@ const sections = [
     icon: '',
     list: [],
     skipitems: 0,
-    group: 'catalog',
+    group: 'collection',
   },
   {
     type: 'deals',
@@ -84,7 +83,7 @@ const sections = [
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
-    group: 'catalog',
+    group: 'collection',
   },
 
   {
@@ -106,6 +105,15 @@ const sections = [
   },
 
   {
+    type: 'coming',
+    title: '¡Mirá lo que se viene!',
+    icon: '',
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
     type: 'toppaid',
     title: 'Los más jugados',
     icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
@@ -114,13 +122,6 @@ const sections = [
     group: 'catalog',
   },
 
-  // {
-  //   type: 'coming',
-  //   title: '¡Mirá lo que se viene!',
-  //   icon: '',
-  //   list: [],
-  //   skipitems: 0,
-  // },
   // {
   //   type: 'best',
   //   title: 'Deberías jugarlos',
@@ -135,6 +136,7 @@ const sections = [
   //   list: [],
   //   skipitems: 0,
   // },
+
   // {
   //   type: 'free',
   //   title: 'Gratarola',
