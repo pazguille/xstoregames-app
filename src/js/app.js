@@ -70,8 +70,8 @@ const broadcast = new BroadcastChannel('worker-channel');
 
 const sections = [
   {
-    type: 'new',
-    title: 'Salidos del horno',
+    type: 'nextweeks',
+    title: 'Salen del horno',
     icon: '',
     list: [],
     skipitems: 0,
@@ -81,6 +81,15 @@ const sections = [
     type: 'deals',
     title: 'Ahorrate unos pesos',
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
+    type: 'new',
+    title: 'Novedades y cosas lindas',
+    icon: '',
     list: [],
     skipitems: 0,
     group: 'collection',
