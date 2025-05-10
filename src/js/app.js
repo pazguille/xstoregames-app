@@ -40,7 +40,6 @@ import {
   gamepassSection,
   supportSection,
   catalogSection,
-  // marketplaceItemsTemplate,
   filtersTemplate,
   filtersCatalogTemplate,
   settingsTemplate,
@@ -77,6 +76,7 @@ const sections = [
     icon: '',
     list: [],
     skipitems: 0,
+    group: 'catalog',
   },
   {
     type: 'deals',
@@ -84,55 +84,80 @@ const sections = [
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
+    group: 'catalog',
   },
+
+  {
+    type: 'gp-deals',
+    title: 'Ofertas con Game Pass',
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
   {
     type: 'careful',
     title: 'Juegos Cuidados',
     icon: `<img alt="" src="/src/assets/icons/careful.svg" width="15" height="22" />`,
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
+
   {
-    type: 'coming',
-    title: '¡Mirá lo que se viene!',
-    icon: '',
-    list: [],
-    skipitems: 0,
-  },
-  {
-    type: 'best',
-    title: 'Deberías jugarlos',
-    icon: '',
-    list: [],
-    skipitems: 0,
-  },
-  {
-    type: 'most',
+    type: 'toppaid',
     title: 'Los más jugados',
     icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
     list: [],
     skipitems: 0,
+    group: 'catalog',
   },
-  {
-    type: 'free',
-    title: 'Gratarola',
-    icon: '',
-    list: [],
-    skipitems: 0,
-  },
+
+  // {
+  //   type: 'coming',
+  //   title: '¡Mirá lo que se viene!',
+  //   icon: '',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+  // {
+  //   type: 'best',
+  //   title: 'Deberías jugarlos',
+  //   icon: '',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+  // {
+  //   type: 'most',
+  //   title: 'Los más jugados',
+  //   icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+  // {
+  //   type: 'free',
+  //   title: 'Gratarola',
+  //   icon: '',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+
   {
     type: 'new-pc',
     title: 'Novedades para PC',
     icon: '',
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
   {
     type: 'deals-pc',
     title: 'Ofertas para PC',
-    icon: '',
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
 ];
 
@@ -151,6 +176,9 @@ const gamepassTitles = {
 };
 
 const catalogTitles = {
+  new: 'Salidos del horno',
+  deals: 'Ahorrate unos pesos',
+  toppaid: 'Los más jugados',
   all: 'Todos los juegos',
   pc: 'Juegos disponibles en PC',
   shooter: 'Shooters',
@@ -1287,8 +1315,9 @@ async function bootApp() {
       }
     });
 
-    await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
-      const games = await fetch(getXboxURL(type)).then(res => res.json());
+    await Promise.all(sections.slice(0, 2).map(async ({ type, group }) => {
+      const fetchAPI = group === 'collection' ? getXboxURL : getXboxCatalogURL;
+      const games = await fetch(fetchAPI(type)).then(res => res.json()).then(res => res.games || res);
       const section = sections.find(section => section.type === type);
       section.list.push(...games);
       games.forEach((game) => gamesCache.set(game.id, game));
@@ -1329,10 +1358,12 @@ async function bootApp() {
     });
 
     requestIdleCallback(async () => {
+      // $home.insertAdjacentHTML('beforeend', paymentMethodBanner());
       $home.insertAdjacentHTML('beforeend', supportSection());
 
-      await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
-        const games = await fetch(getXboxURL(type)).then(res => res.json());
+      await Promise.all(sections.slice(2, sections.length).map(async ({ type, group }) => {
+        const fetchAPI = group === 'collection' ? getXboxURL : getXboxCatalogURL;
+        const games = await fetch(fetchAPI(type)).then(res => res.json()).then(res => res.games || res);
         const section = sections.find(section => section.type === type);
         section.list.push(...games);
         games.forEach((game) => gamesCache.set(game.id, game));
@@ -1360,7 +1391,6 @@ async function bootApp() {
             //   $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
             // });
             await yieldToMain(() => {
-              // $home.insertAdjacentHTML('beforeend', paymentMethodBanner());
               $home.insertAdjacentHTML('beforeend', finanzasARGSection());
             });
           }

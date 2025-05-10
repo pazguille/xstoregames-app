@@ -1,5 +1,7 @@
 const API_DOMAIN = 'https://api.xstoregames.com';
 const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
+// const API_DOMAIN = 'http://localhost:3031';
+// const API_FLY_DOMAIN = 'http://localhost:3031';
 const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
 export const searchXboxURL = (query, ct) => `${API_FLY_DOMAIN}/api/search?q=${query}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
@@ -23,9 +25,6 @@ export const getGamerGamesById = (id, count = 0) => `${AUTH_DOMAIN}/api/games?ga
 export const getGamerAchievementsById = (id, count = 0) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
 export const getGamerAchievementsByTitleId = (id, titleId) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&titleId=${titleId}&lang=${lang}&store=${store}`;
 export const getGamerClipsById = (id, count = 0) => `${AUTH_DOMAIN}/api/clips?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
-
-// const mlId = { ar: 'MLA', mx: 'MLM', };
-// export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
 
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);
