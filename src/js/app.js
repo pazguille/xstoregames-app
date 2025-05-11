@@ -87,6 +87,24 @@ const sections = [
   },
 
   {
+    type: 'gp-deals',
+    title: 'Ofertas con Game Pass',
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
+    type: 'pastweeks',
+    title: 'Por si te lo perdiste',
+    icon: '',
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
     type: 'new',
     title: 'Novedades y cosas lindas',
     icon: '',
@@ -95,14 +113,7 @@ const sections = [
     group: 'collection',
   },
 
-  {
-    type: 'gp-deals',
-    title: 'Ofertas con Game Pass',
-    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
-    list: [],
-    skipitems: 0,
-    group: 'collection',
-  },
+
 
   {
     type: 'careful',
