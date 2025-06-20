@@ -1042,8 +1042,20 @@ header .gamer-btn img {
   border-radius: 100%;
   background-color: var(--bg-box-deal-color);
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 18px;
+  right: 12px;
+  z-index: 6;
+}
+
+.hector-btn:after {
+  border-radius: 100%;
+  content: '';
+  position: absolute;
+  top: -25px;
+  left: 5px;
+  height: 65px;
+  width: 65px;
+  z-index: 7;
 }
 
 .hector-btn.notification:before {
@@ -2353,7 +2365,11 @@ progress {
   }
 
   .hector-btn:before {
-    top: 22px;
+    top: 40px;
+  }
+
+  .hector-btn:after {
+    content: none;
   }
 
   .paymentmethod-banner {
