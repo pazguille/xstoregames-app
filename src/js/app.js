@@ -113,8 +113,6 @@ const sections = [
     group: 'collection',
   },
 
-
-
   {
     type: 'careful',
     title: 'Juegos Cuidados',
@@ -320,7 +318,9 @@ async function bootApp() {
   let $currentPageContent = null;
   let $prevFocus = null;
 
-  const db = await new Promise((resolve) => {
+  window.currentGame = null;
+
+  const db = window.db = await new Promise((resolve) => {
     const iddb = window.indexedDB.open('xstoregames', 1);
     iddb.onupgradeneeded = async (eve) => {
       eve.currentTarget.result
@@ -361,6 +361,7 @@ async function bootApp() {
       return;
     }
 
+    window.currentGame = null;
     $prevPage = $currentPage;
 
     document.title = documentTitle;
@@ -528,6 +529,8 @@ async function bootApp() {
         : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
       $preloadLCP.href = game.lcp + '?w=1160&q=70';
+
+      window.currentGame = game;
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -1895,12 +1898,8 @@ async function bootApp() {
     import('./swipes.js');
   });
 
-  // const gamertags = ['pazguillexx', 'lukevz6440', 'Darkness4381', 'massiRP91218', 'OneCTwo1074', 'Tomi4298543'];
-  // if (gamer && gamertags.includes(gamer.gamertag.toLowerCase())) {
-  if (gamer) {
-    requestIdleCallback(() => {
-      import('./hector.js');
-    });
-  }
+  requestIdleCallback(() => {
+    import('./hector.js');
+  });
 }
 bootApp();

@@ -1005,8 +1005,7 @@ header .gamer-btn img {
   color: var(--bg-xbox-light-color);
 }
 
-.play-btn svg,
-.hector-btn svg {
+.play-btn svg {
   margin: 3px 0 5px;
 }
 
@@ -1017,14 +1016,24 @@ header .gamer-btn img {
 }
 
 .hector-btn {
-  position: absolute;
-  top: -70px;
-  right: 10px;
+  position: relative;
+  height: 49px;
+}
+
+.hector-btn svg {
+  height: 35px;
   border-radius: 100%;
   background-color: var(--txt-color-dark);
-  height: 55px;
-  width: 41px;
-  line-height: 55px;
+  box-shadow: 0 2px 0 0 #2f3336;
+  padding: 12px;
+  width: 35px;
+  position: absolute;
+  left: 8px;
+  top: -30px;
+}
+
+.hector-btn span {
+  line-height: 82px;
 }
 
 .hector-btn:before {
@@ -1039,10 +1048,6 @@ header .gamer-btn img {
 
 .hector-btn.notification:before {
   content: '';
-}
-
-.hector-btn span {
-  display: none;
 }
 
 .search input[type="search"] {
@@ -1801,11 +1806,8 @@ progress {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  padding: 0 0 70px;
+  padding: 0 0 110px;
   white-space: pre-line;
-  /* scroll-behavior: smooth; */
-
-  /* height: 100%; */
 }
 
 .chat-message {
@@ -2337,15 +2339,17 @@ progress {
     width: 98%;
   }
 
-  .hector-btn {
+  .hector-btn svg {
+    height: auto;
+    padding: 6px;
+    width: auto;
     position: relative;
-    background: none;
+    left: auto;
     top: auto;
-    right: auto;
-    line-height: 1;
   }
+
   .hector-btn span {
-    display: inline-block;
+    line-height: 42px;
   }
 
   .hector-btn:before {

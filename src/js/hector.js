@@ -17,6 +17,16 @@ const chatHistory = new Set(
 );
 
 const gamer = JSON.parse(window.localStorage.getItem('gamer'));
+// const wishlist = await new Promise((resolve) => {
+//   window.db
+//     .transaction('wishlist', 'readonly')
+//     .objectStore('wishlist')
+//     .getAll()
+//     .onsuccess = async (eve) => {
+//       const games = eve.target.result.map((g) => g.title).join(', ');
+//       resolve(games);
+//     }
+// });
 
 function showModal() {
   $hector.removeAttribute('hidden');
@@ -119,7 +129,9 @@ $chatForm.addEventListener('submit', async (eve) => {
     body: JSON.stringify({
       message,
       history: Array.from(chatHistory),
-      gamer: gamer.gamertag,
+      gamer: gamer?.gamertag,
+      // wishlist,
+      // currentGame: window.currentGame,
     }),
     mode: 'cors',
   }).then(res => res.json());
