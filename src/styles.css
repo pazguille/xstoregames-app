@@ -1970,8 +1970,8 @@ progress {
   border-radius: 100%;
   border: 1px solid var(--txt-color);
   background-color: var(--bg-color);
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   position: absolute;
   right: 12px;
   top: 2px;
