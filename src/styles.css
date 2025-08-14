@@ -1950,6 +1950,7 @@ progress {
 .chat-form {
   display: flex;
   width: 100%;
+  position: relative;
 }
 
 .chat-input {
@@ -1972,8 +1973,9 @@ progress {
   width: 42px;
   height: 42px;
   position: absolute;
-  right: 10px;
-  top: 14px;
+  right: 12px;
+  top: 2px;
+  padding: 0;
 }
 
 .chat-send svg {
