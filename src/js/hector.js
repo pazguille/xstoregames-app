@@ -33,6 +33,7 @@ function showModal() {
   yieldToMain(() => $hector.classList.add('modal-on'));
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
   $hectorBtn.classList.remove('notification');
+  $chatInput.focus();
 }
 
 function closeModal() {
@@ -131,7 +132,7 @@ $chatForm.addEventListener('submit', async (eve) => {
       history: Array.from(chatHistory),
       gamer: gamer?.gamertag,
       // wishlist,
-      // currentGame: window.currentGame,
+      currentGame: window.currentGame,
     }),
     mode: 'cors',
   }).then(res => res.json());

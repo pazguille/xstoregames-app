@@ -1643,6 +1643,7 @@ async function bootApp() {
 
       $currentPage = null;
       $currentPageContent = null;
+      window.currentGame = null;
 
       sorted = null;
       filtered = null;
