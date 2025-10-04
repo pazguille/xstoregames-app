@@ -164,7 +164,7 @@ export function gameDetailTemplate(game) {
 
   const storeUrl = `https://www.xbox.com/${lang}-${store}/games/store/${slugify(game.title)}/${game.id}`;
 
-  if (['CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
+  if (['CFQ7TTC0K5DJ', 'CFQ7TTC0P85B', 'CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8'].includes(game.id)) {
     game.images.screenshot = null;
   }
 
@@ -399,46 +399,56 @@ export function gamepassSection() {
       </ul>
     </article>
   </div>
-  <h2>Elige tu plan</h2>
+  <h2>Elegí el plan que más te convenga</h2>
   <div class="gamepass-plans carousel">
     <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass-ultimate.png" alt="Game Pass Ultimate" decoding="async" loading="lazy" width="160" height="20" />
-        <strong class="game-important-tag">Plan destacado</strong>
-      </h3>
+      <h3>Ultimate</h3>
       <ul>
-        <li>Cientos de juegos de alta calidad en consola, PC y la nube</li>
+        <li>Más de 400+ juegos en la consola Xbox, PC y dispositivos compatibles</li>
         <li>Nuevos juegos desde el mismo día de su lanzamiento</li>
-        <li>Ofertas, descuentos y Recompensas para miembros</li>
-        <li>Juegos multijugador online para consola</li>
-        <li>Suscripción a EA Play</li>
+        <li>Incluye EA Play, Ubisoft+ Classics y Fortnite Crew</li>
+        <li>Juega a títulos en streaming con tiempos de espera más cortos</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Juegos multijugador en línea para consola</li>
       </ul>
       <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
       <h3>
-        <img src="/src/assets/gamepass-pc.png" alt="Game Pass para PC" decoding="async" loading="lazy" width="135" height="20" />
+        <span>Premium</span>
+        <strong class="game-important-tag">Plan destacado</strong>
       </h3>
       <ul>
-        <li>Cientos de juegos de alta calidad en PC</li>
-        <li>Nuevos juegos desde el mismo día de su lanzamiento</li>
-        <li>Ofertas y descuentos para miembros</li>
-        <li>Suscripción a EA Play</li>
+        <li>Más de 200 juegos en la consola Xbox, PC y dispositivos compatibles</li>
+        <li>Los nuevos juegos publicados por Xbox se incorporan en un plazo de 12 meses desde su lanzamiento</li>
+        <li>Juega a títulos en streaming con tiempos de espera más cortos</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Juegos multijugador en línea para consola</li>
       </ul>
-      <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
+      <a class="btn link" href="/game/xbox-game-pass-premium_CFQ7TTC0P85B">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass.svg" alt="Game Pass Core" decoding="async" loading="lazy" width="115" height="20" /><span>Core</span>
-      </h3>
+      <h3>Essential</h3>
       <ul>
-        <li>Juegos multijugador online para consola</li>
-        <li>Un catálogo de más de 25 juegos de alta calidad para consola</li>
-        <li>Ofertas y descuentos para miembros</li>
+        <li>Más de 50 juegos en la consola Xbox, PC y dispositivos compatibles</li>
+        <li>Juega a títulos en streaming, incluidos algunos juegos que ya tienes</li>
+        <li>Juegos multijugador en línea para consola</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
       </ul>
-      <a class="btn link" href="/game/game-pass-core_CFQ7TTC0K5DJ">Ver más</a>
+      <a class="btn link" href="/game/xbox-game-pass-essential_CFQ7TTC0K5DJ">Ver más</a>
+    </article>
+
+    <article class="gamepass-plan">
+      <h3>PC</h3>
+      <ul>
+        <li>Cientos de juegos de alta calidad en PC</li>
+        <li>Nuevos juegos desde el mismo día de su lanzamiento, incluidos los nuevos juegos publicados por Xbox y los juegos de terceros</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Incluye EA Play</li>
+      </ul>
+      <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
     </article>
   </div>
 </section>
@@ -730,7 +740,7 @@ export function reviewsTemplate(section) {
 export function gameGuessThePriceTemplate(game) {
   const img = game.lcp;
 
-  if (['CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
+  if (['CFQ7TTC0K5DJ', 'CFQ7TTC0P85B', 'CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8'].includes(game.id)) {
     game.images.screenshot = null;
   }
 
