@@ -633,25 +633,6 @@ export function collectionHeaderTemplate({ icon = '', title, filter = true }) {
   : ''}`);
 }
 
-export function finanzasARGSection() {
-  return (`
-<hr>
-<section class="finanzas-arg">
-  <h2>Más aplicaciones para tus finanzas</h2>
-  <a href="https://www.finanzasarg.com/" rel="nofollow noopener" target="_blank">
-    <img
-      src="/src/assets/finanzas-arg.webp"
-      alt=""
-      width="150"
-      height="26"
-      decoding="async"
-      loading="lazy"
-    />
-  </a>
-</section>
-  `);
-}
-
 export function gameSkeletonTemplate() {
   return (`
 <section class="section-skeleton">

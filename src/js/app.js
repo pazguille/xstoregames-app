@@ -43,7 +43,6 @@ import {
   filtersCatalogTemplate,
   settingsTemplate,
   collectionHeaderTemplate,
-  finanzasARGSection,
   gamerPageTemplate,
   gamerGamesTemplate,
   gamerAchievementsTemplate,
@@ -1411,13 +1410,6 @@ async function bootApp() {
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', catalogSection());
             });
-            // const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
-            // await yieldToMain(() => {
-            //   $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
-            // });
-            await yieldToMain(() => {
-              $home.insertAdjacentHTML('beforeend', finanzasARGSection());
-            });
           }
         });
 
@@ -1789,14 +1781,6 @@ async function bootApp() {
         search_term: eve.target.elements[0].value,
       });
     });
-
-    // $home.addEventListener('click', (eve) => {
-    //   if (eve.target.classList.contains('marketplace_item')) {
-    //     gtag('event', 'marketplace_item', {
-    //       page_location: eve.target.href,
-    //     });
-    //   }
-    // });
 
     $detailContent.addEventListener('click', (eve) => {
       if (eve.target.classList.contains('game-buy-now')) {
