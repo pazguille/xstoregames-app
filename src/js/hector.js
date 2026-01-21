@@ -1,6 +1,9 @@
 import {
+  chatWelcomeTemplate,
   chatMessageTemplate,
 } from './templates.js';
+
+import { loginURL } from './utils.js';
 
 const $hector = document.querySelector('.hector');
 const $chat = document.querySelector('.chat');
@@ -28,7 +31,18 @@ const gamer = JSON.parse(window.localStorage.getItem('gamer'));
 //     }
 // });
 
+$chatMessages.insertAdjacentHTML('beforebegin', chatWelcomeTemplate(gamer?.displayName || ''));
+const $chatWelcome = $chat.querySelector('.chat-welcome');
+
+if (chatHistory.size === 0) {
+  $chatWelcome.removeAttribute('hidden');
+}
+
 function showModal() {
+  if (!gamer) {
+    return window.location.href = loginURL();
+  }
+
   $hector.removeAttribute('hidden');
   yieldToMain(() => $hector.classList.add('modal-on'));
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
@@ -90,6 +104,8 @@ $chatForm.addEventListener('submit', async (eve) => {
   $chatInput.focus();
 
   const message = eve.target.elements[0].value;
+
+  $chatWelcome.setAttribute('hidden', 'true');
   $chatForm.reset();
 
   if (message === '') {
@@ -99,6 +115,7 @@ $chatForm.addEventListener('submit', async (eve) => {
   if (message === '/clean') {
     chatHistory.clear();
     window.localStorage.removeItem('chat');
+    $chatWelcome.removeAttribute('hidden');
     $chatMessages.innerHTML = '';
     return;
   }
@@ -159,8 +176,6 @@ $chatForm.addEventListener('submit', async (eve) => {
       text: response.message,
     })
   );
-
-  $chatMessages.scrollTop = $chatMessages.scrollHeight;
 
   window.localStorage.setItem('chat', JSON.stringify(Array.from(chatHistory)));
 

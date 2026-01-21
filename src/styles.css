@@ -1996,6 +1996,14 @@ progress {
   color: var(--txt-color);
 }
 
+.chat-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 22px;
+}
+
 .paymentmethod-banner {
   margin: 15px;
 }

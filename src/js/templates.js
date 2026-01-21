@@ -790,3 +790,7 @@ export function paymentMethodBanner() {
 </section>
   `);
 }
+
+export function chatWelcomeTemplate(name) {
+  return `<div class="chat-welcome" hidden>Hola ${name}. ¿Qué onda?</div>`;
+}
