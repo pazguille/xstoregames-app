@@ -283,6 +283,7 @@ async function bootApp() {
 
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
+  const $logoLink = document.querySelector('header h1 a');
 
   const $search = document.querySelector('#search-collapse');
   const $searchForm = document.querySelector('#search');
@@ -383,6 +384,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.hide();
         $installBtn.hide();
+        $logoLink.classList.remove('logo-hide');
       });
 
       if (!$prevPage) {
@@ -447,6 +449,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $installBtn.hide();
         $pageBack.hide();
+        $logoLink.classList.remove('logo-hide');
       });
 
       if ($prevPage) {
@@ -491,6 +494,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (history.state?.referer !== history.state?.page ) {
@@ -662,6 +666,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -787,6 +792,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -828,6 +834,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -900,6 +907,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -1103,6 +1111,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -1184,6 +1193,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -1278,6 +1288,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       $currentPage = $play;
@@ -1356,6 +1367,20 @@ async function bootApp() {
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+
+      setInterval(() => {
+        const games =  sections[1].list;
+        const pick = games[Math.floor(Math.random() * games.length)];
+        const lcp = pick.images.featurepromotionalsquareart ?
+          pick.images.featurepromotionalsquareart.url : pick.images.boxart?.url;
+        $preloadLCP.href = lcp + '?w=720&q=70';
+        const $current = document.querySelector('.game-important');
+        $current.classList.add('next');
+        setTimeout(() => {
+          $home.insertAdjacentHTML('afterbegin', gameImportantTemplate(pick));
+          $current.remove();
+        }, 250);
+      }, 10000);
     });
 
     // $preloadLCP.href = window.location.origin + '/src/assets/xbox-direct.jpg';
@@ -1631,6 +1656,7 @@ async function bootApp() {
 
       $pageBack.hide();
       $installBtn.show();
+      $logoLink.classList.remove('logo-hide');
       $searchForm.elements[0].value = '';
 
       $currentPage = null;

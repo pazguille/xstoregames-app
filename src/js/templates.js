@@ -171,7 +171,7 @@ export function gameDetailTemplate(game) {
   // ${gamerGames.findIndex((g) => g.id === game.id) !== -1 ? '<span class="game-platform-tag">Ya lo jugaste</span>': '' }
 
   return (`
-<article class="game-preview">
+<article class="game-preview" style="--bg-game-detail: url(${img}?w=1160&q=70)">
   <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
   <video class="hero game-preview-trailer" autoplay loop muted playsinline hidden></video>
   <div>
@@ -322,8 +322,9 @@ export function theGameAward() {
 export function gameImportantTemplate(game) {
   const img = game.images.featurepromotionalsquareart ?
     game.images.featurepromotionalsquareart.url : game.images.boxart?.url;
+
   return (`
-<article class="game-important">
+<article class="game-important" style="--bg-game-important: url(${img}?w=720&q=70)">
   <strong class="game-important-tag">Oferta destacada</strong>
   <h2 class="game-title">
     <a id="detail-${game.id}" href="${basePath}/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>

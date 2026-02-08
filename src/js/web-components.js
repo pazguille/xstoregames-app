@@ -86,6 +86,11 @@ class ShareButton extends HTMLButtonElement {
   }
 
   _onClick() {
+    this.classList.add('animate');
+    this.addEventListener('animationend', () => {
+      this.classList.remove('animate');
+    }, { once: true });
+
     if ('share' in navigator) {
       navigator.share({
         title: this.title,
@@ -170,6 +175,11 @@ class SwitchButton extends HTMLButtonElement {
   }
 
   _onClick() {
+    this.classList.add('animate');
+    this.addEventListener('animationend', () => {
+      this.classList.remove('animate');
+    }, { once: true });
+
     this._active = !this._active;
     this[this._active ? 'setAttribute' : 'removeAttribute']('active', '');
   }
