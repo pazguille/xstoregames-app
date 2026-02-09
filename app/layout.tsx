@@ -1,10 +1,3 @@
-import './globals.css';
-
-export const metadata = {
-  title: 'XStore: La tienda de Xbox Argentina con impuestos incluidos',
-  description: 'Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox en precios argentinos.',
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -12,7 +5,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es-AR">
-      <body style={{ margin: 0, padding: 0, overflow: 'hidden' }}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
