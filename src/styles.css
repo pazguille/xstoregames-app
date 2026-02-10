@@ -1261,6 +1261,7 @@ header .gamer-btn img {
   align-content: start;
   padding: 0 5px;
   margin: 0 auto;
+  position: relative;
 }
 
 .list .game-preview {
