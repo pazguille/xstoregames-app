@@ -1272,10 +1272,6 @@ header .gamer-btn img {
   background: none;
 }
 
-.list .game-preview:last-child {
-  padding-bottom: calc(40px + env(safe-area-inset-bottom));
-}
-
 .list .game-price {
   margin: 10px 0 0;
 }
@@ -1284,11 +1280,15 @@ header .gamer-btn img {
   border-radius: 10px;
 }
 
+.list .game-preview:last-of-type,
+.news .news-preview:last-of-type {
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
 .wish,
 .news,
 .play {
   z-index: 1;
-  bottom: calc(50px + env(safe-area-inset-bottom));
   min-height: auto;
 }
 
