@@ -1176,12 +1176,12 @@ header .gamer-btn img {
   padding: 12px;
   width: 35px;
   position: absolute;
-  left: 8px;
-  top: -30px;
+  left: 5px;
+  top: -32px;
 }
 
 .hector-btn span {
-  line-height: 82px;
+  line-height: 74px;
 }
 
 .hector-btn:before {
@@ -1201,7 +1201,7 @@ header .gamer-btn img {
   position: absolute;
   top: -25px;
   left: 5px;
-  height: 65px;
+  height: 75px;
   width: 65px;
   z-index: 7;
 }
