@@ -337,8 +337,17 @@ h2 img {
   width: max-content;
 }
 
+.game-platform-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .game-preview-info .game-platform-tag {
-  margin-top: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
 }
 
 .game-important-tag {
@@ -582,7 +591,8 @@ h2 img {
   display: flex !important;
   justify-items: center;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 3px;
   width: 100%;
   margin: 15px 0;
 }

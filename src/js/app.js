@@ -1464,6 +1464,7 @@ async function bootApp() {
       $pageBack.show();
       $search.close();
       $installBtn.hide();
+      $logoLink.classList.add('logo-hide');
     });
 
     $currentPage = $results
