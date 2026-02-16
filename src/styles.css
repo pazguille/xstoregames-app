@@ -924,6 +924,7 @@ h2 img {
   margin: 5px 0;
   font-size: 22px;
   color: var(--bg-xbox-light-color);
+  width: 100%;
 }
 
 .detail .detail-content > .game-preview .game-price-off {
