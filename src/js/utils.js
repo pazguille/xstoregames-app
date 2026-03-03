@@ -56,6 +56,7 @@ export function slugify(str) {
     .replace(/_+/g, '-');
 }
 
+const FEE_ASTROPAY = 1.02;
 const IVA = 0.21;
 const IIBBs = {
   NONE: 0,
@@ -70,7 +71,17 @@ const IIBBs = {
   CHACO: 0.055,
 };
 const PAYMETHODS = {
-  ASTROPAY: (price) => toFixed(price) + toFixed(price * IIBB),
+  ASTROPAY: (price) => {
+    try {
+      const markupFactor = (window.apExchange.exchange / window.apExchange.official_exchange) + (window.apExchange.spread / 100);
+      const adjustedPrice = price * markupFactor;
+      const iibbTax = price * IIBB;
+      const finalTotal = adjustedPrice + iibbTax;
+      return toFixed(finalTotal);
+    } catch (error) {
+      return toFixed(price) + toFixed(price * IIBB);
+    }
+  },
   TC: (price) => toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB),
 
   // MP: (price) => {
@@ -127,26 +138,30 @@ export function shuffle(arr) {
   return collection;
 };
 
-// export async function getDollars() {
-//   return new Promise(async (resolve) => {
-//     window.dof = JSON.parse(window.localStorage.getItem('dof'));
-//     window.dccl = JSON.parse(window.localStorage.getItem('dccl'));
-//     const useMP = window.localStorage.getItem('paymethod') === 'MP';
+export async function getDollars() {
+  const useAP = localStorage.getItem('paymethod') === 'ASTROPAY';
+  if (!useAP) return;
 
-//     if (useMP) {
-//       if (dof && dccl && new Date(window.dccl.fechaActualizacion) > Date.now() - 7200000) { // 2 hours = 7200000 ms
-//         resolve();
-//       }
+  const stringApEx = localStorage.getItem('ap_exchange');
 
-//       const dollars = await fetch('https://dolarapi.com/v1/dolares').then(res => res.json());
+  if (stringApEx) {
+    window.apExchange = JSON.parse(stringApEx);
+    const now = Date.now();
+    const lastUpdate = localStorage.getItem('ap_exchange_timestamp');
+    const fiveMinutes = 5 * 60 * 1000;
+    if (now - lastUpdate < fiveMinutes) {
+      return;
+    }
+  }
 
-//       window.dof = dollars.find(d => d.casa === 'oficial');
-//       window.dccl = dollars.find(d => d.casa === 'contadoconliqui');
+  try {
+    const res = await fetch('https://fly.xstoregames.com/api/ap-exchange?from=usd');
+    const apData = await res.json();
 
-//       window.localStorage.setItem('dof', JSON.stringify(window.dof));
-//       window.localStorage.setItem('dccl', JSON.stringify(window.dccl));
-//     }
-
-//     resolve();
-//   });
-// }
+    window.apExchange = apData;
+    localStorage.setItem('ap_exchange', JSON.stringify(apData));
+    localStorage.setItem('ap_exchange_timestamp', Date.now().toString());
+  } catch (error) {
+    console.error("Error en API Local:", error);
+  }
+}

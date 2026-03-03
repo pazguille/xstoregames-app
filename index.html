@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fly.xstoregames.com" />
     <link rel="preconnect" href="https://images.weserv.nl" />
     <link rel="preconnect" href="https://media.rawg.io" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=nextweeks&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=deals&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
@@ -27,6 +28,8 @@
     <link rel="modulepreload" href="/src/js/templates.js" />
     <link rel="modulepreload" href="/src/js/app.js" />
     <link rel="modulepreload" href="/src/js/swipes.js" />
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/web-haptics/+esm" />
+    <link rel="modulepreload" href="/src/js/haptics.js" />
 
     <link id="preloadLCP" rel="preload" as="image" />
 
@@ -48,6 +51,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="apple-mobile-web-app-title" content="XStore" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#072523" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />

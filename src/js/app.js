@@ -24,7 +24,7 @@ import {
   pluralGames,
   logoutURL,
   getDollar,
-  // getDollars,
+  getDollars,
 } from './utils.js';
 
 import {
@@ -218,7 +218,7 @@ const catalogTitles = {
 };
 
 async function bootApp() {
-  // const currentDollars = getDollars();
+  const currentDollars = getDollars();
 
   const $loading = document.querySelector('x-loader');
   const $splash = document.querySelector('.splash-loading');
@@ -1551,7 +1551,7 @@ async function bootApp() {
 
   const { page, id, searchParams } = getPageFromURL(window.location.href);
 
-  // await currentDollars;
+  await currentDollars;
 
   switch (page) {
     case 'home':
@@ -1907,6 +1907,10 @@ async function bootApp() {
   });
 
   requestIdleCallback(() => {
+    import('./haptics.js');
+  });
+
+  requestIdleCallback(() => {
     import('./swipes.js');
   });
 
@@ -1914,4 +1918,5 @@ async function bootApp() {
     import('./hector.js');
   });
 }
+
 bootApp();
