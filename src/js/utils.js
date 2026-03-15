@@ -56,7 +56,6 @@ export function slugify(str) {
     .replace(/_+/g, '-');
 }
 
-const FEE_ASTROPAY = 1.02;
 const IVA = 0.21;
 const IIBBs = {
   NONE: 0,
@@ -76,10 +75,11 @@ const PAYMETHODS = {
       const markupFactor = (window.apExchange.exchange / window.apExchange.official_exchange) + (window.apExchange.spread / 100);
       const adjustedPrice = price * markupFactor;
       const iibbTax = price * IIBB;
-      const finalTotal = adjustedPrice + iibbTax;
+      const ivaTax = price * IVA;
+      const finalTotal = adjustedPrice + ivaTax + iibbTax;
       return toFixed(finalTotal);
     } catch (error) {
-      return toFixed(price) + toFixed(price * IIBB);
+      return toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB);
     }
   },
   TC: (price) => toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB),

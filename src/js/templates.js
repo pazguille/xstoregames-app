@@ -619,11 +619,10 @@ export function settingsTemplate() {
     <h3>¿Cómo vas a pagar?</h3>
     <select name="paymethod">
       <option value="">Voy a pagar con...</option>
-      <option value="ASTROPAY" ${PAYMETHOD === 'ASTROPAY' && 'selected'}>AstroPay (El mejor precio)</option>
+      <option value="ASTROPAY" ${PAYMETHOD === 'ASTROPAY' && 'selected'}>AstroPay</option>
       <option value="TC" ${PAYMETHOD === 'TC' && 'selected'}>Tarjeta de Crédito / Débito</option>
       <option value="MP" ${PAYMETHOD === 'MP' && 'selected'} disabled>Mercado Pago (Próximamente)</option>
     </select>
-    <small>IMPORTANTE: <a class="links" href="https://app.astropay.com/invite/DnpQTSK0W2" rel="noopener" target="_blank">AstroPay</a> tiene el mejor precio.</small>
 
     <button class="btn btn-small" type="submit">Guardar</button>
   </form>
