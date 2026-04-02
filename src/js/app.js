@@ -131,7 +131,7 @@ const sections = [
   },
 
   {
-    type: 'toppaid',
+    type: 'mostpopular',
     title: 'Los más jugados',
     icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
     list: [],
@@ -197,7 +197,7 @@ const gamepassTitles = {
 const catalogTitles = {
   new: 'Salidos del horno',
   deals: 'Ahorrate unos pesos',
-  toppaid: 'Los más jugados',
+  mostpopular: 'Los más jugados',
   all: 'Todos los juegos',
   pc: 'Juegos disponibles en PC',
   shooter: 'Shooters',
