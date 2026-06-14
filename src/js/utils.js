@@ -2,6 +2,7 @@ const API_DOMAIN = 'https://api.xstoregames.com';
 const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
 // const API_DOMAIN = 'http://localhost:3031';
 // const API_FLY_DOMAIN = 'http://localhost:3031';
+// const AUTH_DOMAIN = 'https://dev.xstoregames.com:8081';
 const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
 export const searchXboxURL = (query, ct) => `${API_FLY_DOMAIN}/api/search?q=${query}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
@@ -70,9 +71,12 @@ const IIBBs = {
   CHACO: 0.055,
 };
 const PAYMETHODS = {
+  NONE: (price) => price,
+  PREX: (price) => toFixed(price + (price * IVA) + (price * IIBB)),
   ASTROPAY: (price) => {
     try {
-      const markupFactor = (window.apExchange.exchange / window.apExchange.official_exchange) + (window.apExchange.spread / 100);
+      const gap = window.apExchange.exchange / window.apExchange.official_exchange;
+      const markupFactor = gap * (gap + (window.apExchange.spread / 100));
       const adjustedPrice = price * markupFactor;
       const iibbTax = price * IIBB;
       const ivaTax = price * IVA;
@@ -83,17 +87,10 @@ const PAYMETHODS = {
     }
   },
   TC: (price) => toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB),
-
-  // MP: (price) => {
-  //   const dprice = Number((price / window.dof.compra).toFixed(2)) * window.dccl.compra;
-  //   return toFixed(dprice) + toFixed(price * IVA) + toFixed(price * IIBB);
-  // },
-  // NONE: (price) => price,
-  // DOLLAR: (price) => Number((price / window.dof.compra).toFixed(2)),
 };
 
 const IIBB = IIBBs[window.localStorage.getItem('state') || 'CABA'];
-const PAYMETHOD = PAYMETHODS[window.localStorage.getItem('paymethod') || 'TC'];
+const PAYMETHOD = PAYMETHODS[window.localStorage.getItem('paymethod') || 'PREX'];
 
 export function convertDollar(price) {
   if (store !== 'ar') {

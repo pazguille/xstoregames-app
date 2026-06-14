@@ -619,9 +619,10 @@ export function settingsTemplate() {
     <h3>¿Cómo vas a pagar?</h3>
     <select name="paymethod">
       <option value="">Voy a pagar con...</option>
+      <option value="PREX" ${PAYMETHOD === 'PREX' && 'selected'}>PREX (recomendado)</option>
       <option value="ASTROPAY" ${PAYMETHOD === 'ASTROPAY' && 'selected'}>AstroPay</option>
       <option value="TC" ${PAYMETHOD === 'TC' && 'selected'}>Tarjeta de Crédito / Débito</option>
-      <option value="MP" ${PAYMETHOD === 'MP' && 'selected'} disabled>Mercado Pago (Próximamente)</option>
+      <option value="NONE" ${PAYMETHOD === 'NONE' && 'selected'}>Sin impuestos</option>
     </select>
 
     <button class="btn btn-small" type="submit">Guardar</button>
@@ -779,23 +780,6 @@ export function gameGuessThePriceTemplate(game) {
 
 export function chatMessageTemplate(message) {
   return `<div class="chat-message chat-message-${message.role}"><strong class="visually-hidden">${message.role}:</strong>${message.text}</div>`;
-}
-
-export function paymentMethodBanner() {
-  return (`
-<section class="paymentmethod-banner">
-  <h2 class="visually-hidden">Usá la mejor forma para pagar</h2>
-  <a href="https://app.astropay.com/invite/DnpQTSK0W2" rel="nofollow noopener" target="_blank">
-    <img
-      src="/src/assets/astro-banner.jpg"
-      alt=""
-      decoding="async"
-      loading="lazy"
-      alt="Usá AstroPay para pagar tus juegos y ahorrá. Pagá en pesos y sin IVA."
-    />
-  </a>
-</section>
-  `);
 }
 
 export function chatWelcomeTemplate(name) {
