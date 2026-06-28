@@ -11,6 +11,7 @@ const $chatForm = document.querySelector('.chat-form');
 const $chatMessages = document.querySelector('.chat-messages');
 const $chatInput = document.querySelector('.chat-input');
 const $chatModal = document.querySelector('.modal-chat-content');
+const $chatFooter = document.querySelector('.chat footer');
 const $hectorBtn = document.querySelector('.hector-btn');
 
 let modalShowed = false;
@@ -138,10 +139,14 @@ $chatForm.addEventListener('submit', async (eve) => {
 
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
 
+  const ctrl = new AbortController();
+  // const response = await fetch('http://localhost:3031/api/hector-agent', {
   // const response = await fetch('http://localhost:3031/api/hector', {
-  const response = await fetch('https://fly.xstoregames.com/api/hector', {
+  // const response = await fetch('https://fly.xstoregames.com/api/hector', {
+  const response = await fetch('https://fly.xstoregames.com/api/hector-agent', {
     method: 'POST',
     headers: {
+      Accept: 'text/event-stream',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -152,32 +157,85 @@ $chatForm.addEventListener('submit', async (eve) => {
       currentGame: window.currentGame,
     }),
     mode: 'cors',
-  }).then(res => res.json());
+    signal: ctrl.signal,
+  })
+  // .then(res => res.json());
 
-  chatHistory.add(
-    {
-      role: 'user',
-      parts: [{ text: message }],
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+
+  let firstEvent = true;
+  let finalMessage = '';
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value, { stream: true });
+
+      if (chunk.includes('[DONE]')) {
+        break;
+      }
+
+      if (firstEvent) {
+        firstEvent = false;
+        $chatMessages.querySelector('.chat-message-skeleton').remove();
+        $chatMessages.insertAdjacentHTML(
+          'beforeend',
+          chatMessageTemplate({
+            role: 'model',
+            text: '',
+          })
+        );
+      }
+
+      const lines = chunk
+        .split('\n')
+        .filter(line => line.startsWith('data:'))
+        .map(line => line.replace(/^data:/, ''))
+        .join('')
+
+      const parsed = JSON.parse(lines);
+      const message = parsed.content.parts.map(p => p.text).join(' ');
+      finalMessage += message;
+      const $lastMessage = $chatMessages.querySelector('.chat-message-model:last-child');
+      $lastMessage.innerHTML = finalMessage;
+
     }
-  );
-  chatHistory.add(
-    {
-      role: 'model',
-      parts: [{ text: response.message }],
-    }
-  );
 
-  $chatMessages.querySelector('.chat-message-skeleton').remove();
+    chatHistory.add(
+      {
+        role: 'user',
+        parts: [{ text: message }],
+      }
+    );
+    chatHistory.add(
+      {
+        role: 'model',
+        parts: [{ text: finalMessage }],
+      }
+    );
 
-  $chatMessages.insertAdjacentHTML(
-    'beforeend',
-    chatMessageTemplate({
-      role: 'model',
-      text: response.message,
-    })
-  );
+    window.localStorage.setItem('chat', JSON.stringify(Array.from(chatHistory)));
 
-  window.localStorage.setItem('chat', JSON.stringify(Array.from(chatHistory)));
+  } catch(err) {
+    $chatMessages.insertAdjacentHTML(
+      'beforeend',
+      chatMessageTemplate({
+        role: 'model',
+        text: 'Ups, algo paso...',
+      })
+    );
+    $chatMessages.insertAdjacentHTML(
+      'beforeend',
+      chatMessageTemplate({
+        role: 'model',
+        text: err,
+      })
+    );
+    throw err;
+  }
 
   if (!$hector.classList.contains('modal-on')) {
     $hectorBtn.classList.add('notification');
@@ -206,16 +264,18 @@ if (isIphone) {
     if (h < window.visualViewport.height) {
       h = window.visualViewport.height
 
-      // $chatModal.removeAttribute('style');
-      $chatModal.style.height = '80vh';
+      $chatModal.style.transform = `translateY(0px)`;
+      $chatModal.style.height = '82vh';
       $chat.removeAttribute('style');
       return;
     }
 
     h = window.visualViewport.height
 
-    $chatModal.style.height = `calc(${h}px - 65px)`;
+    $chatModal.style.transform = `translateY(-305px)`;
+    $chatModal.style.height = '50vh';
     $chat.style.height = '100%';
+    window.scrollTo(0, 0);
 
     requestIdleCallback(() => {
       $chatMessages.scrollTop = $chatMessages.scrollHeight;

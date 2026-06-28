@@ -28,8 +28,6 @@
     <link rel="modulepreload" href="/src/js/templates.js" />
     <link rel="modulepreload" href="/src/js/app.js" />
     <link rel="modulepreload" href="/src/js/swipes.js" />
-    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/web-haptics/+esm" />
-    <link rel="modulepreload" href="/src/js/haptics.js" />
 
     <link id="preloadLCP" rel="preload" as="image" />
 
@@ -38,7 +36,7 @@
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=careful&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=coming&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
-    <link rel="prefetch" href="https://api.xstoregames.com/api/catalog?list=toppaid&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/catalog?list=mostpopular&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=new-pc&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=deals-pc&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
 
@@ -337,7 +335,7 @@
     </script>
 
     <script>
-       window.requestIdleCallback = window.requestIdleCallback || function (cb) {
+      window.requestIdleCallback = window.requestIdleCallback || function (cb) {
         var start = Date.now();
         return setTimeout(function () {
           cb({
@@ -412,16 +410,18 @@
       async function bs() {
         if (!navigator.permissions) { return; }
 
-        const registration = await navigator.serviceWorker.ready;
-        const status = await navigator.permissions.query({
-          name: 'periodic-background-sync',
-        });
-        if (status.state === 'granted') {
-          await registration.periodicSync.register('check-deals', {
-            // An interval of one day.
-            minInterval: 24 * 60 * 60 * 1000,
+        try {
+         const registration = await navigator.serviceWorker.ready;
+          const status = await navigator.permissions.query({
+            name: 'periodic-background-sync',
           });
-        }
+          if (status.state === 'granted') {
+            await registration.periodicSync.register('check-deals', {
+              // An interval of one day.
+              minInterval: 24 * 60 * 60 * 1000,
+            });
+          }
+        } catch {}
       }
     </script>
   </body>

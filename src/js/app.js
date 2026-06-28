@@ -331,26 +331,27 @@ async function bootApp() {
       //   .createObjectStore('played', { keyPath: 'gameId' })
       //   .createIndex('lastTimePlayed', 'lastTimePlayed', { unique: true });
 
-      if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
-        const iddbWishlist = window.indexedDB.open('wishlist', 1);
-        iddbWishlist.onsuccess = w => {
-          const ww = w.target.result;
-          ww.transaction('wishlist', 'readonly')
-            .objectStore('wishlist')
-            .getAll()
-            .onsuccess = async (e) => {
-              const filtered = e.target.result.filter((value, index, self) =>
-                index === self.findIndex(t => t.gameId === value.gameId)
-              );
-              const xStore = db
-                .transaction('wishlist', 'readwrite')
-                .objectStore('wishlist');
-              filtered.forEach((g) => { xStore.add(g); });
+      // Migration from old DB
+      // if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
+      //   const iddbWishlist = window.indexedDB.open('wishlist', 1);
+      //   iddbWishlist.onsuccess = w => {
+      //     const ww = w.target.result;
+      //     ww.transaction('wishlist', 'readonly')
+      //       .objectStore('wishlist')
+      //       .getAll()
+      //       .onsuccess = async (e) => {
+      //         const filtered = e.target.result.filter((value, index, self) =>
+      //           index === self.findIndex(t => t.gameId === value.gameId)
+      //         );
+      //         const xStore = db
+      //           .transaction('wishlist', 'readwrite')
+      //           .objectStore('wishlist');
+      //         filtered.forEach((g) => { xStore.add(g); });
 
-              window.indexedDB.deleteDatabase('wishlist');
-            }
-        };
-      }
+      //         window.indexedDB.deleteDatabase('wishlist');
+      //       }
+      //   };
+      // }
     };
     iddb.onsuccess = eve => { resolve(eve.target.result); };
   });
@@ -1904,10 +1905,6 @@ async function bootApp() {
     window.addEventListener('appinstalled', (eve) => {
       gtag('event', 'app_installed');
     });
-  });
-
-  requestIdleCallback(() => {
-    import('./haptics.js');
   });
 
   requestIdleCallback(() => {

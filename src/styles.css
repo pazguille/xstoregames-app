@@ -1939,7 +1939,7 @@ progress {
 
 .modal-chat-content {
   overflow: hidden;
-  height: 80vh;
+  height: 82vh;
   transition: height 300ms ease-out, transform 300ms ease-out;
 }
 
@@ -1994,7 +1994,7 @@ progress {
   width: fit-content !important;
   max-width: 90% !important;
   font-size: 14px;
-  line-height: 1.3em !important;
+  line-height: 1.4em !important;
 }
 
 .chat img {
@@ -2069,8 +2069,9 @@ progress {
 .chat-message-skeleton,
 .chat-message-model {
   align-self: start;
-  border-radius: 12px 12px 12px 0;
-  background: var(--bg-box-color);
+  padding: 10px 0;
+  /* border-radius: 12px 12px 12px 0;
+  background: var(--bg-box-color); */
 }
 
 @keyframes fadeInOut {
@@ -2136,11 +2137,11 @@ progress {
   border-radius: 100%;
   border: 1px solid var(--txt-color);
   background-color: var(--bg-color);
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   position: absolute;
-  right: 12px;
-  top: 2px;
+  right: 14px;
+  top: 3px;
   padding: 0;
 }
 
