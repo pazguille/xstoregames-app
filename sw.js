@@ -37,7 +37,7 @@ this.addEventListener('periodicsync', async (eve) => {
       return;
     }
 
-    const iddb = indexedDB.open('wishlist', 1);
+    const iddb = indexedDB.open('xstoregames', 1);
     iddb.onsuccess = eve => {
       const db = eve.target.result;
       db
@@ -49,10 +49,10 @@ this.addEventListener('periodicsync', async (eve) => {
           if (!games.length) {
             return;
           }
-          const wishlist = games.map((g) => g.id).join(',');
+          const wishlist = games.map((g) => g.gameId).join(',');
           const wish = await fetch(gameXboxURL(wishlist)).then(res => res.json());
-          const deals = games.filter((g) => wish.find((a) => a.id === g.id && a.price.deal < g.amount));
-
+          const deals = games.filter((g) => wish.find((a) => a.id === g.gameId && a.price.deal < g.amount));
+          console.log(`${this.registration.scope}wishlist`);
           if (deals.length) {
             this.registration.showNotification(`¡Nuevas ofertas!`, {
               icon: `${this.registration.scope}src/assets/favicon.png`,

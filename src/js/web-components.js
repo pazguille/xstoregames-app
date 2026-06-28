@@ -86,6 +86,11 @@ class ShareButton extends HTMLButtonElement {
   }
 
   _onClick() {
+    this.classList.add('animate');
+    this.addEventListener('animationend', () => {
+      this.classList.remove('animate');
+    }, { once: true });
+
     if ('share' in navigator) {
       navigator.share({
         title: this.title,
@@ -170,6 +175,11 @@ class SwitchButton extends HTMLButtonElement {
   }
 
   _onClick() {
+    this.classList.add('animate');
+    this.addEventListener('animationend', () => {
+      this.classList.remove('animate');
+    }, { once: true });
+
     this._active = !this._active;
     this[this._active ? 'setAttribute' : 'removeAttribute']('active', '');
   }
@@ -395,16 +405,17 @@ class NotificationPrompt extends HTMLElement {
 
   async _permissions() {
     if (!navigator.permissions) { return; }
-
-    const bsStatus = await navigator.permissions.query({ name: 'periodic-background-sync' });
-    const notifStatus = await navigator.permissions.query({ name: 'notifications' });
-    if (bsStatus.state === 'granted') {
-      if (['denied', 'granted'].includes(notifStatus.state)) {
-        this.hide();
-      } else {
-        this.show();
+    try {
+      const bsStatus = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      const notifStatus = await navigator.permissions.query({ name: 'notifications' });
+      if (bsStatus.state === 'granted') {
+        if (['denied', 'granted'].includes(notifStatus.state)) {
+          this.hide();
+        } else {
+          this.show();
+        }
       }
-    }
+    } catch {}
   }
 }
 window.customElements.define('notification-prompt', NotificationPrompt);

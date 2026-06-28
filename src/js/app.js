@@ -4,6 +4,7 @@ import {
   gameXboxUSURL,
   gameXboxFlyURL,
   gameXboxRelatedURL,
+  gameRandomURL,
   searchXboxURL,
   getXboxNewsURL,
   getGamePassURL,
@@ -19,11 +20,11 @@ import {
   getGamerClipsById,
   slugify,
   getPageFromURL,
-  getMarketplaceItemsURL,
   convertDollar,
   pluralGames,
   logoutURL,
   getDollar,
+  getDollars,
 } from './utils.js';
 
 import {
@@ -38,12 +39,10 @@ import {
   gamepassSection,
   supportSection,
   catalogSection,
-  marketplaceItemsTemplate,
   filtersTemplate,
   filtersCatalogTemplate,
   settingsTemplate,
   collectionHeaderTemplate,
-  finanzasARGSection,
   gamerPageTemplate,
   gamerGamesTemplate,
   gamerAchievementsTemplate,
@@ -51,6 +50,8 @@ import {
   gamerPageStatsTemplate,
   gamerPageNotFoundTemplate,
   reviewsTemplate,
+  gameGuessThePriceTemplate,
+  // paymentMethodBanner,
 } from './templates.js';
 
 let controller;
@@ -68,11 +69,12 @@ const broadcast = new BroadcastChannel('worker-channel');
 
 const sections = [
   {
-    type: 'new',
-    title: 'Salidos del horno',
+    type: 'nextweeks',
+    title: 'Salen del horno',
     icon: '',
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
   {
     type: 'deals',
@@ -80,34 +82,101 @@ const sections = [
     icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
+
+  {
+    type: 'gp-deals',
+    title: 'Ofertas con Game Pass',
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
+    type: 'pastweeks',
+    title: 'Por si te lo perdiste',
+    icon: '',
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
+    type: 'new',
+    title: 'Novedades y cosas lindas',
+    icon: '',
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
+  {
+    type: 'careful',
+    title: 'Juegos Cuidados',
+    icon: `<img alt="" src="/src/assets/icons/careful.svg" width="15" height="22" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
+  },
+
   {
     type: 'coming',
     title: '¡Mirá lo que se viene!',
     icon: '',
     list: [],
     skipitems: 0,
+    group: 'collection',
   },
+
   {
-    type: 'best',
-    title: 'Deberías jugarlos',
-    icon: '',
-    list: [],
-    skipitems: 0,
-  },
-  {
-    type: 'most',
+    type: 'mostpopular',
     title: 'Los más jugados',
     icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
     list: [],
     skipitems: 0,
+    group: 'catalog',
   },
+
+  // {
+  //   type: 'best',
+  //   title: 'Deberías jugarlos',
+  //   icon: '',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+  // {
+  //   type: 'most',
+  //   title: 'Los más jugados',
+  //   icon: '<img alt="" src="/src/assets/icons/chart.svg" width="24" height="24" />',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+
+  // {
+  //   type: 'free',
+  //   title: 'Gratarola',
+  //   icon: '',
+  //   list: [],
+  //   skipitems: 0,
+  // },
+
   {
-    type: 'free',
-    title: 'Gratarola',
+    type: 'new-pc',
+    title: 'Novedades para PC',
     icon: '',
     list: [],
     skipitems: 0,
+    group: 'collection',
+  },
+  {
+    type: 'deals-pc',
+    title: 'Ofertas para PC',
+    icon: `<img alt="" src="/src/assets/icons/tag.svg" width="24" height="24" />`,
+    list: [],
+    skipitems: 0,
+    group: 'collection',
   },
 ];
 
@@ -115,17 +184,20 @@ const gamepassTitles = {
   'gamepass-new': 'Recién agregados a Game Pass',
   'gamepass-coming': 'Se están por sumar a Game Pass',
   'gamepass-leaving': 'Los que se van de Game Pass',
-  'gamepass-ea-play': 'Con EA Play en Game Pass',
+  'gamepass-ea': 'Con EA Play en Game Pass',
   'gamepass-gp-deals': 'Ofertas exclusivas con Game Pass',
   'gamepass-all': 'Todos los juegos de Game Pass',
   'gamepass-new-pc': 'Recién agregados a PC Game Pass',
   'gamepass-coming-pc': 'Se están por sumar a PC Game Pass',
   'gamepass-leaving-pc': 'Los que se van de PC Game Pass',
-  'gamepass-ea-play-pc': 'Con EA Play en Game Pass',
+  'gamepass-ea-pc': 'Con EA Play en Game Pass',
   'gamepass-all-pc': 'Todos los juegos de PC Game Pass',
 };
 
 const catalogTitles = {
+  new: 'Salidos del horno',
+  deals: 'Ahorrate unos pesos',
+  mostpopular: 'Los más jugados',
   all: 'Todos los juegos',
   pc: 'Juegos disponibles en PC',
   shooter: 'Shooters',
@@ -146,6 +218,8 @@ const catalogTitles = {
 };
 
 async function bootApp() {
+  const currentDollars = getDollars();
+
   const $loading = document.querySelector('x-loader');
   const $splash = document.querySelector('.splash-loading');
 
@@ -205,10 +279,11 @@ async function bootApp() {
   const $canonical = document.querySelector('#canonical');
   const $preloadLCP = document.querySelector('#preloadLCP');
 
-  const $footer = document.querySelector('footer');
+  const $footer = document.querySelector('main+footer');
 
   const $installBtn = document.querySelector('#install-btn');
   const $pageBack = document.querySelector('#page-back-btn');
+  const $logoLink = document.querySelector('header h1 a');
 
   const $search = document.querySelector('#search-collapse');
   const $searchForm = document.querySelector('#search');
@@ -225,6 +300,9 @@ async function bootApp() {
   const $results = document.querySelector('.results');
   const $resultsContent = document.querySelector('.results-content');
 
+  const $play = document.querySelector('.play');
+  const $playContent = document.querySelector('.play-content');
+
   const $news = document.querySelector('.news');
   const $newsContent = document.querySelector('.news-content');
   const $wish = document.querySelector('.wish');
@@ -240,48 +318,43 @@ async function bootApp() {
   let $currentPageContent = null;
   let $prevFocus = null;
 
-  const db = await new Promise((resolve) => {
+  window.currentGame = null;
+
+  const db = window.db = await new Promise((resolve) => {
     const iddb = window.indexedDB.open('xstoregames', 1);
     iddb.onupgradeneeded = async (eve) => {
       eve.currentTarget.result
-          .createObjectStore('wishlist', { keyPath: 'gameId' })
-          .createIndex('gameId', 'gameId', { unique: true });
+        .createObjectStore('wishlist', { keyPath: 'gameId' })
+        .createIndex('gameId', 'gameId', { unique: true });
 
       // eve.currentTarget.result
-      //     .createObjectStore('played', { autoIncrement: true })
-      //     .createIndex('id', 'id', { unique: true });
+      //   .createObjectStore('played', { keyPath: 'gameId' })
+      //   .createIndex('lastTimePlayed', 'lastTimePlayed', { unique: true });
 
-      if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
-        const iddbWishlist = window.indexedDB.open('wishlist', 1);
-        iddbWishlist.onsuccess = w => {
-          const ww = w.target.result;
-          ww.transaction('wishlist', 'readonly')
-            .objectStore('wishlist')
-            .getAll()
-            .onsuccess = async (e) => {
-              const filtered = e.target.result.filter((value, index, self) =>
-                index === self.findIndex(t => t.gameId === value.gameId)
-              );
-              const xStore = db
-                .transaction('wishlist', 'readwrite')
-                .objectStore('wishlist');
-              filtered.forEach((g) => { xStore.add(g); });
+      // Migration from old DB
+      // if ((await window.indexedDB.databases()).filter(db => db.name === 'wishlist')[0]) {
+      //   const iddbWishlist = window.indexedDB.open('wishlist', 1);
+      //   iddbWishlist.onsuccess = w => {
+      //     const ww = w.target.result;
+      //     ww.transaction('wishlist', 'readonly')
+      //       .objectStore('wishlist')
+      //       .getAll()
+      //       .onsuccess = async (e) => {
+      //         const filtered = e.target.result.filter((value, index, self) =>
+      //           index === self.findIndex(t => t.gameId === value.gameId)
+      //         );
+      //         const xStore = db
+      //           .transaction('wishlist', 'readwrite')
+      //           .objectStore('wishlist');
+      //         filtered.forEach((g) => { xStore.add(g); });
 
-              window.indexedDB.deleteDatabase('wishlist');
-            }
-        };
-      }
+      //         window.indexedDB.deleteDatabase('wishlist');
+      //       }
+      //   };
+      // }
     };
     iddb.onsuccess = eve => { resolve(eve.target.result); };
   });
-
-  // const gamerGames = window.gamerGames = await new Promise((resolve) => {
-  //   db
-  //     .transaction('played', 'readonly')
-  //     .objectStore('played')
-  //     .getAll()
-  //     .onsuccess = (e) => resolve(e.target.result);
-  // });
 
   async function showPage(page, id) {
     if (page === 'logout') {
@@ -289,6 +362,7 @@ async function bootApp() {
       return;
     }
 
+    window.currentGame = null;
     $prevPage = $currentPage;
 
     document.title = documentTitle;
@@ -304,11 +378,14 @@ async function bootApp() {
     }, 300);
 
     if (page === 'wishlist') {
+      document.title = `Favoritos | XStore`;
+
       $footer.dataset.active = page;
 
       requestIdleCallback(() => {
         $pageBack.hide();
         $installBtn.hide();
+        $logoLink.classList.remove('logo-hide');
       });
 
       if (!$prevPage) {
@@ -364,6 +441,8 @@ async function bootApp() {
     }
 
     if (page === 'news') {
+      document.title = `Noticias | XStore`;
+
       $footer.dataset.active = page;
 
       $home.setAttribute('hidden', true);
@@ -371,6 +450,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $installBtn.hide();
         $pageBack.hide();
+        $logoLink.classList.remove('logo-hide');
       });
 
       if ($prevPage) {
@@ -390,7 +470,9 @@ async function bootApp() {
       const news = await fetch(getXboxNewsURL())
         .then(res => res.json())
         .then(res => res.map(n => {
-          n.image = n.image.replace('1200%2C675', '670%2C380')
+          if (n.image) {
+            n.image = n.image.replace('1920%2C1080', '670%2C380');
+          }
           return n;
         }));
 
@@ -413,6 +495,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (history.state?.referer !== history.state?.page ) {
@@ -446,10 +529,12 @@ async function bootApp() {
 
       game.lcp = (game.images.titledheroart ?
         (game.images.titledheroart.url || game.images.titledheroart[0].url)
-        : game.images.screenshot ? game.images.screenshot[0].url
+        : game.images.screenshot ? (game.images.screenshot[0]?.url || game.images.screenshot?.url)
         : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
 
       $preloadLCP.href = game.lcp + '?w=1160&q=70';
+
+      window.currentGame = game;
 
       const html = gameDetailTemplate(game);
       requestIdleCallback(() => {
@@ -491,9 +576,16 @@ async function bootApp() {
         fetch(getDollar()).then(res => res.json()).then(d => d.venta),
         fetch(gameXboxUSURL(game.id)).then(res => res.json()).then(game => game[0])
       ]).then(([d, g]) => {
+        const usPrice = g.price.amount*d;
+        const diffPriceP = Math.round((usPrice - game.price.amount) / usPrice * 100);
+
         requestIdleCallback(() => {
+          if (diffPriceP > 60) {
+            document.querySelector('.game-bug-price').removeAttribute('hidden');
+          }
+
           document.querySelector('.game-us-price').innerHTML =
-            g.price.amount ? `<x-price amount="${g.price.amount*d}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
+            g.price.amount ? `<x-price amount="${usPrice}"></x-price> <small>(USD <x-price amount="${g.price.amount}"></x-price>)</small>` : '';
         });
       });
 
@@ -521,17 +613,17 @@ async function bootApp() {
               });
             }
 
-            if (related.AddOnsByParentWithDetails) {
+            if (related.ProductAddOns) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
                   icon: '',
                   title: 'Complementos',
                   type: 'addons',
-                  list: related.AddOnsByParentWithDetails,
+                  list: related.ProductAddOns,
                   more: false,
                 }));
                 o.current.remove();
-                related.AddOnsByParentWithDetails.forEach((game) => gamesCache.set(game.id, game));
+                related.ProductAddOns.forEach((game) => gamesCache.set(game.id, game));
               });
             }
 
@@ -547,17 +639,17 @@ async function bootApp() {
               });
             }
 
-            if (related.PAL) {
+            if (related.MoreLike) {
               yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', sectionTemplate({
                   icon: '',
                   title: 'Te pueden gustar',
                   type: 'related',
-                  list: related.PAL,
+                  list: related.MoreLike,
                   more: false,
                 }));
                 o.current.remove();
-                related.PAL.forEach((game) => gamesCache.set(game.id, game));
+                related.MoreLike.forEach((game) => gamesCache.set(game.id, game));
               });
             }
           }
@@ -575,6 +667,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -587,6 +680,8 @@ async function bootApp() {
       $currentPageContent = $listContent;
 
       const section = sections.find(section => section.type === id);
+
+      document.title = `${section.title} | XStore`;
 
       if (!sort && ($prev === null || $currentPageContent.innerHTML === '')) {
         $currentPage.scrollTo(0, 0);
@@ -653,14 +748,21 @@ async function bootApp() {
 
         // TODO: Improve API repsonse to avoid this
         const allGames = allGamesCache.get(id) || await Promise.all([
-          fetch(getXboxURL(id, 0, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 200, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 400, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 600, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 800, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1000, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1200, 200)).then(res => res.json()),
-          fetch(getXboxURL(id, 1400, 200)).then(res => res.json()),
+          fetch(getXboxURL(id, 0, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 100, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 200, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 300, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 400, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 500, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 600, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 700, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 800, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 900, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1000, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1100, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1200, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1300, 100)).then(res => res.json()),
+          fetch(getXboxURL(id, 1400, 100)).then(res => res.json()),
         ]).then(a => a.flat()).then(a => { allGamesCache.set(id, a); return a; });
 
         broadcast.postMessage({
@@ -686,9 +788,12 @@ async function bootApp() {
     }
 
     if (page === 'games') {
+      document.title = `Listado de juegos | XStore`;
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -725,9 +830,12 @@ async function bootApp() {
         return;
       }
 
+      document.title = `Carrito | XStore`;
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -800,6 +908,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -820,6 +929,8 @@ async function bootApp() {
       } else {
         gamerPage = gamer;
       }
+
+      document.title = `Perfil de ${gamerPage.gamertag} | XStore`;
 
       const { paths, searchParams } = getPageFromURL(window.location.href);
       if (paths.length === 3 && ['games', 'achievements', 'clips'].includes(paths[2])) {
@@ -842,6 +953,7 @@ async function bootApp() {
                 gamerCache.set(`${id}-games`, g);
                 return g;
               });
+
             games.then((gs) => {
               gs.map((game, i) => yieldToMain(() => {
                 $currentPageContent.insertAdjacentHTML('beforeend', gamerGamesTemplate(game, id));
@@ -1000,6 +1112,7 @@ async function bootApp() {
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -1010,6 +1123,8 @@ async function bootApp() {
 
       $currentPage = $list;
       $currentPageContent = $listContent;
+
+      document.title = `${gamepassTitles[`${page}-${id}`]} | XStore`;
 
       if ($prev === null || $currentPageContent.innerHTML === '') {
         $loading.show();
@@ -1074,9 +1189,12 @@ async function bootApp() {
     if (page === 'catalog') {
       const { id, searchParams } = getPageFromURL(window.location.href);
 
+      document.title = `${catalogTitles[id]} | XStore`;
+
       requestIdleCallback(() => {
         $pageBack.show();
         $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
       });
 
       if (!$prevPage) {
@@ -1163,7 +1281,41 @@ async function bootApp() {
       }
     }
 
-    $currentPage.removeAttribute('hidden');
+    if (page === 'play') {
+      document.title = `Jugar: ¿Cuánto sale? | XStore`;
+
+      $footer.dataset.active = page;
+
+      requestIdleCallback(() => {
+        $pageBack.show();
+        $installBtn.hide();
+        $logoLink.classList.add('logo-hide');
+      });
+
+      $currentPage = $play;
+      $currentPageContent = $playContent;
+      $currentPageContent.innerHTML = '';
+
+      $loading.show();
+
+      const game = await fetch(gameRandomURL(1)).then(res => res.json()).then(g => g[0]);
+      gamesCache.set(game.id, game);
+      $loading.hide();
+
+      game.lcp = (game.images.titledheroart ?
+        (game.images.titledheroart.url || game.images.titledheroart[0].url)
+        : game.images.screenshot ? game.images.screenshot[0].url
+        : (game.images.superheroart?.url || game.images.boxart?.url)).replace('https:https:', 'https:');
+
+      $preloadLCP.href = game.lcp + '?w=1160&q=70';
+
+      const html = gameGuessThePriceTemplate(game);
+      requestIdleCallback(() => {
+        $currentPage.scrollTo(0, 0);
+        $currentPageContent.innerHTML = html;
+      });
+    }
+    $currentPage?.removeAttribute('hidden');
 
     if (window.swipeToBack) {
       $currentPage.classList.add('page-on');
@@ -1181,8 +1333,8 @@ async function bootApp() {
 
       requestIdleCallback(() => {
         $loading.hide();
-        $currentPage.classList.add('page-on');
-        $currentPage.classList.remove('page-prev-on');
+        $currentPage?.classList.add('page-on');
+        $currentPage?.classList.remove('page-prev-on');
       });
     }
   }
@@ -1199,8 +1351,9 @@ async function bootApp() {
       }
     });
 
-    await Promise.all(sections.slice(0, 2).map(async ({ type }) => {
-      const games = await fetch(getXboxURL(type)).then(res => res.json());
+    await Promise.all(sections.slice(0, 2).map(async ({ type, group }) => {
+      const fetchAPI = group === 'collection' ? getXboxURL : getXboxCatalogURL;
+      const games = await fetch(fetchAPI(type)).then(res => res.json()).then(res => res.games || res);
       const section = sections.find(section => section.type === type);
       section.list.push(...games);
       games.forEach((game) => gamesCache.set(game.id, game));
@@ -1215,6 +1368,20 @@ async function bootApp() {
 
     await yieldToMain(() => {
       $home.insertAdjacentHTML('beforeend', gameImportantTemplate(hotSale));
+
+      setInterval(() => {
+        const games =  sections[1].list;
+        const pick = games[Math.floor(Math.random() * games.length)];
+        const lcp = pick.images.featurepromotionalsquareart ?
+          pick.images.featurepromotionalsquareart.url : pick.images.boxart?.url;
+        $preloadLCP.href = lcp + '?w=720&q=70';
+        const $current = document.querySelector('.game-important');
+        $current.classList.add('next');
+        setTimeout(() => {
+          $home.insertAdjacentHTML('afterbegin', gameImportantTemplate(pick));
+          $current.remove();
+        }, 250);
+      }, 10000);
     });
 
     // $preloadLCP.href = window.location.origin + '/src/assets/xbox-direct.jpg';
@@ -1241,10 +1408,12 @@ async function bootApp() {
     });
 
     requestIdleCallback(async () => {
+      // $home.insertAdjacentHTML('beforeend', paymentMethodBanner());
       $home.insertAdjacentHTML('beforeend', supportSection());
 
-      await Promise.all(sections.slice(2, sections.length).map(async ({ type }) => {
-        const games = await fetch(getXboxURL(type)).then(res => res.json());
+      await Promise.all(sections.slice(2, sections.length).map(async ({ type, group }) => {
+        const fetchAPI = group === 'collection' ? getXboxURL : getXboxCatalogURL;
+        const games = await fetch(fetchAPI(type)).then(res => res.json()).then(res => res.games || res);
         const section = sections.find(section => section.type === type);
         section.list.push(...games);
         games.forEach((game) => gamesCache.set(game.id, game));
@@ -1266,13 +1435,6 @@ async function bootApp() {
             o.unobserve(o.current);
             await yieldToMain(() => {
               $home.insertAdjacentHTML('beforeend', catalogSection());
-            });
-            const { results } = await fetch(getMarketplaceItemsURL()).then(res => res.json());
-            await yieldToMain(() => {
-              $home.insertAdjacentHTML('beforeend', marketplaceItemsTemplate(results));
-            });
-            await yieldToMain(() => {
-              $home.insertAdjacentHTML('beforeend', finanzasARGSection());
             });
           }
         });
@@ -1303,6 +1465,7 @@ async function bootApp() {
       $pageBack.show();
       $search.close();
       $installBtn.hide();
+      $logoLink.classList.add('logo-hide');
     });
 
     $currentPage = $results
@@ -1389,6 +1552,8 @@ async function bootApp() {
 
   const { page, id, searchParams } = getPageFromURL(window.location.href);
 
+  await currentDollars;
+
   switch (page) {
     case 'home':
       loadHomePage();
@@ -1435,6 +1600,7 @@ async function bootApp() {
     case 'gamepass':
     case 'catalog':
     case 'gamer':
+    case 'play':
       history.replaceState({ page, id }, document.title, window.location.href);
       showPage(page, id);
       break;
@@ -1466,7 +1632,7 @@ async function bootApp() {
         return;
       }
 
-      $prevPage.classList.remove('page-on');
+      $prevPage?.classList.remove('page-on');
       setTimeout(() => {
         requestIdleCallback(() => {
           $prevPage.setAttribute('hidden', true);
@@ -1492,10 +1658,12 @@ async function bootApp() {
 
       $pageBack.hide();
       $installBtn.show();
+      $logoLink.classList.remove('logo-hide');
       $searchForm.elements[0].value = '';
 
       $currentPage = null;
       $currentPageContent = null;
+      window.currentGame = null;
 
       sorted = null;
       filtered = null;
@@ -1581,10 +1749,28 @@ async function bootApp() {
       $currentPage?.classList.remove('page-scale');
     });
 
+    document.body.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('game-bug-price')) {
+        emojiBlast({
+          emojis: ['🐛', '🪲', '🐞'],
+          position: {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+          },
+          physics: {
+            fontSize: {
+              max: 54,
+              min: 24,
+            },
+          },
+        });
+      }
+    });
+
     $modal.addEventListener('submit', (eve) => {
       eve.preventDefault();
-      const state = eve.target.elements[0].value;
-      window.localStorage.setItem('state', state);
+      window.localStorage.setItem('state', eve.target.elements[0].value);
+      window.localStorage.setItem('paymethod', eve.target.elements[1].value);
       window.location.reload();
     });
 
@@ -1605,7 +1791,6 @@ async function bootApp() {
       loadSearchPage(q);
     });
 
-
     $gamer.addEventListener('submit', async (eve) => {
       eve.preventDefault();
       const id = eve.target.elements[0].value;
@@ -1623,14 +1808,6 @@ async function bootApp() {
       gtag('event', 'search', {
         search_term: eve.target.elements[0].value,
       });
-    });
-
-    $home.addEventListener('click', (eve) => {
-      if (eve.target.classList.contains('marketplace_item')) {
-        gtag('event', 'marketplace_item', {
-          page_location: eve.target.href,
-        });
-      }
     });
 
     $detailContent.addEventListener('click', (eve) => {
@@ -1709,6 +1886,22 @@ async function bootApp() {
         document.dispatchEvent(new CustomEvent('cartupdate', { detail: { games: cartArr.length } }));
       }
     });
+
+    $playContent.addEventListener('click', (eve) => {
+      if (eve.target.classList.contains('next-game-btn')) {
+        showPage('play', 'guess-the-game');
+      }
+
+      if (eve.target.classList.contains('price-btn')) {
+        const game = gamesCache.get(eve.target.name);
+        if (convertDollar(game.price.amount) ===  eve.target.value) {
+          eve.target.classList.add('bounce');
+        } else {
+          eve.target.classList.add('shakeX');
+        }
+      }
+    });
+
     window.addEventListener('appinstalled', (eve) => {
       gtag('event', 'app_installed');
     });
@@ -1717,5 +1910,10 @@ async function bootApp() {
   requestIdleCallback(() => {
     import('./swipes.js');
   });
+
+  requestIdleCallback(() => {
+    import('./hector.js');
+  });
 }
+
 bootApp();

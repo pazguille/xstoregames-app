@@ -1,5 +1,8 @@
 const API_DOMAIN = 'https://api.xstoregames.com';
 const API_FLY_DOMAIN = 'https://fly.xstoregames.com';
+// const API_DOMAIN = 'http://localhost:3031';
+// const API_FLY_DOMAIN = 'http://localhost:3031';
+// const AUTH_DOMAIN = 'https://dev.xstoregames.com:8081';
 const AUTH_DOMAIN = 'https://auth.xstoregames.com';
 export const getXboxURL = (list, skipitems = 0, count = 10) => `${API_DOMAIN}/api/games?list=${list}&skipitems=${skipitems}&count=${count}&lang=${lang}&store=${store}`;
 export const searchXboxURL = (query, ct) => `${API_FLY_DOMAIN}/api/search?q=${query}${ct ? `&encodedCT=${ct}`: ''}&lang=${lang}&store=${store}`;
@@ -7,6 +10,7 @@ export const gameXboxURL = (id) => `${API_DOMAIN}/api/games?id=${id}&lang=${lang
 export const gameXboxUSURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=us`;
 export const gameXboxFlyURL = (id) => `${API_FLY_DOMAIN}/api/games?id=${id}&lang=${lang}&store=${store}`;
 export const gameXboxRelatedURL = (id) => `${API_FLY_DOMAIN}/api/games?related=${id}&lang=${lang}&store=${store}`;
+export const gameRandomURL = (count) => `${API_FLY_DOMAIN}/api/games?list=random&lang=${lang}&store=${store}&count=${count}`;
 export const getXboxNewsURL = () => `${API_FLY_DOMAIN}/api/news`;
 export const getGamePassURL = (list) => `${API_DOMAIN}/api/gamepass?list=${list}&lang=${lang}&store=${store}`;
 export const getVideoURL = (slug) => `${API_FLY_DOMAIN}/api/videos?game=${slug}`;
@@ -22,9 +26,6 @@ export const getGamerGamesById = (id, count = 0) => `${AUTH_DOMAIN}/api/games?ga
 export const getGamerAchievementsById = (id, count = 0) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
 export const getGamerAchievementsByTitleId = (id, titleId) => `${AUTH_DOMAIN}/api/achievements?gamertag=${id}&titleId=${titleId}&lang=${lang}&store=${store}`;
 export const getGamerClipsById = (id, count = 0) => `${AUTH_DOMAIN}/api/clips?gamertag=${id}&count=${count}&lang=${lang}&store=${store}`;
-
-const mlId = { ar: 'MLA', mx: 'MLM', };
-export const getMarketplaceItemsURL = (limit = 20) => `https://api.mercadolibre.com/sites/${mlId[store]}/search?category=${mlId[store]}455245&limit=${limit}`;
 
 export function getPageFromURL(url) {
   const { pathname, searchParams } = new URL(url);
@@ -56,6 +57,7 @@ export function slugify(str) {
     .replace(/_+/g, '-');
 }
 
+const IVA = 0.21;
 const IIBBs = {
   NONE: 0,
   PAMP: 0.01,
@@ -68,18 +70,35 @@ const IIBBs = {
   RNEGRO: 0.05,
   CHACO: 0.055,
 };
+const PAYMETHODS = {
+  NONE: (price) => price,
+  PREX: (price) => toFixed(price + (price * IVA) + (price * IIBB)),
+  ASTROPAY: (price) => {
+    try {
+      const gap = window.apExchange.exchange / window.apExchange.official_exchange;
+      const markupFactor = gap * (gap + (window.apExchange.spread / 100));
+      const adjustedPrice = price * markupFactor;
+      const iibbTax = price * IIBB;
+      const ivaTax = price * IVA;
+      const finalTotal = adjustedPrice + ivaTax + iibbTax;
+      return toFixed(finalTotal);
+    } catch (error) {
+      return toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB);
+    }
+  },
+  TC: (price) => toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB),
+};
 
-const IVA = 0.21;
 const IIBB = IIBBs[window.localStorage.getItem('state') || 'CABA'];
-const AFIP = 0.30;
-const PAISA = 0.08;
+const PAYMETHOD = PAYMETHODS[window.localStorage.getItem('paymethod') || 'PREX'];
 
 export function convertDollar(price) {
   if (store !== 'ar') {
     return price.toFixed(2);
   }
 
-  const final = toFixed(price) + toFixed(price * IVA) + toFixed(price * IIBB) + toFixed(price * AFIP) + toFixed(price * PAISA);
+  const final = PAYMETHOD(price);
+
   return final.toFixed(2);
 }
 
@@ -98,3 +117,48 @@ export function pluralGames(n) {
   const suffix = suffixes.get(rule);
   return `${n} ${suffix}`;
 };
+
+export function shuffle(arr) {
+  let collection = arr;
+  let len = arr.length;
+  let random;
+  let temp;
+
+  while (len) {
+    random = Math.floor(Math.random() * len);
+    len -= 1;
+    temp = collection[len];
+    collection[len] = collection[random];
+    collection[random] = temp;
+  }
+
+  return collection;
+};
+
+export async function getDollars() {
+  const useAP = localStorage.getItem('paymethod') === 'ASTROPAY';
+  if (!useAP) return;
+
+  const stringApEx = localStorage.getItem('ap_exchange');
+
+  if (stringApEx) {
+    window.apExchange = JSON.parse(stringApEx);
+    const now = Date.now();
+    const lastUpdate = localStorage.getItem('ap_exchange_timestamp');
+    const fiveMinutes = 5 * 60 * 1000;
+    if (now - lastUpdate < fiveMinutes) {
+      return;
+    }
+  }
+
+  try {
+    const res = await fetch('https://fly.xstoregames.com/api/ap-exchange?from=usd');
+    const apData = await res.json();
+
+    window.apExchange = apData;
+    localStorage.setItem('ap_exchange', JSON.stringify(apData));
+    localStorage.setItem('ap_exchange_timestamp', Date.now().toString());
+  } catch (error) {
+    console.error("Error en API Local:", error);
+  }
+}

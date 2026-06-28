@@ -1,0 +1,27 @@
+# XStoreGames
+
+> La tienda de Xbox Argentina con impuestos incluidos.
+
+Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos.
+
+XStoreGames es una web-app para explorar el catálogo de juegos de Xbox en precios argentinos incluyendo los impuestos finales.
+
+Cansado de tener que estar calculando a mano cuánto me saldría cada juego y sumada la mala experiencia del store actual (ya que no hay versión mobile) nace este proyecto.
+
+XStore te ahorra el paso extra de tener que abrir la calculadora cada vez que querés comprar un juego.
+
+Podes usarla absolutamente gratis y sin publicidad.
+
+## XStoreGames te permite
+- Explorar todo el catalogo de juegos (incluidos Xbox Live Gold y Xbox Game Pass).
+- Estar al día con los nuevos juegos que salieron y están por salir.
+- Conocer todas las ofertas disponibles.
+- Armar una lista de favoritos.
+- Buscar juegos.
+- Un newsfeed sobre Xbox.
+- Instalar la PWA y recibir notificaciones de las ofertas (solo Android).
+
+## ¿Cómo reporto un bug o hago una sugerencia?
+Si encontrás un bug o tenés una sugerencia para una nueva funcionalidad, podés reportarlo a través de Github.
+
+Copyright © 2025.

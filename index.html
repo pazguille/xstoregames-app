@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
 
     <!-- <base href="https://dev.xstoregames.com:3030/" /> -->
-    <!-- <base href="https://192.168.0.148:3030/" /> -->
+    <!-- <base href="https://192.168.1.13:3030" /> -->
     <base href="https://xstoregames.com/" />
 
     <link rel="stylesheet" href="/src/styles.css" />
@@ -15,8 +15,9 @@
     <link rel="preconnect" href="https://fly.xstoregames.com" />
     <link rel="preconnect" href="https://images.weserv.nl" />
     <link rel="preconnect" href="https://media.rawg.io" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
 
-    <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=nextweeks&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="preload" as="fetch" href="https://api.xstoregames.com/api/games?list=deals&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
 
     <link rel="preload" as="font" href="/src/assets/bahnschrift.woff2" crossorigin="anonymous" />
@@ -30,29 +31,39 @@
 
     <link id="preloadLCP" rel="preload" as="image" />
 
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=gp-deals&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=pastweeks&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=new&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=careful&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
     <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=coming&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
-    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=best&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
-    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=most&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
-    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=free&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/catalog?list=mostpopular&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=new-pc&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
+    <link rel="prefetch" href="https://api.xstoregames.com/api/games?list=deals-pc&skipitems=0&count=10&lang=es&store=ar" crossorigin="anonymous" />
 
     <title>XStore: La tienda de Xbox Argentina con impuestos incluidos</title>
 
     <link rel="shortcut icon" href="/src/assets/favicon.png" />
     <link rel="apple-touch-icon" href="/src/assets/favicon.png" />
 
-    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
     <meta name="apple-mobile-web-app-title" content="XStore" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#072523" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1668-2388.jpg" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1536-2048.jpg" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1640-2360.jpg" media="(device-width: 820px) and (device-height: 1180px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1668-2224.jpg" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1620-2160.jpg" media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1488-2266.jpg" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1320-2868.jpg" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1206-2622.jpg" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1290-2796.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1179-2556.jpg" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
-    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1170-2532.jpg" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+    <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1284-2778.jpg" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1125-2436.jpg" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-1242-2688.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
     <link rel="apple-touch-startup-image" href="/src/assets/apple-splash-828-1792.jpg" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
@@ -70,27 +81,26 @@
     <meta property="og:image" content="https://xstoregames.com/src/assets/xstore-og.jpg" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:domain" content="xstoregames.com" />
-    <meta property="twitter:url" content="https://xstoregames.com" />
+    <meta name="twitter:domain" content="xstoregames.com" />
+    <meta name="twitter:url" content="https://xstoregames.com" />
     <meta name="twitter:title" content="XStore: La tienda de Xbox Argentina con impuestos incluidos" />
     <meta name="twitter:description" content="Explora la amplia colección de títulos de videojuegos en el catálogo de juegos de Xbox. Busca los éxitos de taquilla favoritos, las ofertas y nuevos lanzamientos en precios argentinos." />
     <meta name="twitter:image" content="https://xstoregames.com/src/assets/xstore-og.jpg" />
 
     <link rel="manifest" href="/manifest.json" />
 
-    <link id="canonical" rel="canonical">
+    <link id="canonical" rel="canonical" />
   </head>
   <body>
     <header>
       <h1>
         <a href="/" aria-label="XStore">
-          <svg aria-hidden="true" width="32" height="32" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="195" cy="125" r="38.7" fill="#9AA495"/>
             <circle cx="125" cy="195" r="38.7" fill="#50AF62"/>
             <circle cx="54.7" cy="125" r="38.7" fill="#64A344"/>
             <circle cx="125" cy="54.7" r="38.7" fill="#3B844D"/>
           </svg>
-          XStore
         </a>
       </h1>
 
@@ -191,6 +201,43 @@
         <div class="cart-content page-content"></div>
       </div>
 
+      <div class="play detail page" hidden>
+        <div class="play-content detail-content page-content"></div>
+      </div>
+
+      <div class="hector modal-chat" hidden>
+        <div class="hector-content modal-chat-content">
+          <section class="chat">
+            <header>
+              <h2>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 10.0196C14.6358 10.3431 10.3431 14.6358 10.0196 20H9.98042C9.65687 14.6358 5.36425 10.3431 0 10.0196V9.98043C5.36425 9.65688 9.65687 5.36424 9.98042 0H10.0196C10.3431 5.36424 14.6358 9.65688 20 9.98043V10.0196Z" fill="url(#paint1)"/>
+                  <defs>
+                    <radialGradient id="paint1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(-6.13727 9.97493) scale(21.6266 172.607)">
+                      <stop offset="0.385135" stop-color="#64A344"/>
+                      <stop offset="0.734299" stop-color="#50AF62"/>
+                      <stop offset="0.931035" stop-color="#3B844D"/>
+                    </radialGradient>
+                  </defs>
+                </svg>
+                Héctor
+              </h2>
+            </header>
+            <output class="chat-messages"></output>
+            <footer>
+              <form id="chat-form" class="chat-form" method="POST">
+                <input id="message" class="chat-input" type="text" placeholder="Escribí tu mensaje..." autocomplete="off" />
+                <button class="chat-send" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="m5 12 7-7 7 7M12 19V5" />
+                  </svg>
+                </button>
+              </form>
+            </footer>
+          </section>
+        </div>
+      </div>
+
       <div class="gamer list page" hidden>
         <div class="gamer-content page-content"></div>
       </div>
@@ -209,32 +256,57 @@
         <ul>
           <li>
             <a id="home" href="/" class="home-btn footer-btn" aria-label="Inicio">
-              <svg width="32" height="32" fill="none" viewBox="0 -2 24 28" aria-hidden="true"><path opacity=".12" d="M13.551 5h-3.102c-2.625 0-3.9374 0-4.9675.4974a5 5 0 0 0-2.1621 2.0132c-.5696.9921-.6631 2.3012-.8501 4.9194l-.246 3.4445C2.1026 17.5634 3.4403 19 5.1334 19c.8659 0 1.687-.3846 2.2413-1.0498L7.75 17.5c.3432-.4118.5147-.6177.7101-.7841a3.0001 3.0001 0 0 1 1.4355-.6723C10.1485 16 10.4165 16 10.9526 16h2.0948c.5361 0 .8041 0 1.057.0436a3.0002 3.0002 0 0 1 1.4355.6723c.1954.1664.367.3723.7101.7841l.3752.4502A2.9174 2.9174 0 0 0 18.8665 19c1.6933 0 3.0309-1.4366 2.9102-3.1255l-.246-3.4445c-.187-2.6182-.2805-3.9273-.8501-4.9194a4.9992 4.9992 0 0 0-2.1621-2.0132C17.4884 5 16.1759 5 13.551 5Z" fill="#9AA495"/><path d="m21.5307 12.43-.9974.0713.9974-.0713Zm.246 3.4445.9975-.0712-.9975.0712Zm-5.1515 2.0757-.7683.6402.7683-.6402ZM16.25 17.5l.7682-.6402-.7682.6402Zm-8.5 0 .7682.6402L7.75 17.5Zm-.3752.4502-.7682-.6402.7682.6402Zm-5.1515-2.0757-.9975-.0712.9975.0712Zm.246-3.4445.9974.0713-.9974-.0713Zm7.4263 3.6136.1699.9855-.1699-.9855Zm-1.4355.6723.6483.7614-.6483-.7614Zm7.0798 0-.6483.7614.6483-.7614Zm-1.4355-.6723-.1699.9855.1699-.9855Zm4.4141-10.5462.4349-.9005-.4349.9005Zm2.1621 2.0132.8673-.4979-.8673.4979ZM5.4815 5.4974l.4348.9005-.4348-.9005ZM3.3194 7.5106l-.8673-.4979.8673.4979ZM6 10c-.5523 0-1 .4477-1 1s.4477 1 1 1v-2Zm4 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2ZM9 9c0-.5523-.4477-1-1-1s-1 .4477-1 1h2Zm-2 4c0 .5523.4477 1 1 1s1-.4477 1-1H7Zm8-2c-.5523 0-1 .4477-1 1s.4477 1 1 1v-2Zm.01 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2ZM18 9c-.5523 0-1 .4477-1 1s.4477 1 1 1V9Zm.01 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2Zm-7.561-5h3.102V4h-3.102v2Zm10.0843 6.5013.246 3.4445 1.9949-.1425-.246-3.4445-1.9949.1425ZM17.3934 17.31l-.3752-.4502-1.5364 1.2804.3751.4502 1.5365-1.2804ZM13.0474 15h-2.0948v2h2.0948v-2Zm-6.0656 1.8598-.3752.4502 1.5365 1.2804.3751-.4502-1.5364-1.2804Zm-3.761-.914.246-3.4445-1.995-.1425-.246 3.4445 1.995.1425ZM5.1334 18c-1.113 0-1.992-.9442-1.9128-2.0542l-1.995-.1425C1.0639 18.071 2.86 20 5.1336 20v-2Zm1.4731-.69c-.3643.4372-.904.69-1.4731.69v2a3.9176 3.9176 0 0 0 3.0096-1.4096L6.6066 17.31Zm4.346-2.31c-.5013 0-.8699-.0034-1.2268.0581l.3397 1.971c.1488-.0257.3163-.0291.8871-.0291v-2Zm-2.4344 3.1402c.3654-.4385.4752-.565.5902-.6629l-1.2966-1.5227c-.2758.2348-.5091.5201-.83.9052l1.5364 1.2804Zm1.2076-3.0821a4.0002 4.0002 0 0 0-1.914.8965l1.2966 1.5227a2 2 0 0 1 .9571-.4482l-.3397-1.971Zm7.2924 1.8017c-.3209-.3851-.5542-.6704-.83-.9052l-1.2966 1.5227c.1149.0979.2248.2244.5902.6629l1.5364-1.2804ZM13.0474 17c.5708 0 .7383.0034.8871.0291l.3397-1.971c-.3569-.0615-.7255-.0581-1.2268-.0581v2Zm3.1408-1.0454a4.0003 4.0003 0 0 0-1.914-.8965l-.3397 1.971c.3535.0609.684.2157.9571.4482l1.2966-1.5227ZM18.8665 18a1.9175 1.9175 0 0 1-1.4731-.69l-1.5365 1.2804A3.9178 3.9178 0 0 0 18.8665 20v-2Zm1.9128-2.0542c.0793 1.11-.7999 2.0542-1.9128 2.0542v2c2.2736 0 4.0697-1.929 3.9077-4.1967l-1.9949.1425ZM13.551 6c1.3284 0 2.2665.0007 3.0029.059.7241.0574 1.1717.166 1.5298.339l.8697-1.801c-.6721-.3246-1.3958-.4647-2.2416-.5317C15.8782 3.9993 14.8476 4 13.551 4v2Zm8.9772 6.3588c-.0924-1.2933-.1651-2.3213-.2904-3.148-.127-.839-.3184-1.5509-.6899-2.198l-1.7345.9957c.198.3449.3382.7836.447 1.5018.1107.7303.1782 1.666.2729 2.991l1.9949-.1425Zm-4.4445-5.9609a4.0003 4.0003 0 0 1 1.7297 1.6106l1.7345-.9958a6.0002 6.0002 0 0 0-2.5945-2.4158l-.8697 1.801ZM10.449 4c-1.2966 0-2.3272-.0007-3.1608.0653-.8458.067-1.5695.2071-2.2416.5316l.8697 1.801c.3581-.1729.8057-.2815 1.5299-.3388C8.1824 6.0007 9.1205 6 10.449 6V4Zm-6.9823 8.5013c.0947-1.325.1623-2.2607.2729-2.991.1088-.7182.249-1.157.447-1.5018l-1.7345-.9958c-.3715.6472-.5629 1.3591-.69 2.198-.1252.8268-.1979 1.8548-.2903 3.1481l1.995.1425Zm1.58-7.9044A6 6 0 0 0 2.452 7.0127l1.7345.9958a4 4 0 0 1 1.7297-1.6106l-.8697-1.801ZM6 12h4v-2H6v2Zm1-3v4h2V9H7Zm8 4h.01v-2H15v2Zm3-2h.01V9H18v2Z" fill="#9AA495" /></svg>
+              <svg width="28" height="28" fill="none" viewBox="0 -2 24 28" aria-hidden="true"><path opacity=".12" d="M13.551 5h-3.102c-2.625 0-3.9374 0-4.9675.4974a5 5 0 0 0-2.1621 2.0132c-.5696.9921-.6631 2.3012-.8501 4.9194l-.246 3.4445C2.1026 17.5634 3.4403 19 5.1334 19c.8659 0 1.687-.3846 2.2413-1.0498L7.75 17.5c.3432-.4118.5147-.6177.7101-.7841a3.0001 3.0001 0 0 1 1.4355-.6723C10.1485 16 10.4165 16 10.9526 16h2.0948c.5361 0 .8041 0 1.057.0436a3.0002 3.0002 0 0 1 1.4355.6723c.1954.1664.367.3723.7101.7841l.3752.4502A2.9174 2.9174 0 0 0 18.8665 19c1.6933 0 3.0309-1.4366 2.9102-3.1255l-.246-3.4445c-.187-2.6182-.2805-3.9273-.8501-4.9194a4.9992 4.9992 0 0 0-2.1621-2.0132C17.4884 5 16.1759 5 13.551 5Z" fill="#9AA495"/><path d="m21.5307 12.43-.9974.0713.9974-.0713Zm.246 3.4445.9975-.0712-.9975.0712Zm-5.1515 2.0757-.7683.6402.7683-.6402ZM16.25 17.5l.7682-.6402-.7682.6402Zm-8.5 0 .7682.6402L7.75 17.5Zm-.3752.4502-.7682-.6402.7682.6402Zm-5.1515-2.0757-.9975-.0712.9975.0712Zm.246-3.4445.9974.0713-.9974-.0713Zm7.4263 3.6136.1699.9855-.1699-.9855Zm-1.4355.6723.6483.7614-.6483-.7614Zm7.0798 0-.6483.7614.6483-.7614Zm-1.4355-.6723-.1699.9855.1699-.9855Zm4.4141-10.5462.4349-.9005-.4349.9005Zm2.1621 2.0132.8673-.4979-.8673.4979ZM5.4815 5.4974l.4348.9005-.4348-.9005ZM3.3194 7.5106l-.8673-.4979.8673.4979ZM6 10c-.5523 0-1 .4477-1 1s.4477 1 1 1v-2Zm4 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2ZM9 9c0-.5523-.4477-1-1-1s-1 .4477-1 1h2Zm-2 4c0 .5523.4477 1 1 1s1-.4477 1-1H7Zm8-2c-.5523 0-1 .4477-1 1s.4477 1 1 1v-2Zm.01 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2ZM18 9c-.5523 0-1 .4477-1 1s.4477 1 1 1V9Zm.01 2c.5523 0 1-.4477 1-1s-.4477-1-1-1v2Zm-7.561-5h3.102V4h-3.102v2Zm10.0843 6.5013.246 3.4445 1.9949-.1425-.246-3.4445-1.9949.1425ZM17.3934 17.31l-.3752-.4502-1.5364 1.2804.3751.4502 1.5365-1.2804ZM13.0474 15h-2.0948v2h2.0948v-2Zm-6.0656 1.8598-.3752.4502 1.5365 1.2804.3751-.4502-1.5364-1.2804Zm-3.761-.914.246-3.4445-1.995-.1425-.246 3.4445 1.995.1425ZM5.1334 18c-1.113 0-1.992-.9442-1.9128-2.0542l-1.995-.1425C1.0639 18.071 2.86 20 5.1336 20v-2Zm1.4731-.69c-.3643.4372-.904.69-1.4731.69v2a3.9176 3.9176 0 0 0 3.0096-1.4096L6.6066 17.31Zm4.346-2.31c-.5013 0-.8699-.0034-1.2268.0581l.3397 1.971c.1488-.0257.3163-.0291.8871-.0291v-2Zm-2.4344 3.1402c.3654-.4385.4752-.565.5902-.6629l-1.2966-1.5227c-.2758.2348-.5091.5201-.83.9052l1.5364 1.2804Zm1.2076-3.0821a4.0002 4.0002 0 0 0-1.914.8965l1.2966 1.5227a2 2 0 0 1 .9571-.4482l-.3397-1.971Zm7.2924 1.8017c-.3209-.3851-.5542-.6704-.83-.9052l-1.2966 1.5227c.1149.0979.2248.2244.5902.6629l1.5364-1.2804ZM13.0474 17c.5708 0 .7383.0034.8871.0291l.3397-1.971c-.3569-.0615-.7255-.0581-1.2268-.0581v2Zm3.1408-1.0454a4.0003 4.0003 0 0 0-1.914-.8965l-.3397 1.971c.3535.0609.684.2157.9571.4482l1.2966-1.5227ZM18.8665 18a1.9175 1.9175 0 0 1-1.4731-.69l-1.5365 1.2804A3.9178 3.9178 0 0 0 18.8665 20v-2Zm1.9128-2.0542c.0793 1.11-.7999 2.0542-1.9128 2.0542v2c2.2736 0 4.0697-1.929 3.9077-4.1967l-1.9949.1425ZM13.551 6c1.3284 0 2.2665.0007 3.0029.059.7241.0574 1.1717.166 1.5298.339l.8697-1.801c-.6721-.3246-1.3958-.4647-2.2416-.5317C15.8782 3.9993 14.8476 4 13.551 4v2Zm8.9772 6.3588c-.0924-1.2933-.1651-2.3213-.2904-3.148-.127-.839-.3184-1.5509-.6899-2.198l-1.7345.9957c.198.3449.3382.7836.447 1.5018.1107.7303.1782 1.666.2729 2.991l1.9949-.1425Zm-4.4445-5.9609a4.0003 4.0003 0 0 1 1.7297 1.6106l1.7345-.9958a6.0002 6.0002 0 0 0-2.5945-2.4158l-.8697 1.801ZM10.449 4c-1.2966 0-2.3272-.0007-3.1608.0653-.8458.067-1.5695.2071-2.2416.5316l.8697 1.801c.3581-.1729.8057-.2815 1.5299-.3388C8.1824 6.0007 9.1205 6 10.449 6V4Zm-6.9823 8.5013c.0947-1.325.1623-2.2607.2729-2.991.1088-.7182.249-1.157.447-1.5018l-1.7345-.9958c-.3715.6472-.5629 1.3591-.69 2.198-.1252.8268-.1979 1.8548-.2903 3.1481l1.995.1425Zm1.58-7.9044A6 6 0 0 0 2.452 7.0127l1.7345.9958a4 4 0 0 1 1.7297-1.6106l-.8697-1.801ZM6 12h4v-2H6v2Zm1-3v4h2V9H7Zm8 4h.01v-2H15v2Zm3-2h.01V9H18v2Z" fill="#9AA495" /></svg>
               Inicio
             </a>
           </li>
           <li>
             <a id="wishlist" href="/wishlist" class="link wish-btn footer-btn" aria-label="Favoritos">
-              <svg width="32" height="32" fill="none" viewBox="0 -5 24 32" aria-hidden="true"><path opacity=".12" d="M16.111 3C19.633 3 22 6.353 22 9.48 22 15.814 12.178 21 12 21c-.178 0-10-5.186-10-11.52C2 6.352 4.367 3 7.889 3 9.91 3 11.233 4.024 12 4.924 12.767 4.024 14.089 3 16.111 3Z" fill="#9AA495"/><path d="m12 4.924-.761.648a1 1 0 0 0 1.522 0L12 4.924ZM16.111 4C18.924 4 21 6.734 21 9.48h2C23 5.971 20.342 2 16.111 2v2ZM21 9.48c0 1.321-.513 2.64-1.368 3.915-.854 1.273-2.013 2.447-3.21 3.456a28.537 28.537 0 0 1-3.31 2.39c-.458.282-.839.5-1.106.644a8.052 8.052 0 0 1-.337.172l-.012.006.009-.003a.55.55 0 0 1 .1-.032c.02-.005.112-.028.234-.028v2c.125 0 .221-.024.246-.03a1.098 1.098 0 0 0 .186-.063 10.016 10.016 0 0 0 .524-.262c.304-.164.719-.401 1.208-.704a30.511 30.511 0 0 0 3.547-2.561c1.281-1.08 2.589-2.39 3.582-3.87C22.285 13.03 23 11.324 23 9.48h-2ZM12 20a.895.895 0 0 1 .334.06l.01.003-.013-.005a22.257 22.257 0 0 1-1.442-.817 28.536 28.536 0 0 1-3.311-2.39c-1.197-1.009-2.356-2.183-3.21-3.456C3.513 12.121 3 10.801 3 9.48H1c0 1.845.715 3.55 1.707 5.03.993 1.48 2.3 2.79 3.582 3.87a30.516 30.516 0 0 0 3.547 2.561c.49.303.904.54 1.208.704.151.081.28.147.379.195a3.157 3.157 0 0 0 .24.103c.02.007.052.017.091.027.025.006.121.03.246.03v-2ZM3 9.48C3 6.734 5.076 4 7.889 4V2C3.658 2 1 5.971 1 9.48h2ZM7.889 4c1.641 0 2.708.818 3.35 1.572l1.522-1.297C11.871 3.23 10.292 2 7.89 2v2Zm4.872 1.572C13.404 4.818 14.47 4 16.111 4V2c-2.403 0-3.981 1.23-4.872 2.275l1.522 1.297Z" fill="#9AA495"/></svg>
+              <svg width="28" height="28" fill="none" viewBox="0 -5 24 32" aria-hidden="true"><path opacity=".12" d="M16.111 3C19.633 3 22 6.353 22 9.48 22 15.814 12.178 21 12 21c-.178 0-10-5.186-10-11.52C2 6.352 4.367 3 7.889 3 9.91 3 11.233 4.024 12 4.924 12.767 4.024 14.089 3 16.111 3Z" fill="#9AA495"/><path d="m12 4.924-.761.648a1 1 0 0 0 1.522 0L12 4.924ZM16.111 4C18.924 4 21 6.734 21 9.48h2C23 5.971 20.342 2 16.111 2v2ZM21 9.48c0 1.321-.513 2.64-1.368 3.915-.854 1.273-2.013 2.447-3.21 3.456a28.537 28.537 0 0 1-3.31 2.39c-.458.282-.839.5-1.106.644a8.052 8.052 0 0 1-.337.172l-.012.006.009-.003a.55.55 0 0 1 .1-.032c.02-.005.112-.028.234-.028v2c.125 0 .221-.024.246-.03a1.098 1.098 0 0 0 .186-.063 10.016 10.016 0 0 0 .524-.262c.304-.164.719-.401 1.208-.704a30.511 30.511 0 0 0 3.547-2.561c1.281-1.08 2.589-2.39 3.582-3.87C22.285 13.03 23 11.324 23 9.48h-2ZM12 20a.895.895 0 0 1 .334.06l.01.003-.013-.005a22.257 22.257 0 0 1-1.442-.817 28.536 28.536 0 0 1-3.311-2.39c-1.197-1.009-2.356-2.183-3.21-3.456C3.513 12.121 3 10.801 3 9.48H1c0 1.845.715 3.55 1.707 5.03.993 1.48 2.3 2.79 3.582 3.87a30.516 30.516 0 0 0 3.547 2.561c.49.303.904.54 1.208.704.151.081.28.147.379.195a3.157 3.157 0 0 0 .24.103c.02.007.052.017.091.027.025.006.121.03.246.03v-2ZM3 9.48C3 6.734 5.076 4 7.889 4V2C3.658 2 1 5.971 1 9.48h2ZM7.889 4c1.641 0 2.708.818 3.35 1.572l1.522-1.297C11.871 3.23 10.292 2 7.89 2v2Zm4.872 1.572C13.404 4.818 14.47 4 16.111 4V2c-2.403 0-3.981 1.23-4.872 2.275l1.522 1.297Z" fill="#9AA495"/></svg>
               Favoritos
             </a>
           </li>
           <li>
+            <a id="hector" href="#" id="hector" class="hector-btn footer-btn" aria-label="Héctor" role="button">
+              <svg aria-hidden="true" width="28" height="28" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 10.0196C14.6358 10.3431 10.3431 14.6358 10.0196 20H9.98042C9.65687 14.6358 5.36425 10.3431 0 10.0196V9.98043C5.36425 9.65688 9.65687 5.36424 9.98042 0H10.0196C10.3431 5.36424 14.6358 9.65688 20 9.98043V10.0196Z" fill="url(#paint0)"/>
+                <defs>
+                  <radialGradient id="paint0" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(-6.13727 9.97493) scale(21.6266 172.607)">
+                    <stop offset="0.385135" stop-color="#64A344"/>
+                    <stop offset="0.734299" stop-color="#50AF62"/>
+                    <stop offset="0.931035" stop-color="#3B844D"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+              <span>Héctor</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a id="play" href="/play/guess-the-price" class="link play-btn footer-btn" aria-label="Jugar" rel="nofollow">
+              <svg aria-hidden="true" width="28" height="25" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="195" cy="125" r="32" fill="#3B844D"></circle>
+                <circle cx="125" cy="195" r="32" fill="#9AA495"></circle>
+                <circle cx="54.7" cy="125" r="32" fill="#3B844D"></circle>
+                <circle cx="125" cy="54.7" r="32" fill="#9AA495"></circle>
+              </svg>
+              Jugar
+            </a>
+          </li> -->
+          <li>
             <a id="news" href="/news" class="link news-btn footer-btn" aria-label="Noticias">
-              <svg width="32" height="32" fill="none" viewBox="0 -5 24 32" aria-hidden="true"><path opacity=".12" d="M2 6.2c0-1.12 0-1.68.22-2.1a2 2 0 0 1 .87-.88C3.52 3 4.08 3 5.2 3h.4c2.24 0 3.36 0 4.22.44a4 4 0 0 1 1.74 1.74c.44.86.44 1.98.44 4.22V21l-.1-.15c-.7-1.04-1.04-1.56-1.5-1.94a4 4 0 0 0-1.38-.74C8.45 18 7.82 18 6.57 18H5.2c-1.12 0-1.68 0-2.1-.22a2 2 0 0 1-.88-.87C2 16.48 2 15.92 2 14.8V6.2Z" fill="#9AA495"/><path d="m12 21-.83.55a1 1 0 0 0 1.66 0L12 21Zm-.1-.15-.83.55.83-.55Zm-1.5-1.94-.64.77.64-.77Zm-1.38-.74-.29.96.3-.96Zm-6.8-1.26.89-.46-.9.46Zm.87.87.46-.89-.46.9ZM9.82 3.44l-.46.89.46-.9Zm1.74 1.74-.89.46.9-.46ZM3.1 3.22l.46.89-.46-.9Zm-.87.87.89.46-.9-.46Zm9.88 16.76.83.55-.83-.55Zm1.5-1.94.64.77-.64-.77Zm1.38-.74.29.96-.3-.96Zm6.8-1.26-.89-.46.9.46Zm-.87.87-.46-.89.46.9ZM14.18 3.44l.46.89-.46-.9Zm-1.74 1.74.89.46-.9-.46Zm8.47-1.96-.46.89.46-.9Zm.87.87-.89.46.9-.46ZM5.2 4h.4V2h-.4v2ZM3 14.8V6.2H1v8.6h2Zm9.83 5.65-.1-.15-1.66 1.1.1.15 1.66-1.1ZM6.57 17H5.2v2h1.37v-2Zm6.16 3.3c-.66-1-1.1-1.67-1.7-2.16l-1.27 1.54c.32.26.58.63 1.3 1.72l1.67-1.1ZM6.57 19c1.32 0 1.77.01 2.16.13l.58-1.91c-.74-.23-1.55-.22-2.74-.22v2Zm4.46-.86a5 5 0 0 0-1.72-.92l-.58 1.91a3 3 0 0 1 1.03.55l1.27-1.54ZM1 14.8c0 .54 0 1.01.03 1.4.03.39.1.78.3 1.16l1.78-.9a1.14 1.14 0 0 1-.09-.43A17 17 0 0 1 3 14.8H1ZM5.2 17c-.58 0-.95 0-1.23-.02a1.14 1.14 0 0 1-.42-.09l-.91 1.78c.38.2.77.27 1.16.3.39.03.86.03 1.4.03v-2Zm-3.87.36a3 3 0 0 0 1.3 1.31l.92-1.78a1 1 0 0 1-.44-.44l-1.78.91ZM5.6 4c1.14 0 1.93 0 2.55.05.6.05.95.14 1.21.28l.91-1.79c-.6-.3-1.23-.42-1.96-.48C7.59 2 6.7 2 5.6 2v2ZM13 9.4c0-1.1 0-2-.06-2.7a5.13 5.13 0 0 0-.48-1.97l-1.79.9c.14.27.23.62.28 1.22.05.62.05 1.41.05 2.55h2ZM9.36 4.33a3 3 0 0 1 1.31 1.3l1.79-.9a5 5 0 0 0-2.19-2.19l-.9 1.79ZM5.2 2c-.54 0-1.01 0-1.4.03-.39.03-.78.1-1.16.3l.9 1.78c.06-.03.16-.06.43-.09A17 17 0 0 1 5.2 4V2ZM3 6.2c0-.58 0-.95.02-1.23.03-.27.06-.37.09-.42l-1.78-.91c-.2.38-.27.77-.3 1.16C1 5.2 1 5.66 1 6.2h2Zm-.36-3.87a3 3 0 0 0-1.31 1.3l1.78.92a1 1 0 0 1 .44-.44l-.91-1.78ZM18.8 2h-.4v2h.4V2ZM11 9.4V21h2V9.4h-2Zm12 5.4V6.2h-2v8.6h2Zm-10.17 6.75.1-.15-1.66-1.1-.1.15 1.66 1.1Zm4.6-2.55h1.37v-2h-1.37v2Zm-4.5 2.4c.73-1.09.99-1.46 1.3-1.72l-1.26-1.54c-.6.5-1.04 1.17-1.7 2.16l1.66 1.1Zm4.5-4.4c-1.2 0-2-.01-2.74.22l.58 1.91c.4-.12.84-.13 2.16-.13v-2Zm-3.2 2.68a3 3 0 0 1 1.04-.55l-.58-1.91a5 5 0 0 0-1.72.92l1.27 1.54ZM21 14.8c0 .58 0 .95-.02 1.23-.03.27-.06.37-.09.42l1.78.91c.2-.38.27-.77.3-1.16.03-.39.03-.86.03-1.4h-2ZM18.8 19c.54 0 1.01 0 1.4-.03.39-.03.78-.1 1.16-.3l-.9-1.78c-.06.03-.16.06-.43.09-.28.02-.65.02-1.23.02v2Zm2.1-2.55a1 1 0 0 1-.45.44l.91 1.78a3 3 0 0 0 1.31-1.3l-1.78-.92ZM18.4 2c-1.1 0-2 0-2.7.06-.74.06-1.38.18-1.97.48l.9 1.79a3.2 3.2 0 0 1 1.22-.28C16.47 4 17.26 4 18.4 4V2ZM13 9.4c0-1.14 0-1.93.05-2.55.05-.6.14-.95.28-1.21l-1.79-.91c-.3.6-.42 1.23-.48 1.96C11 7.41 11 8.3 11 9.4h2Zm.73-6.86a5 5 0 0 0-2.19 2.19l1.79.9a3 3 0 0 1 1.3-1.3l-.9-1.79ZM18.8 4c.58 0 .95 0 1.23.02.27.03.37.06.42.09l.91-1.78c-.38-.2-.77-.27-1.16-.3C19.8 2 19.34 2 18.8 2v2ZM23 6.2c0-.54 0-1.01-.03-1.4-.03-.39-.1-.78-.3-1.16l-1.78.9c.03.06.06.16.09.43.02.28.02.65.02 1.23h2Zm-2.55-2.1a1 1 0 0 1 .44.45l1.78-.91a3 3 0 0 0-1.3-1.31l-.92 1.78Z" fill="#9AA495" /></svg>
+              <svg width="28" height="28" fill="none" viewBox="0 -5 24 32" aria-hidden="true"><path opacity=".12" d="M2 6.2c0-1.12 0-1.68.22-2.1a2 2 0 0 1 .87-.88C3.52 3 4.08 3 5.2 3h.4c2.24 0 3.36 0 4.22.44a4 4 0 0 1 1.74 1.74c.44.86.44 1.98.44 4.22V21l-.1-.15c-.7-1.04-1.04-1.56-1.5-1.94a4 4 0 0 0-1.38-.74C8.45 18 7.82 18 6.57 18H5.2c-1.12 0-1.68 0-2.1-.22a2 2 0 0 1-.88-.87C2 16.48 2 15.92 2 14.8V6.2Z" fill="#9AA495"/><path d="m12 21-.83.55a1 1 0 0 0 1.66 0L12 21Zm-.1-.15-.83.55.83-.55Zm-1.5-1.94-.64.77.64-.77Zm-1.38-.74-.29.96.3-.96Zm-6.8-1.26.89-.46-.9.46Zm.87.87.46-.89-.46.9ZM9.82 3.44l-.46.89.46-.9Zm1.74 1.74-.89.46.9-.46ZM3.1 3.22l.46.89-.46-.9Zm-.87.87.89.46-.9-.46Zm9.88 16.76.83.55-.83-.55Zm1.5-1.94.64.77-.64-.77Zm1.38-.74.29.96-.3-.96Zm6.8-1.26-.89-.46.9.46Zm-.87.87-.46-.89.46.9ZM14.18 3.44l.46.89-.46-.9Zm-1.74 1.74.89.46-.9-.46Zm8.47-1.96-.46.89.46-.9Zm.87.87-.89.46.9-.46ZM5.2 4h.4V2h-.4v2ZM3 14.8V6.2H1v8.6h2Zm9.83 5.65-.1-.15-1.66 1.1.1.15 1.66-1.1ZM6.57 17H5.2v2h1.37v-2Zm6.16 3.3c-.66-1-1.1-1.67-1.7-2.16l-1.27 1.54c.32.26.58.63 1.3 1.72l1.67-1.1ZM6.57 19c1.32 0 1.77.01 2.16.13l.58-1.91c-.74-.23-1.55-.22-2.74-.22v2Zm4.46-.86a5 5 0 0 0-1.72-.92l-.58 1.91a3 3 0 0 1 1.03.55l1.27-1.54ZM1 14.8c0 .54 0 1.01.03 1.4.03.39.1.78.3 1.16l1.78-.9a1.14 1.14 0 0 1-.09-.43A17 17 0 0 1 3 14.8H1ZM5.2 17c-.58 0-.95 0-1.23-.02a1.14 1.14 0 0 1-.42-.09l-.91 1.78c.38.2.77.27 1.16.3.39.03.86.03 1.4.03v-2Zm-3.87.36a3 3 0 0 0 1.3 1.31l.92-1.78a1 1 0 0 1-.44-.44l-1.78.91ZM5.6 4c1.14 0 1.93 0 2.55.05.6.05.95.14 1.21.28l.91-1.79c-.6-.3-1.23-.42-1.96-.48C7.59 2 6.7 2 5.6 2v2ZM13 9.4c0-1.1 0-2-.06-2.7a5.13 5.13 0 0 0-.48-1.97l-1.79.9c.14.27.23.62.28 1.22.05.62.05 1.41.05 2.55h2ZM9.36 4.33a3 3 0 0 1 1.31 1.3l1.79-.9a5 5 0 0 0-2.19-2.19l-.9 1.79ZM5.2 2c-.54 0-1.01 0-1.4.03-.39.03-.78.1-1.16.3l.9 1.78c.06-.03.16-.06.43-.09A17 17 0 0 1 5.2 4V2ZM3 6.2c0-.58 0-.95.02-1.23.03-.27.06-.37.09-.42l-1.78-.91c-.2.38-.27.77-.3 1.16C1 5.2 1 5.66 1 6.2h2Zm-.36-3.87a3 3 0 0 0-1.31 1.3l1.78.92a1 1 0 0 1 .44-.44l-.91-1.78ZM18.8 2h-.4v2h.4V2ZM11 9.4V21h2V9.4h-2Zm12 5.4V6.2h-2v8.6h2Zm-10.17 6.75.1-.15-1.66-1.1-.1.15 1.66 1.1Zm4.6-2.55h1.37v-2h-1.37v2Zm-4.5 2.4c.73-1.09.99-1.46 1.3-1.72l-1.26-1.54c-.6.5-1.04 1.17-1.7 2.16l1.66 1.1Zm4.5-4.4c-1.2 0-2-.01-2.74.22l.58 1.91c.4-.12.84-.13 2.16-.13v-2Zm-3.2 2.68a3 3 0 0 1 1.04-.55l-.58-1.91a5 5 0 0 0-1.72.92l1.27 1.54ZM21 14.8c0 .58 0 .95-.02 1.23-.03.27-.06.37-.09.42l1.78.91c.2-.38.27-.77.3-1.16.03-.39.03-.86.03-1.4h-2ZM18.8 19c.54 0 1.01 0 1.4-.03.39-.03.78-.1 1.16-.3l-.9-1.78c-.06.03-.16.06-.43.09-.28.02-.65.02-1.23.02v2Zm2.1-2.55a1 1 0 0 1-.45.44l.91 1.78a3 3 0 0 0 1.31-1.3l-1.78-.92ZM18.4 2c-1.1 0-2 0-2.7.06-.74.06-1.38.18-1.97.48l.9 1.79a3.2 3.2 0 0 1 1.22-.28C16.47 4 17.26 4 18.4 4V2ZM13 9.4c0-1.14 0-1.93.05-2.55.05-.6.14-.95.28-1.21l-1.79-.91c-.3.6-.42 1.23-.48 1.96C11 7.41 11 8.3 11 9.4h2Zm.73-6.86a5 5 0 0 0-2.19 2.19l1.79.9a3 3 0 0 1 1.3-1.3l-.9-1.79ZM18.8 4c.58 0 .95 0 1.23.02.27.03.37.06.42.09l.91-1.78c-.38-.2-.77-.27-1.16-.3C19.8 2 19.34 2 18.8 2v2ZM23 6.2c0-.54 0-1.01-.03-1.4-.03-.39-.1-.78-.3-1.16l-1.78.9c.03.06.06.16.09.43.02.28.02.65.02 1.23h2Zm-2.55-2.1a1 1 0 0 1 .44.45l1.78-.91a3 3 0 0 0-1.3-1.31l-.92 1.78Z" fill="#9AA495" /></svg>
               Noticias
             </a>
           </li>
           <li>
             <a href="#" id="settings" class="settings-btn footer-btn" aria-label="Ajustes" role="button">
-              <svg width="32" height="32" stroke-width="2" viewBox="0 -5 24 32" fill="none" xmlns="http://www.w3.org/2000/svg" color="#9AA495"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round"/><path d="m19.62 10.4-1.1-2.66L20 6l-2-2-1.74 1.48-2.7-1.11L12.94 2h-1.96l-.63 2.4L7.7 5.52 6 4 4 6l1.45 1.79-1.08 2.66L2 11v2l2.4.66 1.12 2.64L4 18l2 2 1.8-1.46 2.6 1.07L11 22h2l.6-2.39 2.66-1.1C16.7 18.84 18 20 18 20l2-2-1.48-1.75 1.1-2.65 2.38-.62V11l-2.38-.6Z" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg width="28" height="28" stroke-width="2" viewBox="0 -5 24 32" fill="none" xmlns="http://www.w3.org/2000/svg" color="#9AA495"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round"/><path d="m19.62 10.4-1.1-2.66L20 6l-2-2-1.74 1.48-2.7-1.11L12.94 2h-1.96l-.63 2.4L7.7 5.52 6 4 4 6l1.45 1.79-1.08 2.66L2 11v2l2.4.66 1.12 2.64L4 18l2 2 1.8-1.46 2.6 1.07L11 22h2l.6-2.39 2.66-1.1C16.7 18.84 18 20 18 20l2-2-1.48-1.75 1.1-2.65 2.38-.62V11l-2.38-.6Z" stroke="#9AA495" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Ajustes
             </a>
           </li>
         </ul>
       </nav>
     </footer>
-
     <script type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       window.gtag = function gtag(){dataLayer.push(arguments);}
@@ -263,7 +335,7 @@
     </script>
 
     <script>
-       window.requestIdleCallback = window.requestIdleCallback || function (cb) {
+      window.requestIdleCallback = window.requestIdleCallback || function (cb) {
         var start = Date.now();
         return setTimeout(function () {
           cb({
@@ -275,7 +347,10 @@
         }, 1);
       };
 
-      window.yieldToMain = function yieldToMain(task) {
+      function postTask(task, opts) {
+        return task && scheduler.postTask(task, opts);
+      }
+      function yieldToMain(task) {
         return new Promise(resolve => {
           setTimeout(() => {
             task && task();
@@ -283,8 +358,16 @@
           }, 0);
         });
       }
+      // window.yieldToMain = 'scheduler' in window ? postTask : yieldToMain;
+      window.yieldToMain = yieldToMain;
+      // window.yieldToMain = (task) => task();
+
       // custom-elements: https://unpkg.com/@ungap/custom-elements@1.0.2/es.js
       !function(){"use strict";var e=Promise,t=(e,t)=>{const n=e=>{for(let t=0,{length:n}=e;t<n;t++)r(e[t])},r=({target:e,attributeName:t,oldValue:n})=>{e.attributeChangedCallback(t,n,e.getAttribute(t))};return(o,l)=>{const{observedAttributes:s}=o.constructor;return s&&e(l).then((()=>{new t(n).observe(o,{attributes:!0,attributeOldValue:!0,attributeFilter:s});for(let e=0,{length:t}=s;e<t;e++)o.hasAttribute(s[e])&&r({target:o,attributeName:s[e],oldValue:null})})),o}};const n=!0,r=!1,o="querySelectorAll";function l(e){this.observe(e,{subtree:n,childList:n})}const s="querySelectorAll",{document:c,Element:a,MutationObserver:i,Set:u,WeakMap:f}=self,d=e=>s in e,{filter:h}=[];var g=e=>{const t=new f,g=(n,r)=>{let o;if(r)for(let l,s=(e=>e.matches||e.webkitMatchesSelector||e.msMatchesSelector)(n),c=0,{length:a}=y;c<a;c++)s.call(n,l=y[c])&&(t.has(n)||t.set(n,new u),o=t.get(n),o.has(l)||(o.add(l),e.handle(n,r,l)));else t.has(n)&&(o=t.get(n),t.delete(n),o.forEach((t=>{e.handle(n,r,t)})))},p=(e,t=!0)=>{for(let n=0,{length:r}=e;n<r;n++)g(e[n],t)},{query:y}=e,m=e.root||c,w=((e,t,s)=>{const c=(t,r,l,s,a)=>{for(let i=0,{length:u}=t;i<u;i++){const u=t[i];(a||o in u)&&(s?r.has(u)||(r.add(u),l.delete(u),e(u,s)):l.has(u)||(l.add(u),r.delete(u),e(u,s)),a||c(u[o]("*"),r,l,s,n))}},a=new(s||MutationObserver)((e=>{for(let t=new Set,o=new Set,l=0,{length:s}=e;l<s;l++){const{addedNodes:s,removedNodes:a}=e[l];c(a,t,o,r,r),c(s,t,o,n,r)}}));return a.add=l,a.add(t||document),a})(g,m,i),{attachShadow:b}=a.prototype;return b&&(a.prototype.attachShadow=function(e){const t=b.call(this,e);return w.add(t),t}),y.length&&p(m[s](y)),{drop:e=>{for(let n=0,{length:r}=e;n<r;n++)t.delete(e[n])},flush:()=>{const e=w.takeRecords();for(let t=0,{length:n}=e;t<n;t++)p(h.call(e[t].removedNodes,d),!1),p(h.call(e[t].addedNodes,d),!0)},observer:w,parse:p}};const{document:p,Map:y,MutationObserver:m,Object:w,Set:b,WeakMap:E,Element:v,HTMLElement:S,Node:M,Error:O,TypeError:A,Reflect:N}=self,q=self.Promise||e,{defineProperty:C,keys:T,getOwnPropertyNames:D,setPrototypeOf:L}=w;let P=!self.customElements;const $=e=>{const t=T(e),n=[],{length:r}=t;for(let o=0;o<r;o++)n[o]=e[t[o]],delete e[t[o]];return()=>{for(let o=0;o<r;o++)e[t[o]]=n[o]}};if(P){const{createElement:n}=p,r=new y,o=new y,l=new y,s=new y,c=[],a=(e,t,n)=>{const r=l.get(n);if(t&&!r.isPrototypeOf(e)){const t=$(e);u=L(e,r);try{new r.constructor}finally{u=null,t()}}const o=(t?"":"dis")+"connectedCallback";o in r&&e[o]()},{parse:i}=g({query:c,handle:a});let u=null;const f=t=>{if(!o.has(t)){let n,r=new e((e=>{n=e}));o.set(t,{$:r,_:n})}return o.get(t).$},d=t(f,m);function h(){const{constructor:e}=this;if(!r.has(e))throw new A("Illegal constructor");const t=r.get(e);if(u)return d(u,t);const o=n.call(p,t);return d(L(o,e.prototype),t)}C(self,"customElements",{configurable:!0,value:{define:(e,t)=>{if(s.has(e))throw new O(`the name "${e}" has already been used with this registry`);r.set(t,e),l.set(e,t.prototype),s.set(e,t),c.push(e),f(e).then((()=>{i(p.querySelectorAll(e))})),o.get(e)._(t)},get:e=>s.get(e),whenDefined:f}}),C(h.prototype=S.prototype,"constructor",{value:h}),C(self,"HTMLElement",{configurable:!0,value:h}),C(p,"createElement",{configurable:!0,value(e,t){const r=t&&t.is,o=r?s.get(r):s.get(e);return o?new o:n.call(p,e)}}),"isConnected"in M.prototype||C(M.prototype,"isConnected",{configurable:!0,get(){return!(this.ownerDocument.compareDocumentPosition(this)&this.DOCUMENT_POSITION_DISCONNECTED)}})}else try{function e(){return self.Reflect.construct(HTMLLIElement,[],e)}e.prototype=HTMLLIElement.prototype;const t="extends-li";self.customElements.define("extends-li",e,{extends:"li"}),P=p.createElement("li",{is:t}).outerHTML.indexOf(t)<0;const{get:n,whenDefined:r}=self.customElements;C(self.customElements,"whenDefined",{configurable:!0,value(e){return r.call(this,e).then((t=>t||n.call(this,e)))}})}catch(e){P=!P}if(P){const e=self.customElements,{attachShadow:n}=v.prototype,{createElement:r}=p,{define:o,get:l,upgrade:s}=e,{construct:c}=N||{construct(e){return e.call(this)}},a=new E,i=new b,u=new y,f=new y,d=new y,h=new y,w=[],S=[],M=t=>h.get(t)||l.call(e,t),T=(e,t,n)=>{const r=d.get(n);if(t&&!r.isPrototypeOf(e)){const t=$(e);_=L(e,r);try{new r.constructor}finally{_=null,t()}}const o=(t?"":"dis")+"connectedCallback";o in r&&e[o]()},{parse:P}=g({query:S,handle:T}),{parse:k}=g({query:w,handle(e,t){a.has(e)&&(t?i.add(e):i.delete(e),S.length&&x.call(S,e))}}),I=e=>{if(!f.has(e)){let t,n=new q((e=>{t=e}));f.set(e,{$:n,_:t})}return f.get(e).$},H=t(I,m);let _=null;function x(e){const t=a.get(e);P(t.querySelectorAll(this),e.isConnected)}D(self).filter((e=>/^HTML.*Element$/.test(e))).forEach((e=>{const t=self[e];function n(){const{constructor:e}=this;if(!u.has(e))throw new A("Illegal constructor");const{is:n,tag:o}=u.get(e);if(n){if(_)return H(_,n);const t=r.call(p,o);return t.setAttribute("is",n),H(L(t,e.prototype),n)}return c.call(this,t,[],e)}L(n,t),C(n.prototype=t.prototype,"constructor",{value:n}),C(self,e,{value:n})})),C(p,"createElement",{configurable:!0,value(e,t){const n=t&&t.is;if(n){const t=h.get(n);if(t&&u.get(t).tag===e)return new t}const o=r.call(p,e);return n&&o.setAttribute("is",n),o}}),n&&(v.prototype.attachShadow=function(e){const t=n.call(this,e);return a.set(this,t),t}),C(e,"get",{configurable:!0,value:M}),C(e,"whenDefined",{configurable:!0,value:I}),C(e,"upgrade",{configurable:!0,value(t){const n=t.getAttribute("is");if(n){const e=h.get(n);if(e)return void H(L(t,e.prototype),n)}s.call(e,t)}}),C(e,"define",{configurable:!0,value(t,n,r){if(M(t))throw new O(`'${t}' has already been defined as a custom element`);let l;const s=r&&r.extends;u.set(n,s?{is:t,tag:s}:{is:"",tag:t}),s?(l=`${s}[is="${t}"]`,d.set(l,n.prototype),h.set(t,n),S.push(l)):(o.apply(e,arguments),w.push(l=t)),I(t).then((()=>{s?(P(p.querySelectorAll(l)),i.forEach(x,[l])):k(p.querySelectorAll(l))})),f.get(t)._(n)}})}}();
+
+      // emoji-blast: https://unpkg.com/emoji-blast@0.10.0/dist/global.js
+      (()=>{"use strict";const t=t=>"number"==typeof t?t:Math.floor(Math.random()*(t.max-t.min+1))+t.min,e=t=>"function"==typeof t?t():t,i=t=>{const e=t.slice();for(let t=e.length-1;t>0;t-=1){const i=Math.floor(Math.random()*(t+1)),o=e[t];e[t]=e[i],e[i]=o}return e};class o{#t=1;#e;#i;#o;element;constructor(e){var i;this.element=document.createElement("button"),this.element.className=e.className,this.element.textContent=(i=e.emojis)[Math.floor(Math.random()*i.length)],this.element.setAttribute("role","img"),this.element.style.fontSize=`${t(e.physics.fontSize)}px`,this.element.style.transition="16ms opacity, 16ms transform",this.#e=e.physics,this.#i={rotation:t(e.physics.rotation),x:e.position.x,y:e.position.y},this.#o={rotation:t(e.physics.initialVelocities.rotation),x:t(e.physics.initialVelocities.x),y:t(e.physics.initialVelocities.y)},this.updateElement(),e.process?.(this.element),e.container.appendChild(this.element)}updateElement(){this.element.style.opacity=`${this.#t}`,this.element.style.transform=`translate(${this.#i.x}px, ${this.#i.y}px) rotate(${Math.round(this.#i.rotation)}deg)`}act(t){if(this.#e.opacityDecay&&(this.#t-=t/(this.#e.opacityDecay*this.#e.framerate),this.#t<=0))return!0;this.#o.rotation*=this.#e.rotationDeceleration,this.#o.y+=this.#e.gravity,this.#i.rotation+=this.#o.rotation,this.#i.x+=this.#o.x*t/this.#e.framerate,this.#i.y+=this.#o.y*t/this.#e.framerate;const e=window.outerHeight||document.documentElement.clientHeight,i=window.outerWidth||document.documentElement.clientWidth;if(!this.#e.preserveOutOfBounds){if(this.#i.y-this.element.clientHeight>e+350)return!0;if(this.#i.y+this.element.clientHeight<-350)return!0;if(this.#i.x-this.element.clientWidth>i+350)return!0;if(this.#i.x+this.element.clientWidth<-350)return!0}return this.updateElement(),!1}dispose(){null!==this.element.parentElement&&this.element.parentElement.removeChild(this.element)}update(t){void 0!==t.opacity&&(this.#t=t.opacity),void 0!==t.velocity&&(void 0!==t.velocity.rotation&&(this.#o.rotation=t.velocity.rotation),void 0!==t.velocity.x&&(this.#o.x=t.velocity.x),void 0!==t.velocity.y&&(this.#o.y=t.velocity.y))}get opacity(){return this.#t}get position(){return this.#i}get velocity(){return this.#o}}const n=["😁","😂","🤣","😃","😆","😍","🤩","😎","🤗","🥳","🤖","😻","😹","🐱","🐶","🙈","🙉","🙊","🏄","💪","👌","👋","🙌","🫶","💝","💖","💗","🧡","💛","💚","💙","💜","❤️‍🔥","🔥","🚀","⛄","🦩","🍍","💐","🦾","✨","🎉","💯"],s="data-emoji-blast-events-initialized",a=new WeakMap,c=new Set,r="emoji-styles",l=(()=>{let t;return()=>(t?.parentNode===document.body||(t=document.createElement("div"),document.body.prepend(t)),t)})(),h=()=>Math.floor(14*Math.random())+14,m={onClick({actor:t}){t.update({opacity:1,velocity:{y:t.velocity.y/2-15}})}},y={fontSize:{max:28,min:14},framerate:60,gravity:.35,initialVelocities:{rotation:{max:7,min:-7},x:{max:7,min:-7},y:{max:-7,min:-21}},preserveOutOfBounds:!1,rotation:{max:45,min:-45},rotationDeceleration:.98},p=()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight}),d=(t={})=>{const{className:d=r,container:u=l,emojiCount:v=h,emojis:f=n,events:x=m,position:g=p,process:b,uniqueness:M=1/0}=t,w=e(u);(t=>{if(c.has(t))return;c.add(t);const e=document.createElement("style");e.setAttribute("type","text/css"),e.appendChild(document.createTextNode(`\n\t\t.${t} {\n\t\t\tbackground: none;\n\t\t\tborder: none;\n\t\t\tcursor: default;\n\t\t\theight: 2em;\n\t\t\tmargin-left: -1em;\n\t\t\tmargin-top: -1em;\n\t\t\tposition: fixed;\n\t\t\tuser-select: none;\n\t\t\twidth: 2em;\n\t\t\tz-index: 2147483647;\n\t\t}\n\t`)),document.head.appendChild(e)})(d);const E={...y,...t.physics,initialVelocities:{...y.initialVelocities,...void 0!==t.physics?t.physics.initialVelocities:{}}},j={className:d,container:w,emojis:i(e(f)).slice(0,e(M)),physics:E,position:e(g),process:b},C=e(v),V=[];for(let t=0;t<C;t+=1)V.push(new o(j));!function(t){let e=performance.now();const i=o=>{const n=o-e;for(let e=0;e<t.length;e+=1){const i=t[e];i.act(n)&&(i.dispose(),t.splice(e,1),e-=1)}0!==t.length&&(e=o,requestAnimationFrame(i))};requestAnimationFrame(i)}(V),function(t,e,i){for(const e of t)a.set(e.element,e);e.hasAttribute(s)||(e.setAttribute(s,"true"),e.addEventListener("click",(t=>{const e=t.target&&a.get(t.target);e&&i.onClick({actor:e,event:t})})))}(V,w,x)},u=()=>700+Math.floor(1401*Math.random());window.emojiBlast=d,window.emojiBlasts=(t={})=>{const{interval:i=u,scheduler:o=setTimeout}=t;let n=!1;const s=()=>{d(t)},a=()=>{n||("visible"===document.visibilityState&&s(),o(a,e(i)))};return o(a,0),{blast:s,cancel(){n=!0}}}})();
+
     </script>
     <script type="module" src="/src/js/web-components.js"></script>
     <script type="module" src="/src/js/app.js"></script>
@@ -327,16 +410,18 @@
       async function bs() {
         if (!navigator.permissions) { return; }
 
-        const registration = await navigator.serviceWorker.ready;
-        const status = await navigator.permissions.query({
-          name: 'periodic-background-sync',
-        });
-        if (status.state === 'granted') {
-          await registration.periodicSync.register('check-deals', {
-            // An interval of one day.
-            minInterval: 24 * 60 * 60 * 1000,
+        try {
+         const registration = await navigator.serviceWorker.ready;
+          const status = await navigator.permissions.query({
+            name: 'periodic-background-sync',
           });
-        }
+          if (status.state === 'granted') {
+            await registration.periodicSync.register('check-deals', {
+              // An interval of one day.
+              minInterval: 24 * 60 * 60 * 1000,
+            });
+          }
+        } catch {}
       }
     </script>
   </body>

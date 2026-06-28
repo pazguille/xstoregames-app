@@ -2,6 +2,7 @@ import {
   convertDollar,
   slugify,
   getPageFromURL,
+  shuffle,
 } from './utils.js';
 
 export function sectionTemplate(section) {
@@ -9,7 +10,7 @@ export function sectionTemplate(section) {
 <section>
   <h2>${section.icon}${section.title}</h2>
   ${gameListTemplate(section)}
-  ${section.more !== false ? `<a class="see-all link" id="collection-${section.type}" href="${basePath}/collection/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>` : ''}
+  ${section.more !== false ? `<a class="see-all link" id="collection-${section.type}" href="${basePath}/${section.group}/${section.type}" aria-label="Ver el listado completo de ${section.title}">Ver más</a>` : ''}
 </section>
 `);
 }
@@ -20,9 +21,9 @@ export function gameListTemplate(section) {
   <button class="prev arrow" aria-hidden="true">
     <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
   </button>
-  ${section.type === 'new' ?
+  ${['nextweeks', 'coming', 'pastweeks'].includes(section.type) ?
       section.list.map(game => `<li>${gameCardNewTemplate(game)}</li>`).join('')
-    : section.type === 'coming' ?
+    : ['careful', 'new', 'new-pc'].includes(section.type) ?
         section.list.map(game => `<li>${gameCardSoonTemplate(game)}</li>`).join('')
     : section.list.map(game => `<li>${gameCardTemplate(game)}</li>`).join('')
   }
@@ -152,7 +153,14 @@ export function gamerClipsTemplate(clip) {
   `);
 }
 
-
+const platformIcons = {
+  'Xbox One': `data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 2048 2048\' width=\'1em\' height=\'1em\' aria-hidden=\'true\'><path fill=\'white\' d=\'M2048 512v896H0V512h2048zm-128 128H128v256h768v128H128v256h1792V640zm-320 384q-26 0-45-19t-19-45q0-26 19-45t45-19q26 0 45 19t19 45q0 26-19 45t-45 19z\'></path></svg>`,
+  'Xbox Series X|S': `data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\' overflow=\'visible\'><path fill=\'white\' fill-rule=\'evenodd\' d=\'M24 0a2 2 0 0 1 2 2v28a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 2H8v28h2V17a1 1 0 0 1 2 0v13h12zM11 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2\'></path></svg>`,
+  PC: `data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\' overflow=\'visible\'><path fill=\'white\' fill-rule=\'evenodd\' d=\'M4 30q-.607 0-1.155-.233a3 3 0 0 1-.953-.641 3.2 3.2 0 0 1-.657-.969 2.64 2.64 0 0 1-.234-1.156V5q0-.61.234-1.156a3 3 0 0 1 .64-.953q.408-.407.97-.657.562-.249 1.156-.234h10q.61 0 1.156.234.547.235.953.64.406.408.657.97.249.562.234 1.156v3h-2V5a.96.96 0 0 0-.297-.703.96.96 0 0 0-.703-.297H4a.96.96 0 0 0-.703.297A.96.96 0 0 0 3 5v22q0 .406.297.703a.96.96 0 0 0 .703.297h9v2zM6 8a.96.96 0 0 1-.702-.296A.96.96 0 0 1 5 7.001q0-.405.297-.703A.96.96 0 0 1 6 6h6q.406 0 .703.297a.96.96 0 0 1 .297.703q0 .405-.297.703a.96.96 0 0 1-.703.297zm0 4a.96.96 0 0 1-.702-.296.96.96 0 0 1-.297-.703q0-.405.297-.703A.96.96 0 0 1 6 10h3v2zm10 18a.96.96 0 0 1-.702-.296.96.96 0 0 1-.297-.703q0-.344.125-.531a.87.87 0 0 1 .344-.297q.219-.11.484-.14.265-.032.531-.032h.516v-2h-3q-.61 0-1.156-.234a3 3 0 0 1-.953-.641 3.2 3.2 0 0 1-.657-.969 2.64 2.64 0 0 1-.234-1.156V13q0-.61.234-1.156a3 3 0 0 1 .64-.953q.408-.407.97-.657.562-.249 1.156-.234h14q.61 0 1.156.234.547.235.953.64.406.408.657.97.249.562.234 1.156v10q0 .61-.234 1.156a3 3 0 0 1-.641.953q-.406.406-.969.657-.562.249-1.156.234h-3v2h.531q.265 0 .531.031.266.032.47.125.203.094.343.313A.88.88 0 0 1 27 29q0 .407-.297.704a.96.96 0 0 1-.703.297zm12-6q.407 0 .704-.296a.96.96 0 0 0 .297-.703V13a.96.96 0 0 0-.297-.703.96.96 0 0 0-.703-.297H14a.96.96 0 0 0-.703.297A.96.96 0 0 0 13 13v10q0 .406.297.703a.96.96 0 0 0 .703.297zm-9 2v2h4v-2z'></path></svg>`,
+  Cloud: `data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\' overflow=\'visible\'><path fill=\'white\' fill-rule=\'evenodd\' d=\'M17.021 6H17c-.937 0-1.848.143-2.724.426a8.9 8.9 0 0 0-2.396 1.189 9.5 9.5 0 0 0-1.917 1.797l-.231.3-.183.257-.108.165-.296-.05A8 8 0 0 0 8 10a7.8 7.8 0 0 0-3.126.634 8.3 8.3 0 0 0-2.509 1.688 7.9 7.9 0 0 0-1.739 2.57A7.9 7.9 0 0 0 0 18c0 1.106.212 2.153.635 3.126.41.942.974 1.782 1.687 2.51a7.9 7.9 0 0 0 2.546 1.734c.98.42 2.03.63 3.132.63h18c.824 0 1.611-.16 2.344-.478a6.3 6.3 0 0 0 1.878-1.26 5.7 5.7 0 0 0 1.314-1.936c.294-.712.449-1.48.464-2.289 0-.859-.159-1.646-.478-2.381a6.3 6.3 0 0 0-1.26-1.878 5.7 5.7 0 0 0-1.936-1.314l-.285-.108-.326-.105a6.4 6.4 0 0 0-1.678-.25L25.944 14l-.023-.217a8.6 8.6 0 0 0-.632-2.295 9.3 9.3 0 0 0-1.91-2.843 8.7 8.7 0 0 0-2.87-1.942 9.2 9.2 0 0 0-3.488-.702M17 8h.01a7.2 7.2 0 0 1 2.724.548 6.7 6.7 0 0 1 2.22 1.5 7.3 7.3 0 0 1 1.5 2.234A6.8 6.8 0 0 1 24 15a1 1 0 0 0 1 1h1.018c.466.01.918.088 1.338.234l.233.09c.453.187.874.473 1.24.848q.546.563.858 1.281c.209.48.313.996.313 1.566a4.2 4.2 0 0 1-.312 1.544q-.297.718-.86 1.265a4.3 4.3 0 0 1-1.281.86A3.8 3.8 0 0 1 26 24H8a5.894 5.894 0 0 1-4.25-1.766 6.3 6.3 0 0 1-1.281-1.906A5.8 5.8 0 0 1 2 18q0-1.218.469-2.328a5.85 5.85 0 0 1 1.297-1.922 6.3 6.3 0 0 1 1.906-1.28A5.8 5.8 0 0 1 8 12q.72 0 1.402.17l.267.073a1 1 0 0 0 1.158-.516l.028-.056a6 6 0 0 1 .475-.758l.2-.26a7.5 7.5 0 0 1 1.501-1.402A6.9 6.9 0 0 1 17 8'></path></svg>`,
+  Handheld: `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEESURBVHgB7ZbtDYIwEIYP4wC6QR3BTdhAHcEJjJuwAW4AG8AGuAFsUO/wNI3QD6pSfvRJLilpufftcaEFiESWgJRSYBQYrZyHnDRJO+FBhbGBeekw9rT7G7vKMP5ugqudsWYBSlkEzARtlDXbtwHD4oP0642G3jXk7Ule4gnCEw0/75RnAX50mGerydvrrh2SCNWgKyxg7alBBTSJfA1Y864gMAMD3DwN/Bhd3uAViD0Q3IDLf4AOjY3pb2ngblvgUoGzS6IRyPjVtijxbbJvWVQTljRAQ5fPST42j/J5W5pKRe+OiSpaNX2CFAc5hOEE7Ih2WWt2UvL8pNuSQ84UIpEI8gAbdOoTJj00wQAAAABJRU5ErkJggg==`,
+  'Play Anywhere': `data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 2048 2048\' width=\'1em\' height=\'1em\' fill=\'white\' aria-hidden=\'true\'><path d=\'M492 158q-4 0-5-1v-2l2-3Q614 77 746 39t278-39q143 0 277 38t256 113l3 2q-3 5-6 5-8 0-17-2t-17-4q-9-1-18-1t-18 0q-47 0-95 9t-96 24-92 34-88 39q-22 11-44 21t-43 25h-5q-43-27-100-54t-120-49-123-36-113-14q-19 0-39 4t-34 4zm251 412q-44 53-101 128T525 862t-117 184-102 189-72 180-28 156q0 17 2 37t8 36l-1 2-2 1-4-2q-103-139-156-293T0 1024q0-98 20-199t60-196 96-180 130-153q5-4 15-5t15-2q30 0 66 14t75 38 76 53 74 60 65 59 51 50l1 4-1 3zm968-281q7 0 16 1t15 6q73 71 130 155t96 178 59 194 21 201q0 173-53 328t-156 293l-6 1-2-3q3-4 5-14t3-21 2-22 1-16q0-69-27-155t-72-180-102-190-117-184-117-163-102-129l-1-3 1-3q21-21 50-49t65-58 73-61 77-53 75-38 66-15zm-687 533q29 18 56 42t54 47q42 37 102 94t127 128 131 149 117 155 84 149 32 129q0 23-6 43t-23 37q-31 31-69 57t-76 49q-120 72-254 109t-275 38q-141 0-274-37t-255-110q-17-10-43-26t-51-37-47-40-27-39q-7-20-7-45 0-54 30-122t78-142 110-149 123-142 118-123 97-92q34-30 72-64t76-58z\'></path></svg>`
+}
 
 export function gameDetailTemplate(game) {
   const img = game.lcp;
@@ -163,21 +171,16 @@ export function gameDetailTemplate(game) {
   const until = Math.ceil((Date.parse(new Date(game.price.ends)) - Date.parse(new Date())) / (24 * 3600 * 1000));
   // <article class="game-preview" style="--game-preview-url: url(${img}?w=1160&q=70)">
 
-  let storeUrl = `https://www.xbox.com/${lang}-${store}/games/store/${slugify(game.title)}/${game.id}`;
+  const storeUrl = `https://www.xbox.com/${lang}-${store}/games/store/${slugify(game.title)}/${game.id}`;
 
-  if (['CFQ7TTC0KHS0', 'CFQ7TTC0K6L8', 'CFQ7TTC0KGQ8', 'CFQ7TTC0K5DJ'].includes(game.id)) {
+  if (['CFQ7TTC0K5DJ', 'CFQ7TTC0P85B', 'CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8'].includes(game.id)) {
     game.images.screenshot = null;
-    storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
   }
-  // else {
-  //   // storeUrl = `https://redirect.viglink.com?u=${encodeURIComponent(storeUrl)}&key=7fc345bd4db508484216977feb5d8d93`;
-  //   // storeUrl = `https://click.linksynergy.com/deeplink?id=jIIkBhIxUyI&mid=24542&murl=${encodeURIComponent(`https://www.microsoft.com/store/p/${slugify(game.title)}/${game.id}`)}`;
-  // }
 
   // ${gamerGames.findIndex((g) => g.id === game.id) !== -1 ? '<span class="game-platform-tag">Ya lo jugaste</span>': '' }
 
   return (`
-<article class="game-preview">
+<article class="game-preview" style="--bg-game-detail: url(${img}?w=1160&q=70)">
   <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
   <video class="hero game-preview-trailer" autoplay loop muted playsinline hidden></video>
   <div>
@@ -212,11 +215,11 @@ export function gameDetailTemplate(game) {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path opacity=".12" d="M7.8 21h8.4c1.68 0 2.52 0 3.16-.33a3 3 0 0 0 1.31-1.3c.33-.65.33-1.49.33-3.17V12H3v4.2c0 1.68 0 2.52.33 3.16a3 3 0 0 0 1.3 1.31c.65.33 1.49.33 3.17.33Z" fill="#9AA495"/><path d="M22 12a1 1 0 1 0-2 0h2ZM4 12a1 1 0 1 0-2 0h2Zm.64 8.67.45-.89-.45.9Zm-1.31-1.3.89-.46-.9.45Zm16.03 1.3-.45-.89.45.9Zm1.31-1.3.9.45-.9-.46ZM15.3 7.7a1 1 0 1 0 1.42-1.42l-1.42 1.42ZM12 3l.7-.7a1 1 0 0 0-1.4 0l.7.7ZM7.3 6.3a1 1 0 0 0 1.4 1.4L7.3 6.3ZM11 15a1 1 0 1 0 2 0h-2Zm5.2 5H7.8v2h8.4v-2Zm3.8-8v4.2h2V12h-2ZM4 16.2V12H2v4.2h2ZM7.8 20c-.86 0-1.44 0-1.89-.04-.44-.03-.66-.1-.82-.18l-.9 1.78c.48.25 1 .35 1.56.4.55.04 1.23.04 2.05.04v-2ZM2 16.2c0 .82 0 1.5.04 2.05.05.56.15 1.08.4 1.57l1.78-.91a2.16 2.16 0 0 1-.18-.82C4 17.64 4 17.06 4 16.2H2Zm3.1 3.58a2 2 0 0 1-.88-.87l-1.78.9a4 4 0 0 0 1.74 1.75l.91-1.78ZM16.2 22c.82 0 1.5 0 2.05-.04a4.09 4.09 0 0 0 1.57-.4l-.91-1.78c-.16.08-.38.15-.82.18-.45.04-1.03.04-1.89.04v2Zm3.8-5.8c0 .86 0 1.44-.04 1.89-.03.44-.1.66-.18.82l1.78.9c.25-.48.35-1 .4-1.56.04-.55.04-1.23.04-2.05h-2Zm-.18 5.36a4 4 0 0 0 1.74-1.74l-1.78-.91a2 2 0 0 1-.87.87l.9 1.78ZM16.7 6.3l-4-4-1.42 1.42 4 4 1.42-1.42Zm-5.42-4-4 4 1.42 1.42 4-4-1.42-1.42ZM11 3v12h2V3h-2Z" fill="#9AA495"/></svg>
       </button>
 
-      <div>
+      <div class="game-platform-list">
         <h4 class="visually-hidden">Se puede jugar en:</h4>
-        ${game.platforms.map(p => `<span class="game-platform-tag">${p}</span>`).join('')}
+        ${game.xpa ? `<span class="game-platform-tag"><img src="${platformIcons['Play Anywhere']}" alt="" width="14" height="14" decoding="async" loading="lazy" />Play Anywhere</span>` : ''}
+        ${game.platforms.map(p => `<span class="game-platform-tag"><img src="${platformIcons[p]}" alt="" width="14" height="14" decoding="async" loading="lazy" />${p}</span>`).join('')}
       </div>
-
 
       ${game.game_pass ? `<img class="game-pass" src="/src/assets/game-pass.svg" width="70px" height="13" alt="Disponible en Game Pass" loading="lazy" decoding="async" />` : ''}
       ${game.ea_play ? `<img class="game-pass" src="/src/assets/ea-play.png" width="70px" height="13px" alt="Disponible en EA Play" loading="lazy" decoding="async" />` : ''}
@@ -226,8 +229,8 @@ export function gameDetailTemplate(game) {
       ${until ? `<div class="game-deal-ends"><small>La oferta termina en ${until} días.</small></div>` : ''}
 
       <a href="${storeUrl}" class="game-buy-now btn" rel="nofollow noopener">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" width="1em" height="1em" fill="#ffffff" aria-hidden="true"><path d="M492 158q-4 0-5-1v-2l2-3Q614 77 746 39t278-39q143 0 277 38t256 113l3 2q-3 5-6 5-8 0-17-2t-17-4q-9-1-18-1t-18 0q-47 0-95 9t-96 24-92 34-88 39q-22 11-44 21t-43 25h-5q-43-27-100-54t-120-49-123-36-113-14q-19 0-39 4t-34 4zm251 412q-44 53-101 128T525 862t-117 184-102 189-72 180-28 156q0 17 2 37t8 36l-1 2-2 1-4-2q-103-139-156-293T0 1024q0-98 20-199t60-196 96-180 130-153q5-4 15-5t15-2q30 0 66 14t75 38 76 53 74 60 65 59 51 50l1 4-1 3zm968-281q7 0 16 1t15 6q73 71 130 155t96 178 59 194 21 201q0 173-53 328t-156 293l-6 1-2-3q3-4 5-14t3-21 2-22 1-16q0-69-27-155t-72-180-102-190-117-184-117-163-102-129l-1-3 1-3q21-21 50-49t65-58 73-61 77-53 75-38 66-15zm-687 533q29 18 56 42t54 47q42 37 102 94t127 128 131 149 117 155 84 149 32 129q0 23-6 43t-23 37q-31 31-69 57t-76 49q-120 72-254 109t-275 38q-141 0-274-37t-255-110q-17-10-43-26t-51-37-47-40-27-39q-7-20-7-45 0-54 30-122t78-142 110-149 123-142 118-123 97-92q34-30 72-64t76-58z"></path></svg>
         ${new Date(game.release_date) > new Date() ? 'Precompar' : game.price.amount > 0 ? 'Comprar' : 'Descargar'}
+        <span class="game-bug-price" hidden>con Precio Cuidado</span>
       </a>
     </div>
 
@@ -302,7 +305,7 @@ export function gameCardNewTemplate(game) {
 export function gameCardSoonTemplate(game) {
   const img = game.images.titledheroart ?
     (game.images.titledheroart.url || game.images.titledheroart[0].url)
-    : game.images.screenshot[0].url;
+    : (game.images.screenshot && (game.images.screenshot.length ? game.images.screenshot[0].url : game.images.screenshot.url)) || game.images.poster?.url;
   return (`
 <article class="game-preview-soon">
   ${gameInfoTemplate(game)}
@@ -326,8 +329,9 @@ export function theGameAward() {
 export function gameImportantTemplate(game) {
   const img = game.images.featurepromotionalsquareart ?
     game.images.featurepromotionalsquareart.url : game.images.boxart?.url;
+
   return (`
-<article class="game-important">
+<article class="game-important" style="--bg-game-important: url(${img}?w=720&q=70)">
   <strong class="game-important-tag">Oferta destacada</strong>
   <h2 class="game-title">
     <a id="detail-${game.id}" href="${basePath}/game/${slugify(game.title)}_${game.id}" class="link">${game.title}</a>
@@ -340,7 +344,7 @@ export function gameImportantTemplate(game) {
 
 export function gameCardTemplate(game, lazy = true) {
   const img = game.images.boxart ?
-    game.images.boxart.url : game.images.poster?.url;
+    game.images.boxart.url : game.images.poster?.url || game.images.logo?.url;
   return (`
 <article class="game-preview">
   ${gameInfoTemplate(game)}
@@ -354,7 +358,6 @@ export function newsTemplate(news, lazy = true) {
 <article class="news-preview">
   <h2><a href="${news.link}">${news.title}</a></h2>
   <img class="news-img" width="335px" height="190px" alt="" decoding="async" ${lazy ? `loading="lazy"` : `fetchpriority="high"` } src="${news.image}">
-  <p>${news.description}</p>
 </article>
 `);
 }
@@ -388,7 +391,6 @@ export function gamepassSection() {
         <li><a href="${basePath}/gamepass/coming" id="gamepass-coming" class="link">Se están por sumar</a></li>
         <li><a href="${basePath}/gamepass/leaving" id="gamepass-leaving" class="link">Los que se van</a></li>
         <li><a href="${basePath}/gamepass/ea" id="gamepass-ea" class="link">Con EA Play</a></li>
-        <li><a href="${basePath}/gamepass/gp-deals" id="gp-deals" class="link">Ofertas exclusivas</a></li>
         <li><a href="${basePath}/gamepass/all" id="gamepass-all" class="link">Todos</a></li>
       </ul>
     </article>
@@ -405,63 +407,56 @@ export function gamepassSection() {
       </ul>
     </article>
   </div>
-  <h2>Elige tu plan</h2>
+  <h2>Elegí el plan que más te convenga</h2>
   <div class="gamepass-plans carousel">
     <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass-ultimate.png" alt="Game Pass Ultimate" decoding="async" loading="lazy" width="160" height="20" />
-        <strong class="game-important-tag">Plan destacado</strong>
-      </h3>
+      <h3>Ultimate</h3>
       <ul>
-        <li>Acceso ilimitado a más de 100 juegos de alta calidad en PC, consola y dispositivos móviles</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas, descuentos y ventajas para miembros</li>
-        <li>Beneficios gratuitos que incluyen contenido del juego y ofertas de asociados</li>
-        <li>Juega en el teléfono y en la tableta desde la nube</li>
-        <li>Modo multijugador en línea en consola</li>
-        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros</li>
+        <li>Más de 400+ juegos en la consola Xbox, PC y dispositivos compatibles</li>
+        <li>Nuevos juegos desde el mismo día de su lanzamiento</li>
+        <li>Incluye EA Play, Ubisoft+ Classics y Fortnite Crew</li>
+        <li>Juega a títulos en streaming con tiempos de espera más cortos</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Juegos multijugador en línea para consola</li>
       </ul>
       <a class="btn link" href="/game/xbox-game-pass-ultimate_CFQ7TTC0KHS0">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
       <h3>
-        <img src="/src/assets/gamepass-console.png" alt="Game Pass para Consola" decoding="async" loading="lazy" width="174" height="20" />
+        <span>Premium</span>
+        <strong class="game-important-tag">Plan destacado</strong>
       </h3>
       <ul>
-        <li>Acceso ilimitado a más de 100 juegos de consola de alta calidad</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas y descuentos para miembros</li>
+        <li>Más de 200 juegos en la consola Xbox, PC y dispositivos compatibles</li>
+        <li>Los nuevos juegos publicados por Xbox se incorporan en un plazo de 12 meses desde su lanzamiento</li>
+        <li>Juega a títulos en streaming con tiempos de espera más cortos</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Juegos multijugador en línea para consola</li>
       </ul>
-      <a class="btn link" href="/game/xbox-game-pass-para-consola_CFQ7TTC0K6L8">Ver más</a>
+      <a class="btn link" href="/game/xbox-game-pass-premium_CFQ7TTC0P85B">Ver más</a>
     </article>
 
     <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass-pc.png" alt="Game Pass para PC" decoding="async" loading="lazy" width="135" height="20" />
-      </h3>
+      <h3>Essential</h3>
       <ul>
-        <li>Acceso ilimitado a más de 100 juegos de alta calidad para PC</li>
-        <li>Agregamos juegos nuevos en todo momento</li>
-        <li>Xbox Game Studios títulos el día de su lanzamiento</li>
-        <li>Ofertas y descuentos para miembros</li>
-        <li>Una biblioteca de los mejores títulos de Electronic Arts, recompensas exclusivas y contenido solo para miembros en la PC</li>
+        <li>Más de 50 juegos en la consola Xbox, PC y dispositivos compatibles</li>
+        <li>Juega a títulos en streaming, incluidos algunos juegos que ya tienes</li>
+        <li>Juegos multijugador en línea para consola</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+      </ul>
+      <a class="btn link" href="/game/xbox-game-pass-essential_CFQ7TTC0K5DJ">Ver más</a>
+    </article>
+
+    <article class="gamepass-plan">
+      <h3>PC</h3>
+      <ul>
+        <li>Cientos de juegos de alta calidad en PC</li>
+        <li>Nuevos juegos desde el mismo día de su lanzamiento, incluidos los nuevos juegos publicados por Xbox y los juegos de terceros</li>
+        <li>Beneficios para juegos como League of Legends y Call of Duty: Warzone</li>
+        <li>Incluye EA Play</li>
       </ul>
       <a class="btn link" href="/game/game-pass-para-pc_CFQ7TTC0KGQ8">Ver más</a>
-    </article>
-
-    <article class="gamepass-plan">
-      <h3>
-        <img src="/src/assets/gamepass.svg" alt="Game Pass Core" decoding="async" loading="lazy" width="115" height="20" /><span>Core</span>
-      </h3>
-      <ul>
-        <li>Juegos multijugador online para consola</li>
-        <li>Un catálogo de más de 25 juegos de alta calidad para consola</li>
-        <li>Ofertas y descuentos para miembros</li>
-      </ul>
-      <a class="btn link" href="/game/game-pass-core_CFQ7TTC0K5DJ">Ver más</a>
     </article>
   </div>
 </section>
@@ -475,7 +470,7 @@ export function supportSection() {
   <ul>
     ${store === 'ar' ?
     `<li>
-      <a href="https://cafecito.app/pazguille" rel="noopener" target="_blank">
+      <a href="https://cafecito.app/xstoregames" rel="noopener" target="_blank">
         <img
           src="/src/assets/cafecito.svg"
           alt="Invitame un café en cafecito.app"
@@ -496,7 +491,7 @@ export function supportSection() {
           decoding="async"
           loading="lazy"
         />
-        <span>Seguime en Twitter</span>
+        <span>Seguime en 𝕏</span>
       </a>
     </li>`
     :
@@ -529,61 +524,6 @@ export function supportSection() {
   </ul>
 </section>
   `);
-
-  // <li>
-  //   <a href="https://twitter.com/compose/tweet?text=📣%20Ya%20podés%20explorar%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20Argentina%20con%20los%20precios%20finales%20incluidos%20los%20impuestos%20🎮🇦🇷✨%20https://xstoregames.com/" rel="noopener" target="_blank">
-  //     <img
-  //       src="/src/assets/twitter.svg"
-  //       alt=""
-  //       width="35"
-  //       height="35"
-  //       decoding="async"
-  //       loading="lazy"
-  //     />
-  //     <span>Compartir en Twitter</span>
-  //   </a>
-  // </li>
-
-  // <li>
-  //   <a href="https://twitter.com/compose/tweet?text=📣%20Explorá%20el%20catálogo%20de%20juegos%20de%20la%20tienda%20de%20Xbox%20en%20https://xstoregames.com/${store}-store/%20🎮✨" rel="noopener" target="_blank">
-  //     <img
-  //       src="/src/assets/twitter.svg"
-  //       alt=""
-  //       width="35"
-  //       height="35"
-  //       decoding="async"
-  //       loading="lazy"
-  //     />
-  //     <span>Compartir en Twitter</span>
-  //   </a>
-  // </li>
-}
-
-export function marketplaceItemsTemplate(items) {
-  return (`
-<section>
-  <h2>Accesorios destacados</h2>
-  <ul class="carousel" aria-roledescription="Carrusel" aria-label="Accesorios">
-    <button class="prev arrow" aria-hidden="true">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
-    </button>
-    ${items.map(item => `<li>
-      <article class="game-preview">
-        <div>
-          <h3 class="game-title"><a href="${item.permalink}" class="marketplace_item" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
-          <div class="game-price">
-            <x-price amount="${item.price}"></x-price>
-          </div>
-        </div>
-        <img class="game-img" width="165px" height="165px" alt="" decoding="async" loading="lazy" src="${item.thumbnail.replace('http:', 'https:').replace('D_', 'D_2X_').replace('I.jpg', 'AB.webp')}">
-      </article>
-    </li>`).join('')}
-    <button class="next arrow" aria-hidden="true">
-      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path style="transform: rotate(180deg) translate(-24px, -24px);" d="M14.3 18.7a1 1 0 0 0 1.4-1.4l-1.4 1.4ZM9 12l-.7-.7a1 1 0 0 0 0 1.4L9 12Zm6.7-5.3a1 1 0 0 0-1.4-1.4l1.4 1.4Zm0 10.6-6-6-1.4 1.4 6 6 1.4-1.4Zm-6-4.6 6-6-1.4-1.4-6 6 1.4 1.4Z" fill="#ffffff"/></svg>
-    </button>
-  </ul>
-</section>
-`);
 }
 
 export function filtersTemplate() {
@@ -652,11 +592,13 @@ export function filtersCatalogTemplate() {
 
 export function settingsTemplate() {
   const IIBB = window.localStorage.getItem('state');
+  const PAYMETHOD = window.localStorage.getItem('paymethod');
+
   return (`
 <h2>Ajustes</h2>
 <section>
-  <h3>Impuestos Provinciales</h3>
-  <form id="state-tax" >
+  <form id="payment">
+    <h3>Impuestos Provinciales</h3>
     <select name="state">
       <option value="">Seleccioná tu provincia...</option>
       <option value="CABA" ${IIBB === 'CABA' && 'selected'}>CABA</option>
@@ -670,9 +612,21 @@ export function settingsTemplate() {
       <option value="TFUE" ${IIBB === 'TFUE' && 'selected'}>Tierra del Fuego</option>
       <option value="NONE" ${IIBB === 'NONE' && 'selected'}>Otra</option>
     </select>
+    <small>Elegí tu provincia para que el precio final sea más exacto.</small>
+
+    <br /><br />
+
+    <h3>¿Cómo vas a pagar?</h3>
+    <select name="paymethod">
+      <option value="">Voy a pagar con...</option>
+      <option value="PREX" ${PAYMETHOD === 'PREX' && 'selected'}>PREX (recomendado)</option>
+      <option value="ASTROPAY" ${PAYMETHOD === 'ASTROPAY' && 'selected'}>AstroPay</option>
+      <option value="TC" ${PAYMETHOD === 'TC' && 'selected'}>Tarjeta de Crédito / Débito</option>
+      <option value="NONE" ${PAYMETHOD === 'NONE' && 'selected'}>Sin impuestos</option>
+    </select>
+
     <button class="btn btn-small" type="submit">Guardar</button>
   </form>
-  <small>Elegí tu provincia para que el precio final sea más exacto.</small>
 </section>
 `);
 }
@@ -687,25 +641,6 @@ export function collectionHeaderTemplate({ icon = '', title, filter = true }) {
   : ''}`);
 }
 
-export function finanzasARGSection() {
-  return (`
-<hr>
-<section class="finanzas-arg">
-  <h2>Más aplicaciones para tus finanzas</h2>
-  <a href="https://www.finanzasarg.com/" rel="nofollow noopener" target="_blank">
-    <img
-      src="/src/assets/finanzas-arg.webp"
-      alt=""
-      width="150"
-      heigth="26"
-      decoding="async"
-      loading="lazy"
-    />
-  </a>
-</section>
-  `);
-}
-
 export function gameSkeletonTemplate() {
   return (`
 <section class="section-skeleton">
@@ -718,7 +653,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
     <li>
@@ -728,7 +663,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
     <li>
@@ -738,7 +673,7 @@ export function gameSkeletonTemplate() {
           <div class="game-by skeleton"></div>
           <div class="game-price skeleton"></div>
         </div>
-        <span class="game-img skeleton" width="165px" height="165px"></span>
+        <span class="game-img skeleton"></span>
       </article>
     </li>
   </ul>
@@ -789,4 +724,64 @@ export function reviewsTemplate(section) {
   </ul>
 </section>
 `);
+}
+
+export function gameGuessThePriceTemplate(game) {
+  const img = game.lcp;
+
+  if (['CFQ7TTC0K5DJ', 'CFQ7TTC0P85B', 'CFQ7TTC0KHS0', 'CFQ7TTC0KGQ8'].includes(game.id)) {
+    game.images.screenshot = null;
+  }
+
+  const prices = shuffle([
+    convertDollar(game.price.amount),
+    (Math. random() * (game.price.amount*2 - game.price.amount/2) + game.price.amount/2).toFixed(2),
+    (Math. random() * (game.price.amount*2 - game.price.amount/2) + game.price.amount/2).toFixed(2),
+  ]);
+
+  const gameurl = `${window.location.origin}/game/${slugify(game.title)}_${game.id}`;
+
+  return (`
+<article class="game-preview">
+  <img class="game-img" src="${img}?w=1160&q=70" alt="" fetchpriority="high" decoding="async" width="100%" />
+  <div>
+    <div class="game-preview-info">
+      <small>¿Cuánto sale?</small>
+      <h3 class="game-title">${game.title}</h3>
+      <p class="game-by">by ${game.developer || game.publisher}</p>
+      <div>
+        <h4 class="visually-hidden">Se puede jugar en:</h4>
+        ${game.platforms.map(p => `<span class="game-platform-tag">${p}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="price-options">
+      ${
+        prices.map(price => `
+          <button class="btn price-btn" name="${game.id}" value="${price}">
+            <x-price amount="${price}"></x-price>
+          </button>
+        `).join('')
+      }
+    </div>
+
+    <div class="play-actions">
+      <a href="${gameurl}" class="btn view-game-btn link" rel="nofollow noopener">
+        Ver juego
+      </a>
+      <button class="next-game-btn btn">
+        Siguiente
+      </button>
+    </div>
+  </div>
+</article>
+`);
+}
+
+export function chatMessageTemplate(message) {
+  return `<div class="chat-message chat-message-${message.role}"><strong class="visually-hidden">${message.role}:</strong>${message.text}</div>`;
+}
+
+export function chatWelcomeTemplate(name) {
+  return `<div class="chat-welcome" hidden>Hola ${name}. ¿Qué onda?</div>`;
 }
